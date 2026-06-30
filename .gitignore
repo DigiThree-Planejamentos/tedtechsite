@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+tmp/
+.agents/
+.claude/
+.superpowers/
+tsconfig.tsbuildinfo
+*.log
+.DS_Store
