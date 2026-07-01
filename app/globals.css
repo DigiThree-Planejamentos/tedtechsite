@@ -349,17 +349,6 @@ html.lenis body {
   }
 }
 
-/* Hero click flash (components/webgl/HeroClickFlash.tsx) */
-.hero-flash {
-  opacity: 0;
-  background: radial-gradient(
-    circle at 50% 42%,
-    rgba(127, 208, 245, 0.22),
-    rgba(30, 158, 219, 0.08) 40%,
-    transparent 68%
-  );
-}
-
 /* Custom cursor (components/webgl/Cursor.tsx) */
 .has-custom-cursor,
 .has-custom-cursor * {
