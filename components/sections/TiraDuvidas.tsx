@@ -1,14 +1,19 @@
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { Button } from '@/components/ui/Button';
+import { MagneticButton } from '@/components/motion/MagneticButton';
+import { SplitReveal } from '@/components/motion/SplitReveal';
+import { Reveal } from '@/components/motion/Reveal';
 import { content } from '@/lib/content';
 
 export function TiraDuvidas() {
   const t = content.tiraDuvidas;
   return (
-    <section id="tira-duvidas" className="px-5 py-20">
+    <section id="tira-duvidas" className="px-5 py-20 scroll-mt-24">
       <div className="mx-auto max-w-content text-center">
         <SectionLabel>{t.label}</SectionLabel>
-        <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">{t.title}</h2>
+        <SplitReveal as="h2" className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          {t.title}
+        </SplitReveal>
 
         <div className="clean-border mx-auto mt-9 max-w-md overflow-hidden rounded-2xl text-left">
           <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
@@ -16,7 +21,7 @@ export function TiraDuvidas() {
             <span className="text-sm font-semibold">{t.chatTitle}</span>
             <span className="ml-auto text-xs text-muted">{t.chatStatus}</span>
           </div>
-          <div className="space-y-3 px-4 py-5">
+          <Reveal stagger={0.18} className="space-y-3 px-4 py-5">
             {t.bubbles.map((b, idx) => (
               <div
                 key={idx}
@@ -33,14 +38,18 @@ export function TiraDuvidas() {
                 </span>
               </div>
             ))}
-          </div>
+          </Reveal>
           <div className="flex items-center gap-2 border-t border-white/10 px-4 py-3 text-sm text-muted">
             {t.inputPlaceholder}
           </div>
         </div>
 
         <div className="mt-7 flex justify-center">
-          <Button href={content.whatsappUrl} variant="whatsapp">{t.cta}</Button>
+          <MagneticButton>
+            <Button href={content.whatsappUrl} variant="whatsapp">
+              {t.cta}
+            </Button>
+          </MagneticButton>
         </div>
       </div>
     </section>

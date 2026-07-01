@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { IBM_Plex_Sans, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { AppProviders } from '@/components/providers/AppProviders';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const ibmPlexSans = IBM_Plex_Sans({
@@ -42,7 +43,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="pt-BR"
       className={`${inter.variable} ${ibmPlexSans.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
     >
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {/* If JS is disabled, never trap the user behind the preloader overlay. */}
+        <noscript>
+          <style>{`.preloader{display:none !important}`}</style>
+        </noscript>
+        <AppProviders>{children}</AppProviders>
+      </body>
     </html>
   );
 }

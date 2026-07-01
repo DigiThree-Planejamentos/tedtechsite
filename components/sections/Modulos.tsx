@@ -8,6 +8,7 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from 'react';
 import { SectionLabel } from '@/components/ui/SectionLabel';
+import { SplitReveal } from '@/components/motion/SplitReveal';
 import { trackButtonGlow } from '@/components/ui/glow';
 import { content } from '@/lib/content';
 
@@ -257,9 +258,12 @@ export function Modulos() {
       <div className="mx-auto max-w-content">
         <SectionLabel>{content.modulos.label}</SectionLabel>
         <div className="mt-3 flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
-          <h2 className="max-w-2xl text-3xl font-extrabold tracking-tight md:text-4xl">
+          <SplitReveal
+            as="h2"
+            className="max-w-2xl text-3xl font-extrabold tracking-tight md:text-4xl"
+          >
             {content.modulos.title}
-          </h2>
+          </SplitReveal>
           <div
             className="glow-button module-stepper shrink-0"
             style={stepperStyle}

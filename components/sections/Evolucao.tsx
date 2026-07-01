@@ -1,4 +1,8 @@
 import { SectionLabel } from '@/components/ui/SectionLabel';
+import { SplitReveal } from '@/components/motion/SplitReveal';
+import { Reveal } from '@/components/motion/Reveal';
+import { CountUp } from '@/components/motion/CountUp';
+import { GaugeRing } from '@/components/motion/GaugeRing';
 import { content } from '@/lib/content';
 
 export function Evolucao() {
@@ -7,18 +11,22 @@ export function Evolucao() {
     <section className="px-5 py-20">
       <div className="mx-auto grid max-w-content items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center">
-          <div className="gauge relative" style={{ ['--val' as string]: 100 }}>
+          <GaugeRing>
             <div className="text-center">
-              <div className="text-3xl font-extrabold text-grad">{e.gaugeValue}</div>
+              <div className="text-3xl font-extrabold text-grad">
+                <CountUp value={e.gaugeValue} />
+              </div>
               <div className="mt-1 text-xs text-muted">{e.gaugeCaption}</div>
             </div>
-          </div>
+          </GaugeRing>
         </div>
 
         <div>
           <SectionLabel>{e.label}</SectionLabel>
-          <h2 className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">{e.title}</h2>
-          <ol className="mt-7 space-y-6">
+          <SplitReveal as="h2" className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+            {e.title}
+          </SplitReveal>
+          <Reveal as="ol" stagger={0.14} className="mt-7 space-y-6">
             {e.steps.map((s, i) => (
               <li key={s.k} className="relative pl-8">
                 <span className="absolute left-0 top-0 grid h-6 w-6 place-items-center rounded-full btn-grad text-xs font-bold">
@@ -32,7 +40,7 @@ export function Evolucao() {
                 <div className="text-sm text-blue">{s.s}</div>
               </li>
             ))}
-          </ol>
+          </Reveal>
         </div>
       </div>
     </section>
