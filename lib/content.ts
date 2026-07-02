@@ -17,11 +17,11 @@ export const content = {
   whatsappUrl: 'https://wa.me/5500000000000', // TODO: número real
 
   hero: {
-    ghost: 'MONTAGEM',
-    headlineA: 'Transforme conhecimento técnico em',
-    headlineHighlight: 'habilidade profissional',
-    sub: 'Conheça os componentes, monte seu computador, instale o sistema e aprenda a diagnosticar e prevenir os problemas mais comuns.',
-    searchPlaceholder: 'O que você quer aprender primeiro?',
+    headlineWords: ['Hardware', 'Montagem', 'Manutenção'],
+    subLines: [
+      'Conheça os componentes, monte seu computador, instale o sistema',
+      'e aprenda a diagnosticar e prevenir os problemas mais comuns.',
+    ],
     cta: 'Quero me inscrever',
   },
 

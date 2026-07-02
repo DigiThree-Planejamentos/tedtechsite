@@ -13,17 +13,17 @@ export function Evolucao() {
         <div className="flex justify-center">
           <GaugeRing>
             <div className="text-center">
-              <div className="text-3xl font-extrabold text-grad">
+              <div className="text-2xl font-extrabold text-grad md:text-3xl">
                 <CountUp value={e.gaugeValue} />
               </div>
-              <div className="mt-1 text-xs text-muted">{e.gaugeCaption}</div>
+              <div className="mt-1 text-[11px] text-muted md:text-xs">{e.gaugeCaption}</div>
             </div>
           </GaugeRing>
         </div>
 
         <div>
           <SectionLabel>{e.label}</SectionLabel>
-          <SplitReveal as="h2" className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+          <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">
             {e.title}
           </SplitReveal>
           <Reveal as="ol" stagger={0.14} className="mt-7 space-y-6">
@@ -35,9 +35,9 @@ export function Evolucao() {
                 {i < e.steps.length - 1 && (
                   <span className="absolute left-[11px] top-6 h-full w-px bg-white/10" aria-hidden />
                 )}
-                <div className="font-mono text-xs uppercase tracking-wide text-muted">{s.k}</div>
-                <div className="text-base font-semibold">{s.t}</div>
-                <div className="text-sm text-blue">{s.s}</div>
+                <div className="font-mono text-[11px] uppercase tracking-wide text-muted md:text-xs">{s.k}</div>
+                <div className="text-sm font-semibold md:text-base">{s.t}</div>
+                <div className="text-xs text-blue md:text-sm">{s.s}</div>
               </li>
             ))}
           </Reveal>

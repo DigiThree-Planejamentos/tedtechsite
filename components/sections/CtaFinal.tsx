@@ -24,10 +24,10 @@ export function CtaFinal() {
       }}
     >
       <div className="mx-auto max-w-content">
-        <SplitReveal as="h2" className="text-3xl font-extrabold tracking-tight md:text-5xl">
+        <SplitReveal as="h2" className="text-2xl font-extrabold tracking-tight md:text-5xl">
           {c.title}
         </SplitReveal>
-        <p className="mx-auto mt-4 max-w-lg text-[15px] text-muted">{c.sub}</p>
+        <p className="mx-auto mt-4 max-w-lg text-sm text-muted md:text-[15px]">{c.sub}</p>
         <div className="mt-8 flex justify-center">
           <MagneticButton>
             <Button href={content.checkoutUrl} variant="primary">
@@ -37,7 +37,7 @@ export function CtaFinal() {
         </div>
       </div>
 
-      <Marquee items={MARQUEE_ITEMS} className="mt-16 text-2xl opacity-70 md:text-4xl" />
+      <Marquee items={MARQUEE_ITEMS} className="mt-16 text-xl opacity-70 md:text-4xl" />
     </section>
   );
 }

@@ -5,14 +5,13 @@ import { SectionLabel } from '@/components/ui/SectionLabel';
 import { Logo } from '@/components/ui/Logo';
 
 describe('ui primitives', () => {
-  it('primary button links to href with transparent glow styling', () => {
+  it('primary button links to href with a solid TedTech-blue background', () => {
     render(<Button href="https://x.test" variant="primary">Quero</Button>);
     const a = screen.getByRole('link', { name: 'Quero' });
     expect(a).toHaveAttribute('href', 'https://x.test');
     expect(a).toHaveClass('glow-button');
-    expect(a).toHaveClass('border-blue/50');
+    expect(a).toHaveClass('bg-blue');
     expect(a.className).not.toContain('btn-grad');
-    expect(a.className).not.toMatch(/\bbg-/);
   });
 
   it('whatsapp button uses transparent green styling', () => {

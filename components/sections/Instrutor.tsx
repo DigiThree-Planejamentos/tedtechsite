@@ -19,11 +19,11 @@ export function Instrutor() {
     >
       <div className="mx-auto max-w-content text-center">
         <SectionLabel>{i.label}</SectionLabel>
-        <SplitReveal as="h2" className="mt-3 text-3xl font-extrabold tracking-tight md:text-4xl">
+        <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">
           {i.name}
         </SplitReveal>
-        <p className="mt-2 text-sm text-blue">{i.role}</p>
-        <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-muted">{i.bio}</p>
+        <p className="mt-2 text-xs text-blue md:text-sm">{i.role}</p>
+        <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted md:text-[15px]">{i.bio}</p>
 
         <Reveal
           stagger={0.12}
@@ -31,10 +31,10 @@ export function Instrutor() {
         >
           {i.stats.map((s) => (
             <div key={s.label} className="px-6">
-              <div className="text-2xl font-extrabold text-grad">
+              <div className="text-xl font-extrabold text-grad md:text-2xl">
                 <CountUp value={s.value} />
               </div>
-              <div className="mt-1 text-xs text-muted">{s.label}</div>
+              <div className="mt-1 text-[11px] text-muted md:text-xs">{s.label}</div>
             </div>
           ))}
         </Reveal>

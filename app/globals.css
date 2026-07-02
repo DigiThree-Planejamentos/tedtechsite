@@ -130,16 +130,6 @@ html.lenis body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.015);
   }
-  .ghost-word {
-    font-family: var(--font-ibm-plex-sans), Arial, sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    color: #fff;
-    opacity: 0.03;
-    line-height: 0.9;
-    user-select: none;
-    pointer-events: none;
-  }
   /* CSS-only conic gauge; --val is 0..100 */
   .gauge {
     --val: 100;

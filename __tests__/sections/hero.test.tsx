@@ -4,10 +4,10 @@ import { Hero } from '@/components/sections/Hero';
 import { content } from '@/lib/content';
 
 describe('Hero', () => {
-  it('renders the highlighted headline and search prompt without topic chips', () => {
+  it('renders the three staggered headline words', () => {
     render(<Hero />);
-    expect(screen.getByText(content.hero.headlineHighlight)).toBeInTheDocument();
-    expect(screen.getByText(content.hero.searchPlaceholder)).toBeInTheDocument();
-    expect(screen.queryByText('Montagem')).not.toBeInTheDocument();
+    for (const word of content.hero.headlineWords) {
+      expect(screen.getByText(word)).toBeInTheDocument();
+    }
   });
 });

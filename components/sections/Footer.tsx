@@ -11,9 +11,9 @@ export function Footer() {
       <Reveal className="mx-auto flex max-w-content flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
           <Logo />
-          <p className="mt-2 max-w-xs text-xs text-muted">{f.tagline}</p>
+          <p className="mt-2 max-w-xs text-[11px] text-muted md:text-xs">{f.tagline}</p>
         </div>
-        <div className="text-xs text-muted">
+        <div className="text-[11px] text-muted md:text-xs">
           <div className="font-mono">{f.cnpj}</div>
           <div className="mt-1 font-mono">{f.email}</div>
           <div className="mt-3 flex items-center gap-4">

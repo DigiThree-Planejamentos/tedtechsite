@@ -5,6 +5,7 @@ import { SmoothScrollProvider } from './SmoothScrollProvider';
 import { Preloader } from './Preloader';
 import { ReadyProvider } from './ReadyContext';
 import { Cursor } from '@/components/webgl/Cursor';
+import { CircuitEdges } from '@/components/webgl/CircuitEdges';
 
 /**
  * Single client entry mounted in the (server) root layout. Composes the
@@ -19,6 +20,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <ReadyProvider value={ready}>
       <SmoothScrollProvider>
         <Preloader onComplete={() => setReady(true)} />
+        <CircuitEdges />
         <Cursor />
         {children}
       </SmoothScrollProvider>

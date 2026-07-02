@@ -260,7 +260,7 @@ export function Modulos() {
         <div className="mt-3 flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
           <SplitReveal
             as="h2"
-            className="max-w-2xl text-3xl font-extrabold tracking-tight md:text-4xl"
+            className="max-w-2xl text-2xl font-extrabold tracking-tight md:text-4xl"
           >
             {content.modulos.title}
           </SplitReveal>
@@ -353,10 +353,10 @@ export function Modulos() {
                     >
                       {m.icon}
                     </div>
-                    <h3 id={`module-${m.n}`} className="text-xl font-semibold md:text-2xl">
+                    <h3 id={`module-${m.n}`} className="text-lg font-semibold md:text-2xl">
                       {m.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted">{m.desc}</p>
+                    <p className="mt-3 text-xs leading-relaxed text-muted md:text-sm">{m.desc}</p>
                   </div>
 
                   <div className="module-card__content mt-10 pt-2">
@@ -367,7 +367,7 @@ export function Modulos() {
                       {m.lessons.map((lesson, lessonIndex) => (
                         <li
                           key={lesson}
-                          className="module-card__lesson flex gap-3 text-sm leading-relaxed text-muted"
+                          className="module-card__lesson flex gap-3 text-xs leading-relaxed text-muted md:text-sm"
                           style={{ '--lesson-index': lessonIndex } as CSSProperties}
                         >
                           <span className="text-blue" aria-hidden>✓</span>
