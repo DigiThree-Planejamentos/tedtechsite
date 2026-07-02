@@ -20,7 +20,7 @@ const config: Config = {
         subtitle: ['var(--font-space-grotesk)', 'Arial', 'sans-serif'],
         mono: ['var(--font-jetbrains-mono)', 'Consolas', 'monospace'],
       },
-      maxWidth: { content: '920px' },
+      maxWidth: { content: '1200px' },
     },
   },
   plugins: [],

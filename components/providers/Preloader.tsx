@@ -24,7 +24,25 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
   useEffect(() => {
     let killed = false;
 
+    // The page underneath is already fully rendered (tall), so its native
+    // scrollbar shows through during preload and shifts the centered CRT
+    // off from true viewport-center. Lock scroll for the preload duration
+    // only, always restoring on finish/unmount.
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtmlOverflow = html.style.overflow;
+    const prevBodyOverflow = body.style.overflow;
+    const lockScroll = () => {
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+    };
+    const unlockScroll = () => {
+      html.style.overflow = prevHtmlOverflow;
+      body.style.overflow = prevBodyOverflow;
+    };
+
     const finish = () => {
+      unlockScroll();
       if (typeof window !== 'undefined') window.dispatchEvent(new Event('app:ready'));
       ScrollTrigger.refresh();
       onCompleteRef.current?.();
@@ -56,6 +74,8 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
       el.style.strokeDashoffset = String(len);
     });
 
+    lockScroll();
+
     const state = { v: 0 };
     const tl = gsap.timeline({
       onComplete: () => {
@@ -86,6 +106,7 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
     return () => {
       killed = true;
       tl.kill();
+      unlockScroll();
     };
   }, []);
 

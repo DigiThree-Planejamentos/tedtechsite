@@ -6,7 +6,7 @@ import { trackButtonGlow } from '@/components/ui/glow';
 type Variant = 'primary' | 'whatsapp';
 
 const base =
-  'glow-button inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl px-6 font-sans text-xs font-semibold';
+  'glow-button inline-flex min-h-[36px] items-center justify-center gap-2 rounded-lg px-4 py-1.5 font-sans text-[11px] font-semibold';
 
 export function Button({
   href,
