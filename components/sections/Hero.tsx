@@ -9,32 +9,32 @@ export function Hero() {
     <section id="hero" className="relative overflow-hidden px-5 pb-24 pt-36 text-center">
       <div className="relative z-10 mx-auto max-w-content">
         <h1 className="mx-auto max-w-2xl font-extrabold leading-[1.2] tracking-tight">
-          <div className="flex justify-center -translate-x-6 md:-translate-x-12">
+          <div className="flex justify-center -translate-x-8 md:-translate-x-20">
             <SplitReveal
               as="span"
               type="lines"
               trigger="ready"
-              className="text-2xl text-white md:text-4xl"
+              className="text-3xl text-white md:text-6xl"
             >
               {h.headlineWords[0]}
             </SplitReveal>
           </div>
-          <div className="flex justify-center translate-x-10 md:translate-x-20">
+          <div className="flex justify-center translate-x-12 md:translate-x-28">
             <SplitReveal
               as="span"
               type="lines"
               trigger="ready"
-              className="text-2xl text-blue md:text-4xl"
+              className="text-3xl text-blue md:text-6xl"
             >
               {h.headlineWords[1]}
             </SplitReveal>
           </div>
-          <div className="flex justify-center -translate-x-6 md:-translate-x-12">
+          <div className="flex justify-center -translate-x-8 md:-translate-x-20">
             <SplitReveal
               as="span"
               type="lines"
               trigger="ready"
-              className="text-2xl text-white md:text-4xl"
+              className="text-3xl text-white md:text-6xl"
             >
               {h.headlineWords[2]}
             </SplitReveal>
