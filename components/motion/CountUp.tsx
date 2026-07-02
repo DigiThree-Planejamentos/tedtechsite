@@ -60,7 +60,12 @@ export function CountUp({
         v: target,
         duration: dur,
         ease: 'power2.out',
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true },
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          end: 'bottom top',
+          toggleActions: 'restart reverse restart reverse',
+        },
         onStart: () => {
           el.textContent = `${parsed.prefix}${format(0, decimals, parsed.num)}${parsed.suffix}`;
         },

@@ -63,7 +63,14 @@ export function SplitReveal({
         ease: 'power4.out',
         stagger,
         ...(trigger === 'scroll'
-          ? { scrollTrigger: { trigger: el, start: REVEAL_START, once: true } }
+          ? {
+              scrollTrigger: {
+                trigger: el,
+                start: REVEAL_START,
+                end: 'bottom top',
+                toggleActions: 'restart reverse restart reverse',
+              },
+            }
           : {}),
       });
 

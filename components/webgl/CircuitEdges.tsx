@@ -8,7 +8,7 @@ const CircuitEdgesCanvas = dynamic(() => import('./CircuitEdgesCanvas'), {
   loading: () => null,
 });
 
-/** Client host for the global circuit-border decoration. Renders nothing on SSR. */
+/** Client host for the global circuit field (hero backdrop + edge border). Renders nothing on SSR. */
 export function CircuitEdges() {
   return <CircuitEdgesCanvas />;
 }

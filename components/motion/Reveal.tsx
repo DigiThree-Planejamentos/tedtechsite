@@ -50,7 +50,12 @@ export function Reveal({
         duration: duration.base,
         ease: 'power3.out',
         stagger: stagger ?? 0,
-        scrollTrigger: { trigger: el, start: REVEAL_START, once: true },
+        scrollTrigger: {
+          trigger: el,
+          start: REVEAL_START,
+          end: 'bottom top',
+          toggleActions: 'restart reverse restart reverse',
+        },
       });
     },
     { dependencies: [reduced], scope: ref },

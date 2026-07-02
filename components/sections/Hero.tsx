@@ -1,14 +1,12 @@
 import { Button } from '@/components/ui/Button';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { SplitReveal } from '@/components/motion/SplitReveal';
-import { CircuitHero } from '@/components/webgl/CircuitHero';
 import { content } from '@/lib/content';
 
 export function Hero() {
   const h = content.hero;
   return (
-    <section id="hero" className="relative overflow-hidden bg-bg px-5 pb-24 pt-36 text-center">
-      <CircuitHero />
+    <section id="hero" className="relative overflow-hidden px-5 pb-24 pt-36 text-center">
       <div className="relative z-10 mx-auto max-w-content">
         <h1 className="mx-auto max-w-2xl font-extrabold leading-[1.2] tracking-tight">
           <div className="flex justify-center -translate-x-6 md:-translate-x-12">

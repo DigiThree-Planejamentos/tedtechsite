@@ -1,17 +1,7 @@
 import { Button } from '@/components/ui/Button';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { SplitReveal } from '@/components/motion/SplitReveal';
-import { Marquee } from '@/components/motion/Marquee';
 import { content } from '@/lib/content';
-
-const MARQUEE_ITEMS = [
-  'Do zero',
-  'No seu ritmo',
-  'Passo a passo',
-  '100% prático',
-  'Suporte no WhatsApp',
-  'Atualizações',
-];
 
 export function CtaFinal() {
   const c = content.ctaFinal;
@@ -36,8 +26,6 @@ export function CtaFinal() {
           </MagneticButton>
         </div>
       </div>
-
-      <Marquee items={MARQUEE_ITEMS} className="mt-16 text-xl opacity-70 md:text-4xl" />
     </section>
   );
 }

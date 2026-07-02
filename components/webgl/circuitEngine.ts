@@ -42,22 +42,32 @@ const MIN_HOLD_FOR_BURST = 0.12; // s — shorter holds are treated as a plain c
 const KICK_SPRING_K = 36; // spring stiffness pulling kicked stars home
 const KICK_SPRING_DAMPING = 11; // velocity damping on the spring
 const BREAK_STRETCH_FACTOR = 1.5; // filament hidden once stretched past d * this
+const OPEN_FADE_ZONE = 90; // px transition band at the open/closed boundary
 
 export interface CircuitEngineOptions {
   /**
-   * Restrict star placement to left/right bands this many px wide (capped to
-   * 18% of the canvas width so a border never eats the whole viewport).
-   * Omit for full-canvas coverage.
+   * Target left/right band width (px, capped to 18% of canvas width) once
+   * the field is fully "closed". Omit to keep the field permanently open
+   * (full-canvas coverage, no breathing).
    */
   edgeWidth?: number;
+  /**
+   * DOM id of the element whose scroll position drives how "open" (full
+   * width) vs. "closed" (edge bands only) the field is — 1 while that
+   * element still fills the viewport, breathing down to 0 (closed) over the
+   * following viewport-height of scroll. Omit to keep the field always open.
+   */
+  openWhileId?: string;
 }
 
 /**
  * Mounts the "processor starfield" circuit simulation (transistor-pad stars,
  * constellation filaments, current pulses, depth-based parallax, hold-to-blast
- * physics) onto a canvas and starts its render loop. Shared by the full-bleed
- * hero backdrop and the site-wide edge-border decoration — only star
- * placement differs (full canvas vs. left/right bands via `edgeWidth`).
+ * physics) onto a canvas and starts its render loop. One shared star field
+ * covers the whole canvas at all times — `edgeWidth`/`openWhileId` don't
+ * regenerate a separate simulation, they scroll-drive a live width mask so
+ * the hero's full-bleed backdrop and the site-wide edge border read as a
+ * single continuous field breathing open/closed, not two independent ones.
  * Returns a cleanup function that stops the loop and removes listeners.
  */
 export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOptions = {}): () => void {
@@ -77,24 +87,32 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
   let filaments: Filament[] = [];
   let flows: Flow[] = [];
   let disp: { x: number; y: number }[] = [];
+  let vis: number[] = [];
+  const heroEl: HTMLElement | null =
+    options.openWhileId && typeof document !== 'undefined'
+      ? document.getElementById(options.openWhileId)
+      : null;
 
   const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+  /** 1 = full-canvas coverage, 0 = closed down to the edge bands. */
+  const openness = (): number => {
+    if (!options.edgeWidth) return 1;
+    if (!heroEl) return 0;
+    const vh = window.innerHeight || h;
+    return Math.max(0, Math.min(1, heroEl.getBoundingClientRect().bottom / vh));
+  };
 
   const build = () => {
     stars = [];
     filaments = [];
-    const bandWidth = options.edgeWidth ? Math.min(options.edgeWidth, w * 0.18) : null;
-    const pickX = () => {
-      if (!bandWidth) return rand(0, w);
-      return Math.random() < 0.5 ? rand(0, bandWidth) : rand(w - bandWidth, w);
-    };
-    const area = bandWidth ? bandWidth * 2 * h : w * h;
+    const area = w * h;
     const count = Math.max(70, Math.min(280, Math.round(area / 5200)));
     for (let i = 0; i < count; i++) {
       const z = rand(0, 1);
       const chip = Math.random() < 0.22;
       stars.push({
-        x: pickX(),
+        x: rand(0, w),
         y: rand(0, h),
         z,
         r: (chip ? rand(2.6, 3.8) : rand(0.9, 2)) * (0.55 + z * 0.85),
@@ -135,6 +153,7 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
       });
     }
     disp = stars.map((s) => ({ x: s.x, y: s.y }));
+    vis = stars.map(() => 1);
   };
 
   const litAt = (x: number, y: number): number => {
@@ -253,12 +272,22 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
     const ny = mouse.active ? Math.max(-1, Math.min(1, (mouse.y / h) * 2 - 1)) : 0;
     const driftX = Math.sin(time * 0.15) * DRIFT_STRENGTH;
     const driftY = Math.cos(time * 0.12) * DRIFT_STRENGTH * 0.6;
+    // How far from either edge the field currently reaches — interpolates
+    // from the closed band width up to half the canvas (full coverage) as
+    // `openness()` goes 0→1, so hero and border read as one breathing field.
+    const bandWidth = options.edgeWidth ? Math.min(options.edgeWidth, w * 0.18) : w / 2;
+    // Cap at half-width + the fade zone (not exactly half-width) so the two
+    // center-most pixels don't sit right on the fade boundary when fully open.
+    const openCap = w / 2 + OPEN_FADE_ZONE;
+    const revealWidth = bandWidth + openness() * (openCap - bandWidth);
     for (let i = 0; i < stars.length; i++) {
       const s = stars[i];
       const ox = driftX * s.z + nx * TILT_STRENGTH * s.z;
       const oy = driftY * s.z + ny * TILT_STRENGTH * s.z * 0.7;
       disp[i].x = s.x + ox + s.kickX;
       disp[i].y = s.y + oy + s.kickY;
+      const edgeDist = Math.min(disp[i].x, w - disp[i].x);
+      vis[i] = Math.max(0, Math.min(1, (revealWidth - edgeDist) / OPEN_FADE_ZONE));
     }
 
     ctx.clearRect(0, 0, w, h);
@@ -270,6 +299,8 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
     for (const f of filaments) {
       const a = disp[f.a];
       const b = disp[f.b];
+      const filVis = Math.min(vis[f.a], vis[f.b]);
+      if (filVis < 0.02) continue;
       const stretch = Math.hypot(b.x - a.x, b.y - a.y);
       if (stretch > f.d * BREAK_STRETCH_FACTOR) continue;
       const za = stars[f.a].z;
@@ -281,10 +312,10 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
       ctx.moveTo(a.x, a.y);
       ctx.lineTo(b.x, b.y);
       if (lit > 0.03) {
-        ctx.strokeStyle = `rgba(120, 205, 255, ${(0.18 + lit * 0.8) * (0.5 + depth * 0.5)})`;
+        ctx.strokeStyle = `rgba(120, 205, 255, ${(0.18 + lit * 0.8) * (0.5 + depth * 0.5) * filVis})`;
         ctx.lineWidth = 1 + depth * 0.8;
       } else {
-        ctx.strokeStyle = `rgba(130, 160, 190, ${(0.06 + fade * 0.14) * (0.4 + depth * 0.7)})`;
+        ctx.strokeStyle = `rgba(130, 160, 190, ${(0.06 + fade * 0.14) * (0.4 + depth * 0.7) * filVis})`;
         ctx.lineWidth = 0.7 + depth * 0.6;
       }
       ctx.stroke();
@@ -300,6 +331,8 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
       }
       const f = filaments[fl.fil];
       if (!f) continue;
+      const flowVis = Math.min(vis[f.a], vis[f.b]);
+      if (flowVis < 0.02) continue;
       const a = disp[f.a];
       const b = disp[f.b];
       if (Math.hypot(b.x - a.x, b.y - a.y) > f.d * BREAK_STRETCH_FACTOR) continue;
@@ -308,7 +341,7 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
       const py = a.y + (b.y - a.y) * fl.pos;
       const size = 3.5 + depth * 3;
       const grad = ctx.createRadialGradient(px, py, 0, px, py, size);
-      grad.addColorStop(0, 'rgba(190, 236, 255, 0.95)');
+      grad.addColorStop(0, `rgba(190, 236, 255, ${0.95 * flowVis})`);
       grad.addColorStop(1, 'rgba(30, 158, 219, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -319,31 +352,33 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
     // Stars / transistor pads — nearer ones bigger, brighter, more glow.
     for (let i = 0; i < stars.length; i++) {
       const s = stars[i];
+      const v = vis[i];
+      if (v < 0.02) continue;
       const p = disp[i];
       const twinkle = 0.55 + 0.45 * Math.sin(time * s.tw + s.phase);
       const g = litAt(p.x, p.y);
-      const depthAlpha = 0.32 + s.z * 0.68;
+      const depthAlpha = (0.32 + s.z * 0.68) * v;
       const bright = Math.min(1, (twinkle * 0.75 + g) * depthAlpha);
       if (s.chip) {
         const size = s.r * 2;
         ctx.fillStyle = `rgba(155, 178, 202, ${(0.34 + bright * 0.5) * depthAlpha})`;
         ctx.fillRect(p.x - s.r, p.y - s.r, size, size);
         ctx.lineWidth = 1 + s.z * 0.6;
-        ctx.strokeStyle = `rgba(30, 158, 219, ${0.3 + g * 0.6 + s.z * 0.25})`;
+        ctx.strokeStyle = `rgba(30, 158, 219, ${(0.3 + g * 0.6 + s.z * 0.25) * v})`;
         ctx.strokeRect(p.x - s.r, p.y - s.r, size, size);
         if (g > 0.04) {
-          ctx.fillStyle = `rgba(127, 208, 245, ${g * 0.9})`;
+          ctx.fillStyle = `rgba(127, 208, 245, ${g * 0.9 * v})`;
           ctx.fillRect(p.x - s.r, p.y - s.r, size, size);
         }
       } else {
         ctx.beginPath();
         ctx.arc(p.x, p.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(180, 205, 230, ${0.3 + bright * 0.55})`;
+        ctx.fillStyle = `rgba(180, 205, 230, ${(0.3 + bright * 0.55) * v})`;
         ctx.fill();
         if (bright > 0.5 || g > 0.1) {
           ctx.beginPath();
           ctx.arc(p.x, p.y, s.r + 2.2 + s.z * 2.4, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(30, 158, 219, ${Math.max(g, bright - 0.5) * (0.35 + s.z * 0.35)})`;
+          ctx.fillStyle = `rgba(30, 158, 219, ${Math.max(g, bright - 0.5) * (0.35 + s.z * 0.35) * v})`;
           ctx.fill();
         }
       }
@@ -352,7 +387,7 @@ export function mountCircuit(canvas: HTMLCanvasElement, options: CircuitEngineOp
       if (s.z > 0.72) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, s.r + 5, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(90, 190, 255, ${(s.z - 0.72) * 0.28})`;
+        ctx.fillStyle = `rgba(90, 190, 255, ${(s.z - 0.72) * 0.28 * v})`;
         ctx.fill();
       }
     }

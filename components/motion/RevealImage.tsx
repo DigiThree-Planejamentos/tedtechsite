@@ -39,7 +39,12 @@ export function RevealImage({
       gsap.set(el, { clipPath: 'inset(0 0 100% 0)' });
       if (img) gsap.set(img, { scale: 1.2 });
       const tl = gsap.timeline({
-        scrollTrigger: { trigger: el, start: 'top 80%', once: true },
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 80%',
+          end: 'bottom top',
+          toggleActions: 'restart reverse restart reverse',
+        },
       });
       tl.to(el, { clipPath: 'inset(0 0 0% 0)', duration: 1.0, ease: 'power4.inOut' });
       if (img) tl.to(img, { scale: 1, duration: 1.2, ease: 'power3.out' }, 0);
