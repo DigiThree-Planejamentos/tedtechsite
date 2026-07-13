@@ -30,7 +30,6 @@ export const content = {
   dores: {
     label: 'Você se identifica?',
     title: 'Já pensou alguma dessas?',
-    sub: 'Se passou pela sua cabeça, você está no lugar certo — é exatamente o que esse curso resolve, do zero.',
     thoughts: [
       { q: 'Será que é vírus ou hora de formatar?', s: '— e o PC só fica mais lento' },
       { q: 'Tenho medo de abrir e quebrar algo.', s: '— aí nunca aprende de verdade' },
