@@ -4,10 +4,11 @@ import { Hero } from '@/components/sections/Hero';
 import { content } from '@/lib/content';
 
 describe('Hero', () => {
-  it('renders the three staggered headline words', () => {
+  it('renders the identification headline and thought cards', () => {
     render(<Hero />);
-    for (const word of content.hero.headlineWords) {
-      expect(screen.getByText(word)).toBeInTheDocument();
+    expect(screen.getByText(content.dores.title)).toBeInTheDocument();
+    for (const thought of content.dores.thoughts) {
+      expect(screen.getByText(thought.q)).toBeInTheDocument();
     }
   });
 });

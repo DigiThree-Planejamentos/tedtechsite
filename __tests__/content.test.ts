@@ -8,6 +8,8 @@ describe('content', () => {
       expect(m.n).toMatch(/^0[1-6]$/);
       expect(m.title.length).toBeGreaterThan(0);
       expect(m.desc.length).toBeGreaterThan(0);
+      expect(m.image).toMatch(/^\/modulo-[1-6]\.png$/);
+      expect(m.imageAlt.length).toBeGreaterThan(0);
       expect(m.lessons.length).toBeGreaterThanOrEqual(4);
       expect(m.lessons.every((lesson) => lesson.length > 0)).toBe(true);
     }

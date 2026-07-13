@@ -10,6 +10,6 @@ describe('TiraDuvidas', () => {
     expect(screen.getByText(content.tiraDuvidas.bubbles[0].text)).toBeInTheDocument();
     const cta = screen.getByRole('link', { name: content.tiraDuvidas.cta });
     expect(cta).toHaveAttribute('href', content.whatsappUrl);
-    expect(cta).toHaveClass('glow-button--whatsapp', 'border-wa/50', 'text-wa');
+    expect(cta).toHaveClass('glow-button--whatsapp', 'border-blue/25', 'text-white');
   });
 });

@@ -5,21 +5,20 @@ import { SectionLabel } from '@/components/ui/SectionLabel';
 import { Logo } from '@/components/ui/Logo';
 
 describe('ui primitives', () => {
-  it('primary button links to href with a solid TedTech-blue background', () => {
+  it('primary button links to href with a TedTech-blue surface and shared border language', () => {
     render(<Button href="https://x.test" variant="primary">Quero</Button>);
     const a = screen.getByRole('link', { name: 'Quero' });
     expect(a).toHaveAttribute('href', 'https://x.test');
     expect(a).toHaveClass('glow-button');
-    expect(a).toHaveClass('bg-blue');
+    expect(a).toHaveClass('border-blue/25', 'bg-blue', 'rounded-[1.15rem]');
     expect(a.className).not.toContain('btn-grad');
   });
 
-  it('whatsapp button uses transparent green styling', () => {
+  it('whatsapp button uses the card surface with the shared border', () => {
     render(<Button href="https://wa.me/1" variant="whatsapp">Zap</Button>);
     const button = screen.getByRole('link', { name: 'Zap' });
     expect(button).toHaveClass('glow-button', 'glow-button--whatsapp');
-    expect(button).toHaveClass('border-wa/50', 'text-wa');
-    expect(button.className).not.toMatch(/\bbg-/);
+    expect(button).toHaveClass('border-blue/25', 'bg-wa', 'text-white');
   });
 
   it('tracks the pointer position through CSS glow coordinates', () => {
@@ -54,6 +53,8 @@ describe('ui primitives', () => {
 
   it('logo renders the brand', () => {
     render(<Logo />);
-    expect(screen.getByText('TECH')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'TedTech' }).getAttribute('src')).toContain(
+      'tedtech-logo.png',
+    );
   });
 });

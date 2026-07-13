@@ -6,7 +6,7 @@ import { content } from '@/lib/content';
 export function Identificacao() {
   const d = content.dores;
   return (
-    <section className="px-5 py-20">
+    <section className="flex min-h-[100svh] items-center px-5 py-20">
       <div className="mx-auto max-w-content">
         <SectionLabel>{d.label}</SectionLabel>
         <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">

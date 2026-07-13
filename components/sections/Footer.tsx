@@ -8,7 +8,7 @@ export function Footer() {
   const f = content.footer;
   return (
     <footer className="border-t border-white/5 px-5 py-12">
-      <Reveal className="mx-auto flex max-w-content flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <Reveal className="mx-auto flex max-w-[1280px] flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div>
           <Logo />
           <p className="mt-2 max-w-xs text-[11px] text-muted md:text-xs">{f.tagline}</p>

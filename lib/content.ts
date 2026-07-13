@@ -1,6 +1,8 @@
 export interface Module {
   n: string;
   icon: string;
+  image: string;
+  imageAlt: string;
   title: string;
   desc: string;
   lessons: string[];
@@ -47,6 +49,8 @@ export const content = {
     {
       n: '01',
       icon: '🧠',
+      image: '/modulo-1.png',
+      imageAlt: 'Tela do computador exibindo uma falha durante a instalação de um programa',
       title: 'Fundamentos dos computadores',
       desc: 'Entenda a evolução dos computadores e a relação entre hardware e software.',
       lessons: [
@@ -59,6 +63,8 @@ export const content = {
     {
       n: '02',
       icon: '🧩',
+      image: '/modulo-2.png',
+      imageAlt: 'Placa-mãe, processador, teclado e ferramentas sobre uma bancada',
       title: 'Componentes de um computador',
       desc: 'Conheça as peças, suas funções, tipos e critérios de compatibilidade.',
       lessons: [
@@ -72,6 +78,8 @@ export const content = {
     {
       n: '03',
       icon: '🔧',
+      image: '/modulo-3.png',
+      imageAlt: 'Gabinete aberto com placa-mãe, fonte e cabos instalados',
       title: 'Montagem de computadores',
       desc: 'Prepare as ferramentas, instale os componentes e faça a primeira inicialização.',
       lessons: [
@@ -85,6 +93,8 @@ export const content = {
     {
       n: '04',
       icon: '🛠️',
+      image: '/modulo-4.png',
+      imageAlt: 'Fonte, placa-mãe e componentes preparados para manutenção',
       title: 'Manutenção de computadores',
       desc: 'Realize limpeza preventiva, diagnostique falhas e atualize componentes.',
       lessons: [
@@ -98,6 +108,8 @@ export const content = {
     {
       n: '05',
       icon: '🛡️',
+      image: '/modulo-5.png',
+      imageAlt: 'Monitor exibindo o processo de instalação do Windows',
       title: 'Segurança e backup',
       desc: 'Proteja o equipamento e os dados contra danos, falhas e ameaças.',
       lessons: [
@@ -111,6 +123,8 @@ export const content = {
     {
       n: '06',
       icon: '💻',
+      image: '/modulo-6.png',
+      imageAlt: 'Monitor com navegador e aplicativos abertos no Windows',
       title: 'Softwares e drivers',
       desc: 'Instale sistemas e utilitários e mantenha drivers e firmware atualizados.',
       lessons: [

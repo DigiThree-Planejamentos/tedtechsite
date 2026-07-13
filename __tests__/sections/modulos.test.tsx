@@ -1,22 +1,40 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Modulos } from '@/components/sections/Modulos';
 import { content } from '@/lib/content';
 
+function installMatchMedia({
+  desktop = false,
+  reducedMotion = false,
+}: {
+  desktop?: boolean;
+  reducedMotion?: boolean;
+} = {}) {
+  Object.defineProperty(window, 'matchMedia', {
+    configurable: true,
+    value: vi.fn().mockImplementation((query: string) => ({
+      matches:
+        (query.includes('min-width') && desktop) ||
+        (query.includes('prefers-reduced-motion') && reducedMotion),
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  });
+}
+
 describe('Modulos', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'matchMedia', {
+    vi.clearAllMocks();
+    installMatchMedia();
+    Object.defineProperty(window, 'scrollTo', {
       configurable: true,
-      value: vi.fn().mockImplementation((query: string) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
+      value: vi.fn(),
     });
     Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
       configurable: true,
@@ -48,6 +66,17 @@ describe('Modulos', () => {
       for (const lesson of module.lessons) {
         expect(screen.getByText(lesson)).toBeInTheDocument();
       }
+    }
+  });
+
+  it('renders the corresponding image and alternative text for every module', () => {
+    render(<Modulos />);
+
+    for (const module of content.modules) {
+      const image = screen.getByAltText(module.imageAlt);
+      expect(decodeURIComponent(image.getAttribute('src') ?? '')).toContain(
+        module.image,
+      );
     }
   });
 
@@ -95,19 +124,7 @@ describe('Modulos', () => {
   });
 
   it('skips the stepper rebound when reduced motion is requested', () => {
-    Object.defineProperty(window, 'matchMedia', {
-      configurable: true,
-      value: vi.fn().mockImplementation((query: string) => ({
-        matches: query.includes('prefers-reduced-motion'),
-        media: query,
-        onchange: null,
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
+    installMatchMedia({ reducedMotion: true });
 
     render(<Modulos />);
     const next = screen.getByRole('button', { name: 'Ver próximos módulos' });
@@ -124,22 +141,105 @@ describe('Modulos', () => {
     });
   });
 
-  it('renders transparent module cards with the button border color', () => {
+  it('renders module cards with the shared site border language', () => {
     const { container } = render(<Modulos />);
     for (const card of container.querySelectorAll('article')) {
-      expect(card).toHaveClass('border', 'border-blue/50', 'rounded-2xl');
+      expect(card).toHaveClass('border', 'border-blue/25', 'rounded-[1.5rem]');
       expect(card).not.toHaveClass('clean-border');
       expect(card.className).not.toMatch(/\bbg-/);
     }
   });
 
-  it('replays the module animation when the pointer enters a card', () => {
+  it('keeps module text static when the pointer enters a card', () => {
     const { container } = render(<Modulos />);
     const firstCard = container.querySelector('article')!;
 
     fireEvent.mouseEnter(firstCard);
-    expect(Element.prototype.animate).toHaveBeenCalledTimes(
-      content.modules[0].lessons.length + 3,
+    expect(Element.prototype.animate).not.toHaveBeenCalled();
+  });
+
+  it('keeps native horizontal scrolling on mobile', () => {
+    const { container } = render(<Modulos />);
+    const carousel = container.querySelector('[data-module-carousel]');
+
+    expect(carousel).toHaveAttribute('data-desktop-pin', 'false');
+    expect(ScrollTrigger.create).not.toHaveBeenCalled();
+  });
+
+  it('creates a pinned scrubbed horizontal track on desktop', async () => {
+    installMatchMedia({ desktop: true });
+    const { container } = render(<Modulos />);
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('[data-module-carousel]'),
+      ).toHaveAttribute('data-desktop-pin', 'true');
+    });
+
+    const triggerOptions = vi.mocked(ScrollTrigger.create).mock.calls.at(-1)?.[0];
+    expect(triggerOptions?.pin).toBe(container.querySelector('.module-pin'));
+    expect(triggerOptions?.pinSpacing).toBe(true);
+    expect(triggerOptions?.scrub).toBe(0.6);
+    expect(triggerOptions?.invalidateOnRefresh).toBe(true);
+    expect(triggerOptions?.anticipatePin).toBe(1);
+    expect(triggerOptions?.end).toEqual(expect.any(Function));
+    expect(Number(String((triggerOptions?.end as () => string)()).slice(2))).toBeGreaterThanOrEqual(
+      180,
     );
+  });
+
+  it('moves the page to the module progress when desktop controls are used', async () => {
+    installMatchMedia({ desktop: true });
+    render(<Modulos />);
+
+    await waitFor(() => {
+      expect(ScrollTrigger.create).toHaveBeenCalled();
+    });
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Ver próximos módulos' }),
+    );
+
+    expect(window.scrollTo).toHaveBeenCalledWith({
+      top: 256,
+      behavior: 'smooth',
+    });
+    expect(screen.getByText('02')).toBeInTheDocument();
+  });
+
+  it('does not pin on desktop when reduced motion is requested', async () => {
+    installMatchMedia({ desktop: true, reducedMotion: true });
+    const { container } = render(<Modulos />);
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('[data-module-carousel]'),
+      ).toHaveAttribute('data-desktop-pin', 'false');
+    });
+    expect(ScrollTrigger.create).not.toHaveBeenCalled();
+  });
+
+  it('supports arrow-key navigation from the carousel region', () => {
+    render(<Modulos />);
+    const carousel = screen.getByRole('region', { name: 'Módulos do curso' });
+
+    fireEvent.keyDown(carousel, { key: 'ArrowRight' });
+    expect(screen.getByText('02')).toBeInTheDocument();
+
+    fireEvent.keyDown(carousel, { key: 'ArrowLeft' });
+    expect(screen.getByText('01')).toBeInTheDocument();
+  });
+
+  it('kills the desktop ScrollTrigger when the section unmounts', async () => {
+    installMatchMedia({ desktop: true });
+    const { unmount } = render(<Modulos />);
+
+    await waitFor(() => {
+      expect(ScrollTrigger.create).toHaveBeenCalled();
+    });
+    const createdTrigger = vi.mocked(ScrollTrigger.create).mock.results.at(-1)
+      ?.value;
+
+    unmount();
+    expect(createdTrigger?.kill).toHaveBeenCalled();
   });
 });
