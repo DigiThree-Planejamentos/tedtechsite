@@ -6,10 +6,10 @@ import { GlowIconButton } from '@/components/ui/GlowIconButton';
 import { content } from '@/lib/content';
 
 /**
- * Painel de vídeo full-height do hero: vídeo do instrutor com overlay escuro
- * e a copy de credibilidade na base. Enquanto `videoSrc` está vazio, mostra
- * gradiente placeholder com o play decorativo (mesmo comportamento que a
- * antiga seção Instrutor tinha).
+ * Painel de vídeo do hero, em proporção fixa 16:10 em todos os breakpoints
+ * (mesmo vídeo gravado uma única vez, sem recorte diferente por tamanho de
+ * tela). Overlay escuro com a copy de credibilidade na base. Enquanto
+ * `videoSrc` está vazio, mostra gradiente placeholder com o play decorativo.
  */
 export function HeroVideo() {
   const i = content.instrutor;
@@ -26,7 +26,7 @@ export function HeroVideo() {
   return (
     <div
       data-video
-      className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-blue/20 bg-[linear-gradient(145deg,#1a2438,#0b1220)] md:aspect-auto md:h-full"
+      className="relative aspect-[16/10] w-full self-center overflow-hidden rounded-[1.5rem] border border-blue/20 bg-[linear-gradient(145deg,#1a2438,#0b1220)]"
     >
       {hasVideo && (
         <video
@@ -60,14 +60,14 @@ export function HeroVideo() {
             </MagneticButton>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 p-6 text-left sm:p-7">
+          <div className="absolute inset-x-0 bottom-0 p-5 text-left sm:p-6">
             <div className="text-xs font-bold uppercase tracking-[0.18em] text-blue">
               {i.label}
             </div>
-            <div className="mt-1 text-xl font-extrabold text-white md:text-2xl">
+            <div className="mt-1 text-lg font-extrabold text-white md:text-xl">
               {i.name}
             </div>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-[#dbe3ec]">
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-[#dbe3ec]">
               {i.heroQuote}
             </p>
           </div>

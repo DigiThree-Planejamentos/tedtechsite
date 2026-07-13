@@ -14,40 +14,40 @@ export function Hero() {
       id="hero"
       className="site-section site-section--compact relative overflow-hidden"
     >
-      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 md:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 md:grid-cols-[0.85fr_1.15fr]">
         <div className="flex flex-col justify-center text-left">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-blue/15 bg-white/80 px-3 py-2 text-[11px] font-semibold text-blue-deep shadow-sm">
             <span className="grid h-5 w-5 place-items-center rounded-full bg-blue text-white">*</span>
             {d.label}
           </div>
 
-          <h1 className="mt-6 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <h1 className="mt-4 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal
               as="span"
               type="lines"
               trigger="ready"
-              className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
             >
               {d.title}
             </SplitReveal>
           </h1>
 
-          <Reveal stagger={0.1} className="mt-8 grid max-w-xl gap-4">
+          <Reveal stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
             {d.thoughts.map((t) => (
               <div key={t.q} className="border-l-2 border-blue pl-4">
-                <p className="text-sm italic leading-snug text-[#3b4654] sm:text-[15px]">
+                <p className="text-xs italic leading-snug text-[#3b4654] sm:text-sm">
                   “{t.q}”
                 </p>
-                <small className="mt-1 block text-xs not-italic text-[#667284]">{t.s}</small>
+                <small className="mt-1 block text-[11px] not-italic text-[#667284]">{t.s}</small>
               </div>
             ))}
           </Reveal>
 
-          <p className="mt-8 max-w-xl text-sm font-semibold text-[#050914] sm:text-base">
+          <p className="mt-5 max-w-xl text-xs font-semibold text-[#050914] sm:text-sm">
             {d.turn}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-5 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}
