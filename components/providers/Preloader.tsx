@@ -117,7 +117,7 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
       aria-hidden
     >
       {/* Old CRT monitor line-art — the loading logo/counter sit inside its screen. */}
-      <div className="relative aspect-[6/5] w-56 sm:w-64">
+      <div className="relative aspect-[6/5] w-72 sm:w-96">
         <svg
           viewBox="0 0 240 200"
           fill="none"
@@ -156,10 +156,10 @@ export function Preloader({ onComplete }: { onComplete?: () => void }) {
           className="absolute flex flex-col items-center justify-center text-center"
           style={{ top: '13%', left: '10.8%', width: '78.4%', height: '59%' }}
         >
-          <div className="font-subtitle text-lg font-extrabold tracking-tight sm:text-xl">
+          <div className="font-subtitle text-xl font-extrabold tracking-tight sm:text-2xl">
             Ted<span className="text-grad">TECH</span>
           </div>
-          <div className="mt-2 font-mono text-xs text-muted sm:text-sm">
+          <div className="mt-2 font-mono text-sm text-muted sm:text-base">
             <span ref={counterRef}>00</span>
             <span className="text-blue">%</span>
           </div>
