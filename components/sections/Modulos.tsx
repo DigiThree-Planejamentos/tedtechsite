@@ -46,8 +46,8 @@ export function Modulos() {
   const totalModules = String(content.modules.length).padStart(2, '0');
   const stepperProgress = lastIndex === 0 ? 0.5 : activeIndex / lastIndex;
   const stepperStyle = {
-    gridTemplateColumns: `${38 + stepperProgress * 26}px 60px ${
-      38 + (1 - stepperProgress) * 26
+    gridTemplateColumns: `${28 + stepperProgress * 18}px 50px ${
+      28 + (1 - stepperProgress) * 18
     }px`,
   } as CSSProperties;
   const desktopPinEnabled = isDesktop && !prefersReducedMotion;
@@ -461,7 +461,7 @@ export function Modulos() {
                 onClick={(event) => moveCarousel(-1, event.currentTarget)}
                 disabled={activeIndex === 0}
                 data-stepper-direction="prev"
-                className="module-stepper-button module-stepper-button--prev grid place-items-center text-base disabled:cursor-not-allowed"
+                className="module-stepper-button module-stepper-button--prev grid place-items-center text-sm disabled:cursor-not-allowed"
                 aria-label="Ver módulos anteriores"
               >
                 <span className="module-stepper-button__icon" aria-hidden>
@@ -483,7 +483,7 @@ export function Modulos() {
                 onClick={(event) => moveCarousel(1, event.currentTarget)}
                 disabled={activeIndex === lastIndex}
                 data-stepper-direction="next"
-                className="module-stepper-button module-stepper-button--next grid place-items-center text-base disabled:cursor-not-allowed"
+                className="module-stepper-button module-stepper-button--next grid place-items-center text-sm disabled:cursor-not-allowed"
                 aria-label="Ver próximos módulos"
               >
                 <span className="module-stepper-button__icon" aria-hidden>
