@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotion } from './useReducedMotion';
+import { useHasScrolled } from './useHasScrolled';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -17,10 +18,11 @@ if (typeof window !== 'undefined') {
 export function GaugeRing({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const reduced = useReducedMotion();
+  const hasScrolled = useHasScrolled();
 
   useGSAP(
     () => {
-      if (reduced) return;
+      if (reduced || !hasScrolled) return;
       const el = ref.current;
       if (!el) return;
       const state = { v: 0 };
@@ -37,7 +39,7 @@ export function GaugeRing({ children }: { children: ReactNode }) {
         onUpdate: () => el.style.setProperty('--val', String(state.v)),
       });
     },
-    { dependencies: [reduced], scope: ref },
+    { dependencies: [reduced, hasScrolled], scope: ref },
   );
 
   return (

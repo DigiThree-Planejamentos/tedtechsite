@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotion } from './useReducedMotion';
+import { useHasScrolled } from './useHasScrolled';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -44,11 +45,12 @@ export function CountUp({
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const reduced = useReducedMotion();
+  const hasScrolled = useHasScrolled();
   const parsed = parse(value);
 
   useGSAP(
     () => {
-      if (reduced || !parsed) return;
+      if (reduced || !parsed || !hasScrolled) return;
       const el = ref.current;
       if (!el) return;
       const decimals = (parsed.num.split(',')[1] || '').length;
@@ -77,7 +79,7 @@ export function CountUp({
         },
       });
     },
-    { dependencies: [reduced, value], scope: ref },
+    { dependencies: [reduced, value, hasScrolled], scope: ref },
   );
 
   if (!parsed) return <span className={className}>{value}</span>;
