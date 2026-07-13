@@ -248,17 +248,6 @@ html.lenis body {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .hero-float {
-    animation: hero-float 5.8s ease-in-out infinite;
-    will-change: transform;
-  }
-  .hero-float--delay {
-    animation-delay: -1.8s;
-  }
-  .hero-float--slow {
-    animation-duration: 7.2s;
-    animation-delay: -0.7s;
-  }
   .split-line {
     padding-bottom: 0.1em;
     margin-bottom: -0.1em;
@@ -454,16 +443,6 @@ html.lenis body {
   }
 }
 
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
-}
-
 /* Marquee ticker (components/motion/Marquee.tsx) */
 .marquee {
   overflow: hidden;
@@ -573,7 +552,6 @@ html.lenis body {
     transform: none;
   }
   .module-card-active,
-  .hero-float,
   .module-card-active .module-card__icon {
     animation: none !important;
     opacity: 1;
