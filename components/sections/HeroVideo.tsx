@@ -6,10 +6,10 @@ import { GlowIconButton } from '@/components/ui/GlowIconButton';
 import { content } from '@/lib/content';
 
 /**
- * Painel de vídeo full-height do hero: vídeo do instrutor com overlay escuro
- * e a copy de credibilidade na base. Enquanto `videoSrc` está vazio, mostra
- * gradiente placeholder com o play decorativo (mesmo comportamento que a
- * antiga seção Instrutor tinha).
+ * Painel de vídeo do hero, em proporção fixa 16:10 em todos os breakpoints
+ * (mesmo vídeo gravado uma única vez, sem recorte diferente por tamanho de
+ * tela). Overlay escuro com a copy de credibilidade na base. Enquanto
+ * `videoSrc` está vazio, mostra gradiente placeholder com o play decorativo.
  */
 export function HeroVideo() {
   const i = content.instrutor;
@@ -26,7 +26,7 @@ export function HeroVideo() {
   return (
     <div
       data-video
-      className="relative aspect-[16/10] overflow-hidden rounded-[1.5rem] border border-blue/20 bg-[linear-gradient(145deg,#1a2438,#0b1220)] md:aspect-auto md:h-full"
+      className="relative aspect-[16/10] w-full self-center overflow-hidden rounded-[1.5rem] border border-blue/20 bg-[linear-gradient(145deg,#1a2438,#0b1220)]"
     >
       {hasVideo && (
         <video
