@@ -31,8 +31,8 @@ export function GaugeRing({ children }: { children: ReactNode }) {
         scrollTrigger: {
           trigger: el,
           start: 'top 75%',
-          once: true,
-          toggleActions: 'play none none none',
+          end: 'bottom top',
+          toggleActions: 'restart none none none',
         },
         onUpdate: () => el.style.setProperty('--val', String(state.v)),
       });

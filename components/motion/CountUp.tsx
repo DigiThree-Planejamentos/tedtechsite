@@ -63,8 +63,8 @@ export function CountUp({
         scrollTrigger: {
           trigger: el,
           start: 'top 85%',
-          once: true,
-          toggleActions: 'play none none none',
+          end: 'bottom top',
+          toggleActions: 'restart none none none',
         },
         onStart: () => {
           el.textContent = `${parsed.prefix}${format(0, decimals, parsed.num)}${parsed.suffix}`;
