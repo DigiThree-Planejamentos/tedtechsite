@@ -14,7 +14,7 @@ export function Hero() {
       id="hero"
       className="site-section site-section--compact relative overflow-hidden"
     >
-      <div className="relative mx-auto grid min-h-[calc(100svh-12rem)] w-full max-w-content items-stretch gap-10 md:grid-cols-[1.05fr_0.95fr]">
+      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 md:grid-cols-[1.05fr_0.95fr]">
         <div className="flex flex-col justify-center text-left">
           <div className="inline-flex w-fit items-center gap-2 rounded-full border border-blue/15 bg-white/80 px-3 py-2 text-[11px] font-semibold text-blue-deep shadow-sm">
             <span className="grid h-5 w-5 place-items-center rounded-full bg-blue text-white">*</span>
