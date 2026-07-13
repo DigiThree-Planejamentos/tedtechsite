@@ -68,7 +68,8 @@ export function SplitReveal({
                 trigger: el,
                 start: REVEAL_START,
                 end: 'bottom top',
-                toggleActions: 'restart reverse restart reverse',
+                once: true,
+                toggleActions: 'play none none none',
               },
             }
           : {}),

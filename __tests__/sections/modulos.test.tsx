@@ -179,13 +179,14 @@ describe('Modulos', () => {
     const triggerOptions = vi.mocked(ScrollTrigger.create).mock.calls.at(-1)?.[0];
     expect(triggerOptions?.pin).toBe(container.querySelector('.module-pin'));
     expect(triggerOptions?.pinSpacing).toBe(true);
+    expect(triggerOptions?.start).toBe('top -8%');
     expect(triggerOptions?.scrub).toBe(0.6);
     expect(triggerOptions?.invalidateOnRefresh).toBe(true);
     expect(triggerOptions?.anticipatePin).toBe(1);
     expect(triggerOptions?.end).toEqual(expect.any(Function));
-    expect(Number(String((triggerOptions?.end as () => string)()).slice(2))).toBeGreaterThanOrEqual(
-      180,
-    );
+    expect(
+      Number(String((triggerOptions?.end as () => string)()).slice(2)),
+    ).toBeGreaterThanOrEqual(360);
   });
 
   it('moves the page to the module progress when desktop controls are used', async () => {
@@ -200,7 +201,7 @@ describe('Modulos', () => {
     );
 
     expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 256,
+      top: 248,
       behavior: 'smooth',
     });
     expect(screen.getByText('02')).toBeInTheDocument();

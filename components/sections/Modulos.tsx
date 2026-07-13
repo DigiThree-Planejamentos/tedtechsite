@@ -10,6 +10,7 @@ import {
 } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { SplitReveal } from '@/components/motion/SplitReveal';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { trackButtonGlow } from '@/components/ui/glow';
 import { content } from '@/lib/content';
@@ -20,7 +21,8 @@ if (typeof window !== 'undefined') {
 
 const DESKTOP_QUERY = '(min-width: 768px)';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-const DESKTOP_LEAD_PROGRESS = 0.07;
+const DESKTOP_LEAD_PROGRESS = 0.08;
+const DESKTOP_TRACK_PROGRESS = 1 - DESKTOP_LEAD_PROGRESS * 2;
 
 export function Modulos() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -126,7 +128,7 @@ export function Modulos() {
         Math.min(
           1,
           (scrollProgress - DESKTOP_LEAD_PROGRESS) /
-            (1 - DESKTOP_LEAD_PROGRESS),
+            DESKTOP_TRACK_PROGRESS,
         ),
       );
     const getNearestCardIndex = (progress: number) => {
@@ -172,16 +174,22 @@ export function Modulos() {
       })
       .to(track, {
         x: () => -getMaxX(),
-        duration: 1 - DESKTOP_LEAD_PROGRESS,
+        duration: DESKTOP_TRACK_PROGRESS,
         ease: 'none',
         overwrite: 'auto',
+      })
+      .to(track, {
+        x: () => -getMaxX(),
+        duration: DESKTOP_LEAD_PROGRESS,
+        ease: 'none',
       });
     const trigger = ScrollTrigger.create({
       trigger: section,
       pin,
       pinSpacing: true,
-      start: 'top top',
-      end: () => `+=${Math.max(1, getMaxX() + getLeadDistance())}`,
+      start: 'top -8%',
+      end: () =>
+        `+=${Math.max(1, getMaxX() + getLeadDistance() * 2)}`,
       scrub: 0.6,
       animation: timeline,
       invalidateOnRefresh: true,
@@ -286,7 +294,7 @@ export function Modulos() {
       index === 0
         ? 0
         : DESKTOP_LEAD_PROGRESS +
-          progress * (1 - DESKTOP_LEAD_PROGRESS);
+          progress * DESKTOP_TRACK_PROGRESS;
     const top =
       trigger.start + (trigger.end - trigger.start) * triggerProgress;
     window.scrollTo({ top, behavior: 'smooth' });
@@ -435,9 +443,12 @@ export function Modulos() {
         <div className="module-pin__header relative z-20">
           <SectionLabel>{content.modulos.label}</SectionLabel>
           <div className="mt-3 flex flex-col items-start gap-5 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="max-w-2xl text-2xl font-extrabold tracking-tight md:text-4xl">
+            <SplitReveal
+              as="h2"
+              className="max-w-2xl text-2xl font-extrabold tracking-tight md:text-4xl"
+            >
               {content.modulos.title}
-            </h2>
+            </SplitReveal>
             <div
               className="glow-button module-stepper shrink-0"
               style={stepperStyle}

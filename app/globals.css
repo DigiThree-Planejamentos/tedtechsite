@@ -409,8 +409,10 @@ html.lenis body {
 
 @media (min-width: 768px) {
   .module-track {
+    box-sizing: content-box;
     grid-auto-columns: min(760px, 82%);
     gap: 2.5rem;
+    padding-inline: max(0px, calc((100% - min(760px, 82%)) / 2));
   }
   .module-card {
     height: clamp(520px, calc(100svh - 15rem), 760px);
