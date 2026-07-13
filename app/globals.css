@@ -171,11 +171,11 @@ html.lenis body {
   }
   .site-section {
     position: relative;
-    padding: 4.5rem 1.25rem;
+    padding: 3rem 1.25rem;
     scroll-margin-top: 6rem;
   }
   .site-section--compact {
-    padding-block: 4rem;
+    padding-block: 2.5rem;
   }
   .section-divider {
     border-top: 1px solid rgba(15, 42, 81, 0.1);
@@ -207,10 +207,10 @@ html.lenis body {
   }
   @media (min-width: 768px) {
     .site-section {
-      padding-block: 5.5rem;
+      padding-block: 4rem;
     }
     .site-section--compact {
-      padding-block: 4.75rem;
+      padding-block: 3rem;
     }
   }
   @media (min-width: 1024px) {
@@ -247,17 +247,6 @@ html.lenis body {
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
-  }
-  .hero-float {
-    animation: hero-float 5.8s ease-in-out infinite;
-    will-change: transform;
-  }
-  .hero-float--delay {
-    animation-delay: -1.8s;
-  }
-  .hero-float--slow {
-    animation-duration: 7.2s;
-    animation-delay: -0.7s;
   }
   .split-line {
     padding-bottom: 0.1em;
@@ -454,16 +443,6 @@ html.lenis body {
   }
 }
 
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
-}
-
 /* Marquee ticker (components/motion/Marquee.tsx) */
 .marquee {
   overflow: hidden;
@@ -573,7 +552,6 @@ html.lenis body {
     transform: none;
   }
   .module-card-active,
-  .hero-float,
   .module-card-active .module-card__icon {
     animation: none !important;
     opacity: 1;

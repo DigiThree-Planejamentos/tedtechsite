@@ -30,7 +30,6 @@ export const content = {
   dores: {
     label: 'Você se identifica?',
     title: 'Já pensou alguma dessas?',
-    sub: 'Se passou pela sua cabeça, você está no lugar certo — é exatamente o que esse curso resolve, do zero.',
     thoughts: [
       { q: 'Será que é vírus ou hora de formatar?', s: '— e o PC só fica mais lento' },
       { q: 'Tenho medo de abrir e quebrar algo.', s: '— aí nunca aprende de verdade' },
@@ -154,6 +153,8 @@ export const content = {
     name: 'Nome do Instrutor', // TODO
     role: 'Técnico em manutenção · X anos de experiência', // TODO
     bio: 'Apaixonado por computadores, já formou centenas de alunos do absoluto zero. Aqui ele ensina exatamente o passo a passo que usa no dia a dia.', // TODO
+    heroQuote:
+      '“[X] anos de mercado, formado em [certificação]. Separei tudo que aprendi nesse tempo nesse curso, direto ao ponto, pra você aprender a consertar de verdade.”', // TODO: dados reais
     stats: [
       { value: 'X anos', label: 'de experiência' },
       { value: '+XXX', label: 'PCs montados' },
