@@ -60,14 +60,14 @@ export function HeroVideo() {
             </MagneticButton>
           </div>
 
-          <div className="absolute inset-x-0 bottom-0 p-6 text-left sm:p-7">
+          <div className="absolute inset-x-0 bottom-0 p-5 text-left sm:p-6">
             <div className="text-xs font-bold uppercase tracking-[0.18em] text-blue">
               {i.label}
             </div>
-            <div className="mt-1 text-xl font-extrabold text-white md:text-2xl">
+            <div className="mt-1 text-lg font-extrabold text-white md:text-xl">
               {i.name}
             </div>
-            <p className="mt-3 max-w-md text-sm leading-relaxed text-[#dbe3ec]">
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-[#dbe3ec]">
               {i.heroQuote}
             </p>
           </div>

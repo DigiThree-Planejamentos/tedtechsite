@@ -21,18 +21,18 @@ export function Hero() {
             {d.label}
           </div>
 
-          <h1 className="mt-6 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <h1 className="mt-4 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal
               as="span"
               type="lines"
               trigger="ready"
-              className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+              className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
             >
               {d.title}
             </SplitReveal>
           </h1>
 
-          <Reveal stagger={0.1} className="mt-8 grid max-w-xl gap-4">
+          <Reveal stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
             {d.thoughts.map((t) => (
               <div key={t.q} className="border-l-2 border-blue pl-4">
                 <p className="text-sm italic leading-snug text-[#3b4654] sm:text-[15px]">
@@ -43,11 +43,11 @@ export function Hero() {
             ))}
           </Reveal>
 
-          <p className="mt-8 max-w-xl text-sm font-semibold text-[#050914] sm:text-base">
+          <p className="mt-5 max-w-xl text-sm font-semibold text-[#050914] sm:text-base">
             {d.turn}
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-5 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}
