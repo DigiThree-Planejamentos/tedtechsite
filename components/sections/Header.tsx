@@ -35,7 +35,6 @@ export function Header() {
         <Logo compact />
         <nav className="hidden max-w-xs items-center gap-7 overflow-hidden whitespace-nowrap text-sm text-[#3b4654] transition-all duration-300 ease-out md:flex">
           <a href={site.nav.modulos} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Módulos</a>
-          <a href={site.nav.instrutor} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Quem ensina</a>
           <a href={site.nav.tiraDuvidas} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Tira-dúvidas</a>
         </nav>
         <MagneticButton>

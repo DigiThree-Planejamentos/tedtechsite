@@ -8,6 +8,7 @@ describe('Home page', () => {
     const { container } = render(<Home />);
     expect(screen.getByText(content.dores.title)).toBeInTheDocument();
     expect(container.querySelector('#modulos')).not.toBeNull();
+    expect(container.querySelector('#instrutor')).toBeNull();
     expect(container.querySelector('#tira-duvidas')).not.toBeNull();
     expect(container.querySelector('#identificacao')).toBeNull();
     expect(screen.getByText(content.offer.priceNow)).toBeInTheDocument();

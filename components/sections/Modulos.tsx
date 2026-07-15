@@ -12,7 +12,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitReveal } from '@/components/motion/SplitReveal';
 import { SectionLabel } from '@/components/ui/SectionLabel';
-import { trackButtonGlow } from '@/components/ui/glow';
+import { ModuleStepper } from '@/components/sections/ModuleStepper';
 import { content } from '@/lib/content';
 
 if (typeof window !== 'undefined') {
@@ -44,12 +44,6 @@ export function Modulos() {
   const lastIndex = Math.max(0, content.modules.length - cardsPerView);
   const activeModuleNumber = String(activeIndex + 1).padStart(2, '0');
   const totalModules = String(content.modules.length).padStart(2, '0');
-  const stepperProgress = lastIndex === 0 ? 0.5 : activeIndex / lastIndex;
-  const stepperStyle = {
-    gridTemplateColumns: `${38 + stepperProgress * 26}px 60px ${
-      38 + (1 - stepperProgress) * 26
-    }px`,
-  } as CSSProperties;
   const desktopPinEnabled = isDesktop && !prefersReducedMotion;
 
   useEffect(() => {
@@ -319,84 +313,22 @@ export function Modulos() {
     });
   }
 
-  function playStepperButtonAnimation(button: HTMLButtonElement, direction: -1 | 1) {
-    if (
-      prefersReducedMotion ||
-      (typeof window.matchMedia === 'function' &&
-        window.matchMedia(REDUCED_MOTION_QUERY).matches) ||
-      typeof button.animate !== 'function'
-    ) {
-      return;
-    }
-
-    const travel = direction * 4;
-    const easing = 'cubic-bezier(0.22, 1, 0.36, 1)';
-
-    button.getAnimations().forEach((animation) => animation.cancel());
-    button.animate(
-      [
-        { transform: 'translate3d(0, 0, 0) scale(1)' },
-        {
-          transform: `translate3d(${travel}px, 0, 0) scale(0.94)`,
-          offset: 0.24,
-        },
-        {
-          transform: `translate3d(${-travel * 0.4}px, 0, 0) scale(1.04)`,
-          offset: 0.64,
-        },
-        { transform: 'translate3d(0, 0, 0) scale(1)' },
-      ],
-      { duration: 420, easing },
-    );
-
-    const icon = button.querySelector('.module-stepper-button__icon');
-    if (icon && typeof icon.animate === 'function') {
-      icon.animate(
-        [
-          { transform: 'translate3d(0, 0, 0)' },
-          { transform: `translate3d(${travel * 1.7}px, 0, 0)`, offset: 0.35 },
-          { transform: `translate3d(${-travel * 0.45}px, 0, 0)`, offset: 0.72 },
-          { transform: 'translate3d(0, 0, 0)' },
-        ],
-        { duration: 420, easing },
-      );
-    }
-  }
-
-  function moveCarousel(nextDirection: -1 | 1, trigger?: HTMLButtonElement) {
+  function moveCarousel(nextDirection: -1 | 1) {
     const nextIndex = Math.max(
       0,
       Math.min(lastIndex, activeIndexRef.current + nextDirection * cardsPerView),
     );
-    if (!updateActiveIndex(nextIndex)) return;
+    if (!updateActiveIndex(nextIndex)) return false;
 
     if (!scrollDesktopToCard(nextIndex)) scrollToCard(nextIndex);
-    if (trigger) playStepperButtonAnimation(trigger, nextDirection);
+    return true;
   }
 
-  function resetCarousel(trigger?: HTMLButtonElement) {
-    if (!updateActiveIndex(0)) return;
+  function resetCarousel() {
+    if (!updateActiveIndex(0)) return false;
 
     if (!scrollDesktopToCard(0)) scrollToCard(0);
-    if (
-      !prefersReducedMotion &&
-      trigger &&
-      typeof trigger.animate === 'function'
-    ) {
-      trigger.getAnimations().forEach((animation) => animation.cancel());
-      trigger.animate(
-        [
-          { transform: 'scale(1)' },
-          { transform: 'scale(0.92)', offset: 0.3 },
-          { transform: 'scale(1.06)', offset: 0.66 },
-          { transform: 'scale(1)' },
-        ],
-        {
-          duration: 360,
-          easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
-        },
-      );
-    }
+    return true;
   }
 
   function syncActiveCard() {
@@ -453,48 +385,16 @@ export function Modulos() {
             >
               {content.modulos.title}
             </SplitReveal>
-            <div
-              className="glow-button module-stepper shrink-0"
-              style={stepperStyle}
-              role="group"
-              aria-label="Controles dos módulos"
-              onPointerMove={trackButtonGlow}
-            >
-              <button
-                type="button"
-                onClick={(event) => moveCarousel(-1, event.currentTarget)}
-                disabled={activeIndex === 0}
-                data-stepper-direction="prev"
-                className="module-stepper-button module-stepper-button--prev grid place-items-center text-base disabled:cursor-not-allowed"
-                aria-label="Ver módulos anteriores"
-              >
-                <span className="module-stepper-button__icon" aria-hidden>
-                  ←
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={(event) => resetCarousel(event.currentTarget)}
-                className="module-stepper-status grid place-items-center font-mono text-[11px] font-extrabold tracking-[0.14em]"
-                aria-live="polite"
-                aria-atomic="true"
-                aria-label={`Módulo ${activeModuleNumber} de ${totalModules}. Voltar ao primeiro módulo`}
-              >
-                <span className="tabular-nums">{activeModuleNumber}</span>
-              </button>
-              <button
-                type="button"
-                onClick={(event) => moveCarousel(1, event.currentTarget)}
-                disabled={activeIndex === lastIndex}
-                data-stepper-direction="next"
-                className="module-stepper-button module-stepper-button--next grid place-items-center text-base disabled:cursor-not-allowed"
-                aria-label="Ver próximos módulos"
-              >
-                <span className="module-stepper-button__icon" aria-hidden>
-                  →
-                </span>
-              </button>
-            </div>
+            <ModuleStepper
+              activeModuleNumber={activeModuleNumber}
+              totalModules={totalModules}
+              isFirst={activeIndex === 0}
+              isLast={activeIndex === lastIndex}
+              prefersReducedMotion={prefersReducedMotion}
+              onPrevious={() => moveCarousel(-1)}
+              onNext={() => moveCarousel(1)}
+              onReset={resetCarousel}
+            />
           </div>
         </div>
 

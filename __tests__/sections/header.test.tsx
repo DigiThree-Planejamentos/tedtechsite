@@ -7,6 +7,7 @@ describe('Header', () => {
   it('renders nav and a CTA to checkout', () => {
     render(<Header />);
     expect(screen.getByText('Módulos')).toBeInTheDocument();
+    expect(screen.queryByText('Quem ensina')).not.toBeInTheDocument();
     const cta = screen.getByRole('link', { name: content.hero.cta });
     expect(cta).toHaveAttribute('href', content.checkoutUrl);
   });

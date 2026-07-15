@@ -16,15 +16,32 @@ export function Footer() {
         <div className="text-[11px] text-muted md:text-xs">
           <div className="font-mono">{f.cnpj}</div>
           <div className="mt-1 font-mono">{f.email}</div>
-          <div className="mt-3 flex items-center gap-4">
+          <a
+            href={f.phone.href}
+            className="mt-1 block font-mono transition-colors hover:text-text"
+          >
+            Tel. {f.phone.label}
+          </a>
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
             {f.links.map((l) => (
-              <a key={l.label} href={l.href} className="hover:text-text">
+              <a
+                key={l.label}
+                href={l.href}
+                target={l.href.startsWith('http') ? '_blank' : undefined}
+                rel={l.href.startsWith('http') ? 'noreferrer' : undefined}
+                className="transition-colors hover:text-text"
+              >
                 {l.label}
               </a>
             ))}
             {f.socials.map((s) => (
               <MagneticButton key={s.label}>
-                <a href={s.href} className="hover:text-text">
+                <a
+                  href={s.href}
+                  target={s.href.startsWith('http') ? '_blank' : undefined}
+                  rel={s.href.startsWith('http') ? 'noreferrer' : undefined}
+                  className="transition-colors hover:text-text"
+                >
                   {s.label}
                 </a>
               </MagneticButton>

@@ -89,6 +89,10 @@ describe('Modulos', () => {
     expect(next).toBeEnabled();
     expect(previous).toHaveClass('module-stepper-button');
     expect(next).toHaveAttribute('data-stepper-direction', 'next');
+    expect(previous).toHaveTextContent('‹');
+    expect(next).toHaveTextContent('›');
+    expect(previous).not.toHaveTextContent('←');
+    expect(next).not.toHaveTextContent('→');
     expect(screen.getByText('01')).toBeInTheDocument();
 
     fireEvent.click(next);
@@ -97,6 +101,24 @@ describe('Modulos', () => {
     expect(screen.getByText('02')).toBeInTheDocument();
     expect(document.querySelectorAll('[data-active="true"]')).toHaveLength(1);
     expect(Element.prototype.animate).toHaveBeenCalledTimes(2);
+    expect(Element.prototype.animate).toHaveBeenNthCalledWith(
+      2,
+      expect.arrayContaining([
+        expect.objectContaining({
+          opacity: 0,
+          transform: 'translate3d(11px, 0, 0)',
+        }),
+        expect.objectContaining({
+          opacity: 0,
+          transform: 'translate3d(-6px, 0, 0)',
+        }),
+        expect.objectContaining({
+          opacity: 1,
+          transform: 'translate3d(0, 0, 0)',
+        }),
+      ]),
+      expect.objectContaining({ duration: 480 }),
+    );
   });
 
   it('does not animate when clicking a disabled stepper control', () => {

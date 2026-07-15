@@ -207,12 +207,20 @@ export const content = {
     tagline: 'Curso de manutenção e montagem de PC, do zero.',
     cnpj: 'CNPJ 00.000.000/0000-00', // TODO
     email: 'contato@tedtech.com.br', // TODO
+    phone: {
+      label: '(24) 99999-9999', // TODO: número real
+      href: 'tel:+5524999999999',
+    },
     links: [
       { label: 'Termos', href: '#' },
       { label: 'Privacidade', href: '#' },
+      { label: 'Kiwify', href: 'https://kiwify.com.br/tedtech-exemplo' }, // TODO: link real da Kiwify
     ],
     socials: [
-      { label: 'Instagram', href: '#' },
+      {
+        label: 'Instagram @tedtechangra',
+        href: 'https://www.instagram.com/tedtechangra/',
+      },
       { label: 'YouTube', href: '#' },
     ],
   },

@@ -267,96 +267,192 @@ html.lenis body {
     gap: 1rem;
   }
   .module-stepper {
+    --stepper-arrow-width: 36px;
+    --stepper-number-width: 44px;
     display: inline-grid;
     align-items: center;
     overflow: hidden;
-    height: 32px;
-    grid-template-columns: 2rem 2.25rem 2rem;
-    border: 1px solid rgba(30, 158, 219, 0.5);
-    border-radius: 0.625rem;
-    background: rgba(7, 17, 31, 0.78);
-    color: #eef2f7;
-    backdrop-filter: blur(14px);
+    height: 34px;
+    grid-template-columns: var(--stepper-arrow-width) 0px var(--stepper-arrow-width);
+    border: 1px solid rgba(127, 208, 245, 0.82);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #25a9e8 0%, #1e9edb 48%, #0f78bd 100%);
+    color: #ffffff;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      0 8px 24px rgba(0, 0, 0, 0.28);
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      inset 0 -1px 0 rgba(7, 17, 31, 0.18),
+      0 7px 18px rgba(15, 111, 184, 0.24),
+      0 2px 6px rgba(15, 42, 81, 0.16);
     transition:
+      grid-template-columns 480ms cubic-bezier(0.22, 1, 0.36, 1),
       border-color 220ms ease,
-      box-shadow 220ms ease,
-      grid-template-columns 420ms cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .module-stepper:hover,
   .module-stepper:focus-within {
-    border-color: rgba(30, 158, 219, 0.68);
+    grid-template-columns:
+      var(--stepper-arrow-width) var(--stepper-number-width)
+      var(--stepper-arrow-width);
+    border-color: rgba(127, 208, 245, 1);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.16),
-      0 12px 28px rgba(0, 0, 0, 0.34);
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -1px 0 rgba(7, 17, 31, 0.16),
+      0 10px 24px rgba(15, 111, 184, 0.3),
+      0 3px 8px rgba(15, 42, 81, 0.18);
+    transform: translate3d(0, -1px, 0);
   }
   .module-stepper > * {
     position: relative;
     z-index: 1;
   }
   .module-stepper-button {
+    isolation: isolate;
+    overflow: hidden;
     border: 0;
     border-radius: 0;
     height: 100%;
     min-width: 0;
     background: transparent;
     box-shadow: none;
-    color: #eef2f7;
+    color: #ffffff;
     transform: translate3d(0, 0, 0) scale(1);
     transition:
-      background 220ms ease,
-      color 220ms ease,
       opacity 220ms ease,
       transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .module-stepper-button:not(:disabled):hover,
-  .module-stepper-button:not(:disabled):focus-visible {
-    background: rgba(30, 158, 219, 0.2);
-    color: #7fd0f5;
-    transform: translate3d(0, 0, 0) scale(1);
+  .module-stepper-button--prev {
+    border-radius: 999px 0 0 999px;
+  }
+  .module-stepper-button--next {
+    border-radius: 0 999px 999px 0;
+  }
+  .module-stepper-button__ink {
+    position: absolute;
+    inset: 2px;
+    z-index: -1;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(127, 208, 245, 0.92), rgba(30, 158, 219, 0.74));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      0 0 12px rgba(127, 208, 245, 0.42);
+    opacity: 0;
+    transform: scale(0.38);
+    transition:
+      opacity 180ms ease,
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .module-stepper-button:not(:disabled):hover .module-stepper-button__ink,
+  .module-stepper-button:not(:disabled):focus-visible .module-stepper-button__ink {
+    opacity: 1;
+    transform: scale(1);
   }
   .module-stepper-button:not(:disabled):active {
-    transform: translate3d(0, 0, 0) scale(0.94);
+    transform: translate3d(0, 0, 0) scale(0.9);
   }
   .module-stepper-button:disabled {
     background: transparent;
-    color: rgba(238, 242, 247, 0.38);
+    color: rgba(255, 255, 255, 0.36);
   }
-  .module-stepper-button__icon {
-    display: inline-block;
+  .module-stepper-arrow {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    width: 14px;
+    height: 18px;
     line-height: 1;
-    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):hover .module-stepper-button__icon,
-  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):focus-visible .module-stepper-button__icon {
-    transform: translate3d(-3px, 0, 0);
+  .module-stepper-arrow__base,
+  .module-stepper-arrow__reveal {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    color: currentColor;
+    transition:
+      opacity 180ms ease,
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .module-stepper-button[data-stepper-direction='next']:not(:disabled):hover .module-stepper-button__icon,
-  .module-stepper-button[data-stepper-direction='next']:not(:disabled):focus-visible .module-stepper-button__icon {
-    transform: translate3d(3px, 0, 0);
+  .module-stepper-arrow__base {
+    opacity: 0.82;
+    transform: translate3d(0, 0, 0);
+  }
+  .module-stepper-arrow__reveal {
+    opacity: 0;
+  }
+  .module-stepper-button[data-stepper-direction='prev'] .module-stepper-arrow__reveal {
+    transform: translate3d(8px, 0, 0);
+  }
+  .module-stepper-button[data-stepper-direction='next'] .module-stepper-arrow__reveal {
+    transform: translate3d(-8px, 0, 0);
+  }
+  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):is(:hover, :focus-visible)
+    .module-stepper-arrow__base {
+    opacity: 0;
+    transform: translate3d(-9px, 0, 0);
+  }
+  .module-stepper-button[data-stepper-direction='next']:not(:disabled):is(:hover, :focus-visible)
+    .module-stepper-arrow__base {
+    opacity: 0;
+    transform: translate3d(9px, 0, 0);
+  }
+  .module-stepper-button:not(:disabled):is(:hover, :focus-visible)
+    .module-stepper-arrow__reveal {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
   .module-stepper-status {
     height: 100%;
     min-width: 0;
     align-self: stretch;
     border: 0;
-    border-inline: 1px solid rgba(127, 208, 245, 0.2);
-    background: rgba(247, 251, 255, 0.08);
+    overflow: hidden;
+    border-inline: 1px solid transparent;
+    background: rgba(15, 111, 184, 0.2);
     color: #ffffff;
+    font-size: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, 0, 0) scaleX(0.55);
     transition:
+      border-color 240ms ease,
+      opacity 220ms ease,
       background 220ms ease,
-      color 220ms ease,
-      transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .module-stepper:is(:hover, :focus-within) .module-stepper-status {
+    border-inline-color: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate3d(0, 0, 0) scaleX(1);
   }
   .module-stepper-status:hover,
   .module-stepper-status:focus-visible {
-    background: rgba(30, 158, 219, 0.18);
-    color: #7fd0f5;
+    background: rgba(127, 208, 245, 0.24);
   }
   .module-stepper-status:active {
-    transform: scale(0.94);
+    transform: scale(0.9);
+  }
+  .module-stepper-status__value {
+    opacity: 0;
+    transform: translate3d(0, 55%, 0);
+    transition:
+      opacity 220ms ease 100ms,
+      transform 420ms cubic-bezier(0.22, 1, 0.36, 1) 70ms;
+    animation: module-stepper-number-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .module-stepper:is(:hover, :focus-within) .module-stepper-status__value {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+  .module-stepper-button:focus-visible,
+  .module-stepper-status:focus-visible {
+    outline: 0;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92);
   }
   .module-card {
     min-height: max(620px, calc(100svh - 8rem));
@@ -397,6 +493,11 @@ html.lenis body {
 }
 
 @media (min-width: 768px) {
+  .module-stepper {
+    --stepper-arrow-width: 40px;
+    --stepper-number-width: 48px;
+    height: 36px;
+  }
   .module-track {
     box-sizing: content-box;
     grid-auto-columns: min(760px, 82%);
@@ -440,6 +541,17 @@ html.lenis body {
 @keyframes module-icon-glow {
   50% {
     box-shadow: 0 0 28px rgba(30, 158, 219, 0.26);
+  }
+}
+
+@keyframes module-stepper-number-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 70%, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -535,8 +647,11 @@ html.lenis body {
   }
   .module-stepper,
   .module-stepper-button,
-  .module-stepper-button__icon,
-  .module-stepper-status {
+  .module-stepper-button__ink,
+  .module-stepper-arrow__base,
+  .module-stepper-arrow__reveal,
+  .module-stepper-status,
+  .module-stepper-status__value {
     transition: none;
   }
   .module-stepper-button:not(:disabled):hover,
@@ -544,12 +659,11 @@ html.lenis body {
   .module-stepper-button:not(:disabled):active,
   .module-stepper-status:hover,
   .module-stepper-status:focus-visible,
-  .module-stepper-status:active,
-  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):hover .module-stepper-button__icon,
-  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):focus-visible .module-stepper-button__icon,
-  .module-stepper-button[data-stepper-direction='next']:not(:disabled):hover .module-stepper-button__icon,
-  .module-stepper-button[data-stepper-direction='next']:not(:disabled):focus-visible .module-stepper-button__icon {
+  .module-stepper-status:active {
     transform: none;
+  }
+  .module-stepper-status__value {
+    animation: none;
   }
   .module-card-active,
   .module-card-active .module-card__icon {
