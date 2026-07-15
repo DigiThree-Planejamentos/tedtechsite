@@ -36,7 +36,7 @@ export const content = {
       { q: 'De novo pagando técnico por isso?', s: '— por um problema bem simples' },
       { q: 'Como descubro qual componente está com problema?', s: '— sem trocar peças no escuro' },
     ],
-    turn: 'A boa notícia: tudo isso se aprende — começando do zero.',
+    turn: 'A boa notícia: tudo isso se aprende começando do zero.',
   },
 
   modulos: {

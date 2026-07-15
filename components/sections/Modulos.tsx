@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') {
 
 const DESKTOP_QUERY = '(min-width: 768px)';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
-const DESKTOP_LEAD_PROGRESS = 0.08;
+const DESKTOP_LEAD_PROGRESS = 0.025;
 const DESKTOP_TRACK_PROGRESS = 1 - DESKTOP_LEAD_PROGRESS * 2;
 
 export function Modulos() {
@@ -181,10 +181,10 @@ export function Modulos() {
       trigger: section,
       pin,
       pinSpacing: true,
-      start: 'top -8%',
+      start: 'top top',
       end: () =>
         `+=${Math.max(1, getMaxX() + getLeadDistance() * 2)}`,
-      scrub: 0.6,
+      scrub: 0.35,
       animation: timeline,
       invalidateOnRefresh: true,
       // This pin adds several viewport-heights of scroll space. Refresh it

@@ -14,21 +14,19 @@ export function Hero() {
       id="hero"
       className="site-section site-section--compact relative overflow-hidden"
     >
-      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 md:grid-cols-[0.85fr_1.15fr]">
+      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
         <div className="flex flex-col justify-center text-left">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-blue/15 bg-white/80 px-3 py-2 text-[11px] font-semibold text-blue-deep shadow-sm">
-            <span className="grid h-5 w-5 place-items-center rounded-full bg-blue text-white">*</span>
-            {d.label}
-          </div>
-
-          <h1 className="mt-4 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal
               as="span"
               type="lines"
-              trigger="ready"
-              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-            >
-              {d.title}
+            trigger="ready"
+            className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+          >
+              <span className="text-blue">Já pensou</span>{' '}
+              <span className="inline-block text-[22px] sm:text-[26px] md:text-[32px] lg:text-[40px]">
+                alguma dessas?
+              </span>
             </SplitReveal>
           </h1>
 

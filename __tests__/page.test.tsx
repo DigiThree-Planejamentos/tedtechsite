@@ -6,7 +6,9 @@ import { content } from '@/lib/content';
 describe('Home page', () => {
   it('renders the new hero, modules anchor and offer price together', () => {
     const { container } = render(<Home />);
-    expect(screen.getByText(content.dores.title)).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: content.dores.title }),
+    ).toBeInTheDocument();
     expect(container.querySelector('#modulos')).not.toBeNull();
     expect(container.querySelector('#instrutor')).toBeNull();
     expect(container.querySelector('#tira-duvidas')).not.toBeNull();

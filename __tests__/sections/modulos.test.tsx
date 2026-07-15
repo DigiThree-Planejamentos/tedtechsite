@@ -201,8 +201,8 @@ describe('Modulos', () => {
     const triggerOptions = vi.mocked(ScrollTrigger.create).mock.calls.at(-1)?.[0];
     expect(triggerOptions?.pin).toBe(container.querySelector('.module-pin'));
     expect(triggerOptions?.pinSpacing).toBe(true);
-    expect(triggerOptions?.start).toBe('top -8%');
-    expect(triggerOptions?.scrub).toBe(0.6);
+    expect(triggerOptions?.start).toBe('top top');
+    expect(triggerOptions?.scrub).toBe(0.35);
     expect(triggerOptions?.invalidateOnRefresh).toBe(true);
     expect(triggerOptions?.refreshPriority).toBe(1);
     expect(triggerOptions?.anticipatePin).toBe(1);
@@ -224,7 +224,7 @@ describe('Modulos', () => {
     );
 
     expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 248,
+      top: 215,
       behavior: 'smooth',
     });
     expect(screen.getByText('02')).toBeInTheDocument();

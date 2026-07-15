@@ -6,7 +6,12 @@ import { content } from '@/lib/content';
 describe('Hero', () => {
   it('renders the headline, diagnostic questions as quotes and the turn phrase', () => {
     render(<Hero />);
-    expect(screen.getByText(content.dores.title)).toBeInTheDocument();
+    expect(screen.queryByText(content.dores.label)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: content.dores.title }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Já pensou')).toHaveClass('text-blue');
+    expect(screen.getByText('alguma dessas?')).toHaveClass('text-[22px]');
     for (const thought of content.dores.thoughts) {
       expect(screen.getByText(`“${thought.q}”`)).toBeInTheDocument();
       expect(screen.getByText(thought.s)).toBeInTheDocument();
