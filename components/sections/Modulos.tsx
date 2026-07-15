@@ -441,37 +441,37 @@ export function Modulos() {
                     className="module-card__text-shade absolute inset-0"
                     aria-hidden
                   />
-                  <div className="module-card__body relative z-10 flex flex-1 flex-col px-4 py-7 md:px-7 md:py-9">
+                  <div className="module-card__body relative z-10 mr-auto flex w-[84%] max-w-[350px] flex-1 flex-col px-4 py-5 md:w-[52%] md:max-w-none md:px-6 md:py-7">
                     <div className="module-card__intro flex-1">
-                      <div className="mb-4 font-mono text-[11px] font-extrabold tracking-wide text-white/70">
+                      <div className="mb-3 font-mono text-[9px] font-extrabold tracking-wide text-white/70 md:text-[10px]">
                         MÓDULO {module.n}
                       </div>
                       <div
-                        className="module-card__icon mb-3 grid h-12 w-12 place-items-center rounded-xl text-xl"
+                        className="module-card__icon mb-2 grid h-10 w-10 place-items-center rounded-xl text-lg md:h-11 md:w-11"
                         aria-hidden
                       >
                         {module.icon}
                       </div>
                       <h3
                         id={`module-${module.n}`}
-                        className="text-lg font-semibold text-white md:text-2xl"
+                        className="text-base font-semibold leading-tight text-white md:text-xl"
                       >
                         {module.title}
                       </h3>
-                      <p className="mt-3 max-w-xl text-xs leading-relaxed text-slate-100/90 md:text-sm">
+                      <p className="mt-2 max-w-md text-[11px] leading-relaxed text-slate-100/90 md:text-xs">
                         {module.desc}
                       </p>
                     </div>
 
-                    <div className="module-card__content mt-8 pt-2 md:mt-10">
-                      <div className="mb-4 font-mono text-[11px] font-bold uppercase tracking-[1.4px] text-[#7fd0f5]">
+                    <div className="module-card__content mt-6 pt-1 md:mt-8">
+                      <div className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[1.2px] text-[#7fd0f5] md:text-[10px]">
                         Conteúdo do módulo
                       </div>
-                      <ul className="space-y-3">
+                      <ul className="space-y-2.5">
                         {module.lessons.map((lesson, lessonIndex) => (
                           <li
                             key={lesson}
-                            className="module-card__lesson flex gap-3 text-xs leading-relaxed text-slate-100/90 md:text-sm"
+                            className="module-card__lesson flex gap-2.5 text-[11px] leading-relaxed text-slate-100/90 md:text-xs"
                             style={
                               { '--lesson-index': lessonIndex } as CSSProperties
                             }
