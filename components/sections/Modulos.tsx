@@ -193,6 +193,10 @@ export function Modulos() {
       scrub: 0.6,
       animation: timeline,
       invalidateOnRefresh: true,
+      // This pin adds several viewport-heights of scroll space. Refresh it
+      // before reveals below the carousel so their start positions include
+      // the pin spacing even though this effect mounts after those reveals.
+      refreshPriority: 1,
       anticipatePin: 1,
       onUpdate: (self) =>
         syncActiveIndex(getHorizontalProgress(self.progress)),

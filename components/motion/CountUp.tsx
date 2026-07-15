@@ -64,7 +64,8 @@ export function CountUp({
           trigger: el,
           start: 'top 85%',
           end: 'bottom top',
-          toggleActions: 'restart reverse restart reverse',
+          once: true,
+          toggleActions: 'play none none none',
         },
         onStart: () => {
           el.textContent = `${parsed.prefix}${format(0, decimals, parsed.num)}${parsed.suffix}`;

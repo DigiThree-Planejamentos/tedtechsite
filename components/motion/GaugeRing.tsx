@@ -32,7 +32,8 @@ export function GaugeRing({ children }: { children: ReactNode }) {
           trigger: el,
           start: 'top 75%',
           end: 'bottom top',
-          toggleActions: 'restart reverse restart reverse',
+          once: true,
+          toggleActions: 'play none none none',
         },
         onUpdate: () => el.style.setProperty('--val', String(state.v)),
       });

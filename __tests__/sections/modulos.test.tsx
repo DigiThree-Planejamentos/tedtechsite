@@ -182,6 +182,7 @@ describe('Modulos', () => {
     expect(triggerOptions?.start).toBe('top -8%');
     expect(triggerOptions?.scrub).toBe(0.6);
     expect(triggerOptions?.invalidateOnRefresh).toBe(true);
+    expect(triggerOptions?.refreshPriority).toBe(1);
     expect(triggerOptions?.anticipatePin).toBe(1);
     expect(triggerOptions?.end).toEqual(expect.any(Function));
     expect(
