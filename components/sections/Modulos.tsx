@@ -423,7 +423,7 @@ export function Modulos() {
                   }}
                   aria-labelledby={`module-${module.n}`}
                   data-active={isActive ? 'true' : 'false'}
-                  className={`module-card relative isolate flex snap-start flex-col overflow-hidden rounded-[1.5rem] border border-blue/25 ${
+                  className={`module-card relative isolate flex snap-start flex-col overflow-hidden rounded-[1.5rem] ${
                     isActive ? 'module-card-active' : ''
                   }`}
                 >
@@ -432,58 +432,53 @@ export function Modulos() {
                     alt={module.imageAlt}
                     fill
                     priority={moduleIndex === 0}
-                    sizes="(min-width: 768px) min(760px, 82vw), calc(100vw - 2.5rem)"
+                    sizes="(min-width: 768px) 460px, min(92vw, 400px)"
                     className="module-card__image object-cover object-center"
                     onLoad={refreshModuleScrollTrigger}
                   />
                   <div className="module-card__shade absolute inset-0" aria-hidden />
-                  <div
-                    className="module-card__text-shade absolute inset-0"
-                    aria-hidden
-                  />
-                  <div className="module-card__body relative z-10 mr-auto flex w-[84%] max-w-[350px] flex-1 flex-col px-4 py-5 md:w-[52%] md:max-w-none md:px-6 md:py-7">
-                    <div className="module-card__intro flex-1">
-                      <div className="mb-3 font-mono text-[9px] font-extrabold tracking-wide text-white/70 md:text-[10px]">
-                        MÓDULO {module.n}
-                      </div>
-                      <div
-                        className="module-card__icon mb-2 grid h-10 w-10 place-items-center rounded-xl text-lg md:h-11 md:w-11"
-                        aria-hidden
-                      >
-                        {module.icon}
-                      </div>
+
+                  <div className="module-card__body relative z-10 flex flex-1 flex-col px-5 pb-5 md:px-6 md:pb-6">
+                    <div>
                       <h3
                         id={`module-${module.n}`}
-                        className="text-base font-semibold leading-tight text-white md:text-xl"
+                        className="text-lg font-bold leading-tight text-white md:text-xl"
                       >
                         {module.title}
                       </h3>
-                      <p className="mt-2 max-w-md text-[11px] leading-relaxed text-slate-100/90 md:text-xs">
-                        {module.desc}
-                      </p>
                     </div>
 
-                    <div className="module-card__content mt-6 pt-1 md:mt-8">
-                      <div className="mb-3 font-mono text-[9px] font-bold uppercase tracking-[1.2px] text-[#7fd0f5] md:text-[10px]">
-                        Conteúdo do módulo
-                      </div>
-                      <ul className="space-y-2.5">
-                        {module.lessons.map((lesson, lessonIndex) => (
-                          <li
-                            key={lesson}
-                            className="module-card__lesson flex gap-2.5 text-[11px] leading-relaxed text-slate-100/90 md:text-xs"
-                            style={
-                              { '--lesson-index': lessonIndex } as CSSProperties
-                            }
-                          >
-                            <span className="text-[#7fd0f5]" aria-hidden>
-                              ✓
-                            </span>
-                            <span>{lesson}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <p className="mt-2 text-[11px] leading-relaxed text-slate-200/85 md:text-xs">
+                      {module.desc}
+                    </p>
+
+                    <div className="mt-4 font-mono text-[9px] font-bold uppercase tracking-[1.2px] text-[#7fd0f5] md:text-[10px]">
+                      O que você aprende
                     </div>
+                    <ul className="module-card__topics mt-2.5 grid gap-1.5">
+                      {module.lessons.map((lesson, lessonIndex) => (
+                        <li
+                          key={lesson}
+                          className="module-card__lesson flex items-start gap-2 py-1 text-[10px] leading-tight text-slate-100 md:text-[11px]"
+                          style={
+                            { '--lesson-index': lessonIndex } as CSSProperties
+                          }
+                        >
+                          <span className="mt-[1px] text-[#7fd0f5]" aria-hidden>
+                            ✓
+                          </span>
+                          <span>{lesson}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href={content.checkoutUrl}
+                      className="module-card__cta mt-auto flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold text-[#07111f] transition-[background,color,transform] duration-200 hover:bg-[#dff5ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98] md:text-sm"
+                    >
+                      Quero aprender
+                      <span aria-hidden>→</span>
+                    </a>
                   </div>
                 </article>
               );

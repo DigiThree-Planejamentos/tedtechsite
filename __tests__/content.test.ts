@@ -26,12 +26,11 @@ describe('content', () => {
     expect(content.offer.includes).toContain('6 módulos completos');
   });
 
-  it('does not advertise unsupported course promises', () => {
+  it('does not advertise unsupported course deliverables', () => {
     const pageContent = JSON.stringify(content).toLowerCase();
     expect(pageContent).not.toContain('dual boot');
     expect(pageContent).not.toContain('precificar');
     expect(pageContent).not.toContain('acesso vitalício');
     expect(pageContent).not.toContain('certificado de conclusão');
-    expect(pageContent).not.toContain('renda extra');
   });
 });

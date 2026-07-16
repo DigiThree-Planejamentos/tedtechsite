@@ -148,6 +148,46 @@ export const content = {
     ],
   },
 
+  caminhos: {
+    label: 'Para que serve esse conhecimento',
+    title: 'Um curso, três caminhos',
+    subtitle:
+      'O que você aprende nos 6 módulos serve tanto pra cuidar do seu próprio computador quanto pra ganhar dinheiro com isso — na hora vaga ou como profissão.',
+    cta: 'Quero me inscrever',
+    cards: [
+      {
+        icon: 'home',
+        title: 'No seu próprio PC',
+        desc: 'Resolva os problemas de casa sem pagar técnico toda vez.',
+        bullets: [
+          'Diagnosticar lentidão e travamentos',
+          'Fazer upgrade com segurança',
+          'Manter backup e proteção em dia',
+        ],
+      },
+      {
+        icon: 'money',
+        title: 'Como renda extra',
+        desc: 'Atenda vizinhos, amigos e pequenos negócios nas horas vagas.',
+        bullets: [
+          'Montagens e formatações avulsas',
+          'Manutenção pra quem está por perto',
+          'Primeiros clientes como freelancer',
+        ],
+      },
+      {
+        icon: 'briefcase',
+        title: 'Como profissão',
+        desc: 'Use a base do curso pra entrar no mercado de suporte técnico.',
+        bullets: [
+          'Assistências técnicas e lojas de informática',
+          'Suporte de TI dentro de empresas',
+          'Montar seu próprio negócio de manutenção',
+        ],
+      },
+    ],
+  },
+
   instrutor: {
     label: 'Quem ensina',
     name: 'Nome do Instrutor', // TODO

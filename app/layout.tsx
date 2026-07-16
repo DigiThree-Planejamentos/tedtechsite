@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: 'TedTech — Curso de Manutenção e Montagem de PC do Zero',
   description:
     'Aprenda os fundamentos, a montagem, a configuração e a manutenção de computadores do zero.',
+  icons: {
+    icon: [{ url: '/favicon.png', type: 'image/png' }],
+    shortcut: '/favicon.png',
+  },
   openGraph: {
     title: 'TedTech — Curso de Manutenção e Montagem de PC',
     description:

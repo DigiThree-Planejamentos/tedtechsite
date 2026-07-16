@@ -163,10 +163,11 @@ describe('Modulos', () => {
     });
   });
 
-  it('renders module cards with the shared site border language', () => {
+  it('renders module cards without decorative borders', () => {
     const { container } = render(<Modulos />);
     for (const card of container.querySelectorAll('article')) {
-      expect(card).toHaveClass('border', 'border-blue/25', 'rounded-[1.5rem]');
+      expect(card).toHaveClass('rounded-[1.5rem]');
+      expect(card).not.toHaveClass('border', 'border-blue/25');
       expect(card).not.toHaveClass('clean-border');
       expect(card.className).not.toMatch(/\bbg-/);
     }

@@ -10,6 +10,7 @@ describe('Home page', () => {
       screen.getByRole('heading', { name: content.dores.title }),
     ).toBeInTheDocument();
     expect(container.querySelector('#modulos')).not.toBeNull();
+    expect(container.querySelector('#caminhos')).not.toBeNull();
     expect(container.querySelector('#instrutor')).toBeNull();
     expect(container.querySelector('#tira-duvidas')).not.toBeNull();
     expect(container.querySelector('#identificacao')).toBeNull();
