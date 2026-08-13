@@ -7,7 +7,14 @@ import { SplitText } from 'gsap/SplitText';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotion } from './useReducedMotion';
 import { useReady } from '@/components/providers/ReadyContext';
-import { duration, stagger as staggerSteps, REVEAL_START } from '@/lib/motion';
+import {
+  ARRIVAL_BRIGHTNESS_FROM,
+  ARRIVAL_SCALE_FROM,
+  duration,
+  stagger as staggerSteps,
+  REVEAL_START,
+  REVEAL_TOGGLE,
+} from '@/lib/motion';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, SplitText);
@@ -55,10 +62,17 @@ export function SplitReveal({
       const targets = split[type] as Element[] | undefined;
       if (!targets || targets.length === 0) return;
 
-      gsap.set(targets, { yPercent: type === 'lines' ? 110 : 60, opacity: type === 'lines' ? 1 : 0 });
+      gsap.set(targets, {
+        yPercent: type === 'lines' ? 110 : 60,
+        opacity: type === 'lines' ? 1 : 0,
+        scale: ARRIVAL_SCALE_FROM,
+        filter: `blur(8px) brightness(${ARRIVAL_BRIGHTNESS_FROM})`,
+      });
       const tween = gsap.to(targets, {
         yPercent: 0,
         opacity: 1,
+        scale: 1,
+        filter: 'blur(0px) brightness(1)',
         duration: duration.slow,
         ease: 'power4.out',
         stagger,
@@ -68,8 +82,7 @@ export function SplitReveal({
                 trigger: el,
                 start: REVEAL_START,
                 end: 'bottom top',
-                once: true,
-                toggleActions: 'play none none none',
+                toggleActions: REVEAL_TOGGLE,
               },
             }
           : {}),

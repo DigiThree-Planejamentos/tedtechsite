@@ -237,9 +237,8 @@ export const content = {
     payments: 'Pix · Cartão · Boleto',
   },
 
-  ctaFinal: {
-    title: 'Pronto pra começar do zero?',
-    sub: 'Dê o primeiro passo para conhecer, montar e cuidar do seu computador.',
+  floatingCta: {
+    urgency: 'Últimas vagas com acompanhamento',
     cta: 'Quero me inscrever',
   },
 

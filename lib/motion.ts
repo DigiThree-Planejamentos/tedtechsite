@@ -38,3 +38,10 @@ export const breakpoint = {
 
 /** Default ScrollTrigger start for on-enter reveals. */
 export const REVEAL_START = 'top 85%';
+
+// "Arrival" reveal physics — content approaches like the circuit field's near
+// stars (small/blurred/dim -> full size/sharp/bright), reversing when you
+// scroll back up so it recedes the same way it arrived.
+export const ARRIVAL_SCALE_FROM = 0.88;
+export const ARRIVAL_BRIGHTNESS_FROM = 0.55;
+export const REVEAL_TOGGLE = 'play reverse play reverse';

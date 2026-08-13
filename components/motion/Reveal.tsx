@@ -5,22 +5,34 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotion } from './useReducedMotion';
-import { duration, REVEAL_START } from '@/lib/motion';
+import {
+  ARRIVAL_BRIGHTNESS_FROM,
+  ARRIVAL_SCALE_FROM,
+  duration,
+  REVEAL_START,
+  REVEAL_TOGGLE,
+} from '@/lib/motion';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 /**
- * Fade/blur/rise reveal on scroll-in. When `stagger` is set, the element's
- * direct children animate in sequence (grids/lists). Under reduced motion the
- * content renders visible with no animation.
+ * Reveal on scroll-in. When `stagger` is set, the element's direct children
+ * animate in sequence (grids/lists). Under reduced motion the content
+ * renders visible with no animation.
+ *
+ * `variant="arrival"` (default) grows/sharpens/brightens content into place
+ * like a near star in the circuit field, and reverses the same way when you
+ * scroll back up. `variant="simple"` is the plain fade/blur/rise, played
+ * once — for content that shouldn't echo the space-journey motion (footer).
  */
 export function Reveal({
   as = 'div',
   y = 24,
   blur = 8,
   stagger,
+  variant = 'arrival',
   className,
   children,
 }: {
@@ -28,6 +40,7 @@ export function Reveal({
   y?: number;
   blur?: number;
   stagger?: number;
+  variant?: 'arrival' | 'simple';
   className?: string;
   children: ReactNode;
 }) {
@@ -41,12 +54,23 @@ export function Reveal({
       if (!el) return;
       const targets: Element | Element[] =
         stagger != null ? Array.from(el.children) : el;
+      const arrival = variant === 'arrival';
 
-      gsap.set(targets, { autoAlpha: 0, y, filter: blur ? `blur(${blur}px)` : 'none' });
+      gsap.set(targets, {
+        autoAlpha: 0,
+        y,
+        scale: arrival ? ARRIVAL_SCALE_FROM : 1,
+        filter: arrival
+          ? `blur(${blur}px) brightness(${ARRIVAL_BRIGHTNESS_FROM})`
+          : blur
+            ? `blur(${blur}px)`
+            : 'none',
+      });
       gsap.to(targets, {
         autoAlpha: 1,
         y: 0,
-        filter: 'blur(0px)',
+        scale: 1,
+        filter: arrival ? 'blur(0px) brightness(1)' : 'blur(0px)',
         duration: duration.base,
         ease: 'power3.out',
         stagger: stagger ?? 0,
@@ -54,12 +78,13 @@ export function Reveal({
           trigger: el,
           start: REVEAL_START,
           end: 'bottom top',
-          once: true,
-          toggleActions: 'play none none none',
+          ...(arrival
+            ? { toggleActions: REVEAL_TOGGLE }
+            : { once: true, toggleActions: 'play none none none' }),
         },
       });
     },
-    { dependencies: [reduced], scope: ref },
+    { dependencies: [reduced, variant], scope: ref },
   );
 
   return createElement(as, { ref, className }, children);
