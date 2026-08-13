@@ -14,6 +14,7 @@ describe('Caminhos', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(content.caminhos.subtitle)).toBeInTheDocument();
     expect(container.querySelectorAll('article')).toHaveLength(3);
+    expect(container.querySelectorAll('article.path-card')).toHaveLength(3);
 
     for (const card of content.caminhos.cards) {
       expect(

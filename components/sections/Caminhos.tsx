@@ -103,7 +103,7 @@ export function Caminhos() {
             return (
               <article
                 key={card.title}
-                className="site-panel flex h-full flex-col rounded-[1.5rem] p-6 text-left md:p-8"
+                className="site-panel path-card flex h-full flex-col rounded-[1.5rem] p-6 text-left md:p-8"
               >
                 <Icon
                   aria-hidden="true"

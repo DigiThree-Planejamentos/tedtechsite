@@ -178,7 +178,10 @@ export function Modulos() {
         ease: 'none',
       });
     const trigger = ScrollTrigger.create({
-      trigger: section,
+      // Pin from the container's own top. Starting from the outer section
+      // preserves its desktop top padding and locks the cards too low in the
+      // viewport.
+      trigger: pin,
       pin,
       pinSpacing: true,
       start: 'top top',

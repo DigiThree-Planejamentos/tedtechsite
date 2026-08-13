@@ -200,6 +200,7 @@ describe('Modulos', () => {
     });
 
     const triggerOptions = vi.mocked(ScrollTrigger.create).mock.calls.at(-1)?.[0];
+    expect(triggerOptions?.trigger).toBe(container.querySelector('.module-pin'));
     expect(triggerOptions?.pin).toBe(container.querySelector('.module-pin'));
     expect(triggerOptions?.pinSpacing).toBe(true);
     expect(triggerOptions?.start).toBe('top top');
