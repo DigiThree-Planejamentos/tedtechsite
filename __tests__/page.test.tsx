@@ -14,7 +14,11 @@ describe('Home page', () => {
     expect(container.querySelector('#instrutor')).toBeNull();
     expect(container.querySelector('#tira-duvidas')).not.toBeNull();
     expect(container.querySelector('#identificacao')).toBeNull();
-    expect(screen.getByText(content.offer.priceNow)).toBeInTheDocument();
-    expect(screen.queryByText(content.ctaFinal.title)).not.toBeInTheDocument();
+    expect(screen.getAllByText(content.offer.priceNow)).toHaveLength(2);
+    expect(screen.getByText(content.floatingCta.urgency)).toBeInTheDocument();
+    expect(container.querySelector('[data-floating-cta] a')).toHaveAttribute(
+      'href',
+      content.checkoutUrl,
+    );
   });
 });

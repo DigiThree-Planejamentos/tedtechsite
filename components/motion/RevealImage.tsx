@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useReducedMotion } from './useReducedMotion';
+import { ARRIVAL_BRIGHTNESS_FROM } from '@/lib/motion';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -36,7 +37,10 @@ export function RevealImage({
       const el = ref.current;
       if (!el) return;
       const img = el.querySelector('img');
-      gsap.set(el, { clipPath: 'inset(0 0 100% 0)' });
+      gsap.set(el, {
+        clipPath: 'inset(0 0 100% 0)',
+        filter: `brightness(${ARRIVAL_BRIGHTNESS_FROM})`,
+      });
       if (img) gsap.set(img, { scale: 1.2 });
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -46,7 +50,7 @@ export function RevealImage({
           toggleActions: 'restart reverse restart reverse',
         },
       });
-      tl.to(el, { clipPath: 'inset(0 0 0% 0)', duration: 1.0, ease: 'power4.inOut' });
+      tl.to(el, { clipPath: 'inset(0 0 0% 0)', filter: 'brightness(1)', duration: 1.0, ease: 'power4.inOut' });
       if (img) tl.to(img, { scale: 1, duration: 1.2, ease: 'power3.out' }, 0);
     },
     { dependencies: [reduced], scope: ref },
