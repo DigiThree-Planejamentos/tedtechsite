@@ -47,7 +47,7 @@ export function Oferta() {
                 </Button>
               </MagneticButton>
             </div>
-            <div className="mt-4 text-[11px] text-[#667284] md:text-xs">{o.payments}</div>
+            <div className="mt-4 text-[11px] text-[#667284] md:text-xs">{o.trust.payments}</div>
           </div>
         </div>
       </div>
