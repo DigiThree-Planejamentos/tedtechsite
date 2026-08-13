@@ -31,10 +31,13 @@ export const content = {
   whatsappUrl: 'https://wa.me/5500000000000', // TODO: número real
 
   hero: {
-    headlineWords: ['Hardware', 'Montagem', 'Manutenção'],
-    subLines: [
-      'Conheça os componentes, monte seu computador, instale o sistema',
-      'e aprenda a diagnosticar e prevenir os problemas mais comuns.',
+    eyebrow: 'Curso de montagem e manutenção de computadores',
+    headline: 'Monte, formate e conserte PCs começando do zero',
+    sub: 'Sem pré-requisito e sem medo de abrir o gabinete.',
+    bullets: [
+      '6 módulos, dos componentes à manutenção',
+      'Do zero — nenhum conhecimento prévio',
+      'Pra cuidar do seu PC ou atender clientes',
     ],
     cta: 'Quero me inscrever',
   },

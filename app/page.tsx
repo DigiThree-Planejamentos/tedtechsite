@@ -1,5 +1,6 @@
 import { Header } from '@/components/sections/Header';
 import { Hero } from '@/components/sections/Hero';
+import { Dores } from '@/components/sections/Dores';
 import { Modulos } from '@/components/sections/Modulos';
 import { Evolucao } from '@/components/sections/Evolucao';
 import { Caminhos } from '@/components/sections/Caminhos';
@@ -15,6 +16,7 @@ export default function Home() {
       <Header />
       <MainCard>
         <Hero />
+        <Dores />
         <Modulos />
         <Evolucao />
         <Caminhos />
