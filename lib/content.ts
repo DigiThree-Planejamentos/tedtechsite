@@ -219,20 +219,6 @@ export const content = {
     videoSrc: '', // TODO: embed/mp4
   },
 
-  tiraDuvidas: {
-    label: 'Tira-dúvidas',
-    title: 'Converse com a gente antes de decidir',
-    chatTitle: 'TedTech · Atendimento',
-    chatStatus: 'online',
-    bubbles: [
-      { from: 'them', text: 'Oi! Posso te ajudar a escolher? 👋' },
-      { from: 'me', text: 'Sou iniciante total, consigo acompanhar?' },
-      { from: 'them', text: 'Com certeza — o curso começa pelos fundamentos e avança até a manutenção.' },
-    ],
-    inputPlaceholder: 'Digite sua dúvida…',
-    cta: 'Continuar no WhatsApp',
-  },
-
   offer: {
     label: 'A oferta',
     title: 'Comece hoje, do zero',

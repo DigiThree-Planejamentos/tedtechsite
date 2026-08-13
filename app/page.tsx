@@ -4,8 +4,8 @@ import { Dores } from '@/components/sections/Dores';
 import { Modulos } from '@/components/sections/Modulos';
 import { Evolucao } from '@/components/sections/Evolucao';
 import { Caminhos } from '@/components/sections/Caminhos';
-import { TiraDuvidas } from '@/components/sections/TiraDuvidas';
 import { Oferta } from '@/components/sections/Oferta';
+import { Faq } from '@/components/sections/Faq';
 import { FloatingCta } from '@/components/sections/FloatingCta';
 import { Footer } from '@/components/sections/Footer';
 import { MainCard } from '@/components/layout/MainCard';
@@ -20,8 +20,8 @@ export default function Home() {
         <Modulos />
         <Evolucao />
         <Caminhos />
-        <TiraDuvidas />
         <Oferta />
+        <Faq />
       </MainCard>
       <FloatingCta />
       <Footer />
