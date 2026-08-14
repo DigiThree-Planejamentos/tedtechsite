@@ -15,11 +15,7 @@ export function Hero() {
     >
       <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
         <div className="flex flex-col justify-center text-left">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue sm:text-xs">
-            {h.eyebrow}
-          </p>
-
-          <h1 className="mt-3 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
                   accessible name "Chega de pagar técnico" in one piece. */}
@@ -28,18 +24,24 @@ export function Hero() {
                   descender of the "g". The font needs >= 1.19em to fit it.
                   The negative top margin cancels the extra half-leading so
                   the headline keeps sitting close under the eyebrow. */}
-              <span className="-mt-[0.12em] block text-5xl/[1.25] text-blue sm:text-6xl/[1.25] md:text-7xl/[1.25] lg:text-8xl/[1.25]">
+              <span className="-mt-[0.12em] block font-subtitle text-5xl/[1.25] italic text-blue sm:text-6xl/[1.25] md:text-7xl/[1.25] lg:text-8xl/[1.25]">
                 {h.headline.lead}
               </span>{' '}
               {/* Same 1.25 leading as the lead line, and for the same reason:
-                  "pagar" has a descender and the mask clips at the line box. */}
-              <span className="-mt-[0.12em] block text-3xl/[1.25] sm:text-4xl/[1.25] md:text-5xl/[1.25] lg:text-6xl/[1.25]">
+                  "pagar" has a descender and the mask clips at the line box.
+
+                  The sizes are measured, not chosen: each one lands this line's
+                  right ink edge on the same x as the "a" of "Chega" above it.
+                  Measured against the glyph ink, not the advance box, because
+                  the italic overhangs its box and the eye reads the ink. They
+                  are tied to these two exact strings and to Space Grotesk
+                  italic above — changing either text or font means measuring
+                  again. */}
+              <span className="-mt-[0.12em] block whitespace-nowrap text-[19.09px]/[1.25] sm:text-[23.82px]/[1.25] md:text-[28.56px]/[1.25] lg:text-[38.04px]/[1.25]">
                 {h.headline.rest}
               </span>
             </SplitReveal>
           </h1>
-
-          <p className="mt-4 max-w-xl text-sm text-[#3b4654] sm:text-base">{h.sub}</p>
 
           <Reveal as="ul" stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
             {h.bullets.map((bullet) => (

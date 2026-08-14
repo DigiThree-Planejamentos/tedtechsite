@@ -32,8 +32,8 @@ export const content = {
 
   hero: {
     eyebrow: 'Curso de montagem e manutenção de computadores',
-    // Duas partes tipográficas de uma frase só: `lead` sai grande e em azul,
-    // `rest` na linha de baixo no tamanho normal. O h1 lê os dois juntos.
+    // Duas partes tipográficas de uma frase só, cada uma em sua própria linha.
+    // O h1 continua lendo as duas partes como uma única frase.
     headline: {
       lead: 'Chega',
       rest: 'de pagar técnico',
