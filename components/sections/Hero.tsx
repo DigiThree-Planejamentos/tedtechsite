@@ -20,13 +20,22 @@ export function Hero() {
           </p>
 
           <h1 className="mt-3 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
-            <SplitReveal
-              as="span"
-              type="lines"
-              trigger="ready"
-              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-            >
-              {h.headline}
+            <SplitReveal as="span" type="lines" trigger="ready" className="block">
+              {/* The space between the spans is load-bearing: it keeps the
+                  accessible name "Chega de pagar técnico" in one piece. */}
+              {/* leading-[1.25] is not styling: the text-* utilities ship
+                  line-height 1, which makes the GSAP line mask clip the
+                  descender of the "g". The font needs >= 1.19em to fit it.
+                  The negative top margin cancels the extra half-leading so
+                  the headline keeps sitting close under the eyebrow. */}
+              <span className="-mt-[0.12em] block text-5xl/[1.25] text-blue sm:text-6xl/[1.25] md:text-7xl/[1.25] lg:text-8xl/[1.25]">
+                {h.headline.lead}
+              </span>{' '}
+              {/* Same 1.25 leading as the lead line, and for the same reason:
+                  "pagar" has a descender and the mask clips at the line box. */}
+              <span className="-mt-[0.12em] block text-3xl/[1.25] sm:text-4xl/[1.25] md:text-5xl/[1.25] lg:text-6xl/[1.25]">
+                {h.headline.rest}
+              </span>
             </SplitReveal>
           </h1>
 

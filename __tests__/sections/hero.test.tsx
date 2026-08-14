@@ -3,16 +3,38 @@ import { render, screen } from '@testing-library/react';
 import { Hero } from '@/components/sections/Hero';
 import { content } from '@/lib/content';
 
+const fullHeadline = `${content.hero.headline.lead} ${content.hero.headline.rest}`;
+
 describe('Hero', () => {
   it('names the product in the h1 and supports it with eyebrow, sub and bullets', () => {
     render(<Hero />);
     expect(
-      screen.getByRole('heading', { level: 1, name: content.hero.headline }),
+      screen.getByRole('heading', { level: 1, name: fullHeadline }),
     ).toBeInTheDocument();
     expect(screen.getByText(content.hero.eyebrow)).toBeInTheDocument();
     expect(screen.getByText(content.hero.sub)).toBeInTheDocument();
     for (const bullet of content.hero.bullets) {
       expect(screen.getByText(bullet)).toBeInTheDocument();
+    }
+  });
+
+  it('sets the lead word larger and in the brand blue above the remainder', () => {
+    render(<Hero />);
+    const lead = screen.getByText(content.hero.headline.lead);
+    const rest = screen.getByText(content.hero.headline.rest);
+    expect(lead).not.toBe(rest);
+    expect(lead.className).toMatch(/\btext-blue\b/);
+    expect(lead.className).toMatch(/text-5xl\/\[1\.25\]/);
+    expect(rest.className).toMatch(/text-3xl\/\[1\.25\]/);
+    // Every size step of BOTH lines must carry the 1.25 leading. The text-*
+    // utilities ship line-height 1, and a bare `leading-` class loses to the
+    // responsive ones, so the GSAP line mask clips the descenders of "Chega"
+    // and "pagar".
+    for (const size of ['text-5xl', 'sm:text-6xl', 'md:text-7xl', 'lg:text-8xl']) {
+      expect(lead.className).toContain(`${size}/[1.25]`);
+    }
+    for (const size of ['text-3xl', 'sm:text-4xl', 'md:text-5xl', 'lg:text-6xl']) {
+      expect(rest.className).toContain(`${size}/[1.25]`);
     }
   });
 
