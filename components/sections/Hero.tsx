@@ -14,7 +14,10 @@ export function Hero() {
       className="site-section site-section--compact relative overflow-hidden"
     >
       <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
-        <div className="flex flex-col justify-center text-left">
+        {/* Lifted off the vertical centre: the column is `justify-center`, which
+            left the headline sitting low against the video panel. Transform, not
+            margin, because on mobile the column has no free space to give back. */}
+        <div className="flex -translate-y-4 flex-col justify-center text-left md:-translate-y-6 lg:-translate-y-10">
           <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
