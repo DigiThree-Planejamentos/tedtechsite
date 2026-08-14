@@ -324,10 +324,13 @@ seção". No mobile, Caminhos (1,60), Oferta (1,14) e Módulos (1,07) simplesmen
 sem corte de conteúdo e sem rolagem dentro de rolagem, que trava o dedo do usuário e esconde
 conteúdo pago. O mesmo padrão que o Zarpei usa (`min-h-[100svh]` em `#economia` e `#orcamento`).
 
-**Módulos não recebe `--full`.** Já ocupa a tela por estar pinada; somar `min-height` deve
-injetar uma tela vazia antes do pin começar. Recebe faixa e cor, não altura. **A verificar por
-medição**, não no olho: se a medição mostrar que o pin convive bem com `min-height`, a
-exceção cai e a regra fica uniforme.
+**~~Módulos não recebe `--full`~~ — a exceção caiu.** Enquanto o carrossel era pinado por
+`ScrollTrigger`, Módulos consumia quatro telas de rolagem e somar `min-height` injetaria uma
+tela vazia antes do pin. Depois que o carrossel virou o acordeão do DigiThree, os seis cards
+passaram a caber numa tela só, o pin saiu e a seção virou uma faixa normal como as outras.
+Medido: a seção foi de **3440px para 900px** a 1440×900.
+
+A regra voltou a ser uniforme: **toda seção é `--full`, sem exceção.**
 
 **O Hero perde o `min-h-[calc(100svh-24rem)]` interno** (`Hero.tsx` linha 16). Aquele número
 foi calculado para o layout do cartão; com a faixa dona da altura, ele passa a competir com
@@ -400,7 +403,7 @@ Notas de projeto:
 |---|---|---|
 | hero | claro (sólido) | sim |
 | dores | escuro (transparente) | sim |
-| modulos | claro (sólido) | não (pinada) |
+| modulos | claro (sólido) | sim |
 | evolucao | escuro (transparente) | sim |
 | caminhos | claro (sólido) | sim |
 | oferta | escuro (transparente) | sim |

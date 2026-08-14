@@ -1,22 +1,13 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Modulos } from '@/components/sections/Modulos';
 import { content } from '@/lib/content';
 
-function installMatchMedia({
-  desktop = false,
-  reducedMotion = false,
-}: {
-  desktop?: boolean;
-  reducedMotion?: boolean;
-} = {}) {
+function installMatchMedia({ reducedMotion = false }: { reducedMotion?: boolean } = {}) {
   Object.defineProperty(window, 'matchMedia', {
     configurable: true,
     value: vi.fn().mockImplementation((query: string) => ({
-      matches:
-        (query.includes('min-width') && desktop) ||
-        (query.includes('prefers-reduced-motion') && reducedMotion),
+      matches: query.includes('prefers-reduced-motion') && reducedMotion,
       media: query,
       onchange: null,
       addEventListener: vi.fn(),
@@ -32,14 +23,6 @@ describe('Modulos', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     installMatchMedia();
-    Object.defineProperty(window, 'scrollTo', {
-      configurable: true,
-      value: vi.fn(),
-    });
-    Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
-      configurable: true,
-      value: vi.fn(),
-    });
     Object.defineProperty(Element.prototype, 'animate', {
       configurable: true,
       value: vi.fn(() => ({ cancel: vi.fn() })),
@@ -54,7 +37,8 @@ describe('Modulos', () => {
     const { container } = render(<Modulos />);
     expect(container.querySelector('#modulos')).not.toBeNull();
     for (const m of content.modules) {
-      expect(screen.getByText(m.title)).toBeInTheDocument();
+      // O titulo aparece duas vezes: no h3 e no titulo vertical do card.
+      expect(screen.getAllByText(m.title).length).toBeGreaterThan(0);
     }
   });
 
@@ -66,6 +50,7 @@ describe('Modulos', () => {
       for (const lesson of module.lessons) {
         expect(screen.getByText(lesson)).toBeInTheDocument();
       }
+      expect(screen.getByText(module.desc)).toBeInTheDocument();
     }
   });
 
@@ -80,7 +65,50 @@ describe('Modulos', () => {
     }
   });
 
-  it('provides controls to navigate the horizontal module list', () => {
+  it('keeps exactly one card open, starting on the first', () => {
+    const { container } = render(<Modulos />);
+    const cards = Array.from(container.querySelectorAll('article'));
+
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+    expect(cards[0]).toHaveAttribute('data-active', 'true');
+  });
+
+  it('opens the card under the pointer and closes the previous one', () => {
+    const { container } = render(<Modulos />);
+    const cards = Array.from(container.querySelectorAll('article'));
+
+    fireEvent.mouseEnter(cards[3]);
+
+    expect(cards[3]).toHaveAttribute('data-active', 'true');
+    expect(cards[0]).toHaveAttribute('data-active', 'false');
+    // A invariante que importa: nunca dois abertos ao mesmo tempo.
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+  });
+
+  it('opens the card that receives focus, so the keyboard reaches it too', () => {
+    const { container } = render(<Modulos />);
+    const cards = Array.from(container.querySelectorAll('article'));
+
+    // O foco borbulha do link do card ate o article.
+    fireEvent.focus(cards[2].querySelector('a')!);
+
+    expect(cards[2]).toHaveAttribute('data-active', 'true');
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+  });
+
+  it('gives every card a vertical spine title for the collapsed state', () => {
+    const { container } = render(<Modulos />);
+    const spines = Array.from(container.querySelectorAll('.module-card__spine'));
+
+    expect(spines).toHaveLength(6);
+    spines.forEach((spine, i) => {
+      expect(spine).toHaveTextContent(content.modules[i].title);
+      // Decorativo: quem nomeia o card e o h3.
+      expect(spine).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  it('provides controls to step through the modules', () => {
     render(<Modulos />);
     const previous = screen.getByRole('button', { name: 'Ver módulos anteriores' });
     const next = screen.getByRole('button', { name: 'Ver próximos módulos' });
@@ -91,33 +119,25 @@ describe('Modulos', () => {
     expect(next).toHaveAttribute('data-stepper-direction', 'next');
     expect(previous).toHaveTextContent('‹');
     expect(next).toHaveTextContent('›');
-    expect(previous).not.toHaveTextContent('←');
-    expect(next).not.toHaveTextContent('→');
     expect(screen.getByText('01')).toBeInTheDocument();
 
     fireEvent.click(next);
     expect(previous).toBeEnabled();
-    expect(next).toBeEnabled();
     expect(screen.getByText('02')).toBeInTheDocument();
     expect(document.querySelectorAll('[data-active="true"]')).toHaveLength(1);
-    expect(Element.prototype.animate).toHaveBeenCalledTimes(2);
-    expect(Element.prototype.animate).toHaveBeenNthCalledWith(
-      2,
-      expect.arrayContaining([
-        expect.objectContaining({
-          opacity: 0,
-          transform: 'translate3d(11px, 0, 0)',
-        }),
-        expect.objectContaining({
-          opacity: 0,
-          transform: 'translate3d(-6px, 0, 0)',
-        }),
-        expect.objectContaining({
-          opacity: 1,
-          transform: 'translate3d(0, 0, 0)',
-        }),
-      ]),
-      expect.objectContaining({ duration: 480 }),
+  });
+
+  it('walks the stepper all the way to the last module and stops there', () => {
+    const { container } = render(<Modulos />);
+    const next = screen.getByRole('button', { name: 'Ver próximos módulos' });
+
+    for (let i = 0; i < content.modules.length; i += 1) fireEvent.click(next);
+
+    expect(screen.getByText('06')).toBeInTheDocument();
+    expect(next).toBeDisabled();
+    expect(Array.from(container.querySelectorAll('article')).at(-1)).toHaveAttribute(
+      'data-active',
+      'true',
     );
   });
 
@@ -156,13 +176,6 @@ describe('Modulos', () => {
     expect(Element.prototype.animate).not.toHaveBeenCalled();
   });
 
-  it('animates the initial visible module when the observer API is unavailable', async () => {
-    render(<Modulos />);
-    await waitFor(() => {
-      expect(document.querySelectorAll('[data-active="true"]')).toHaveLength(1);
-    });
-  });
-
   it('renders module cards without decorative borders', () => {
     const { container } = render(<Modulos />);
     for (const card of container.querySelectorAll('article')) {
@@ -173,99 +186,36 @@ describe('Modulos', () => {
     }
   });
 
-  it('keeps module text static when the pointer enters a card', () => {
+  it('keeps native horizontal scrolling below the accordion breakpoint', () => {
     const { container } = render(<Modulos />);
-    const firstCard = container.querySelector('article')!;
+    const trilho = container.querySelector('[data-module-carousel]');
 
-    fireEvent.mouseEnter(firstCard);
-    expect(Element.prototype.animate).not.toHaveBeenCalled();
+    expect(trilho?.className).toContain('max-lg:overflow-x-auto');
+    expect(trilho?.className).toContain('max-lg:snap-x');
+    for (const card of container.querySelectorAll('article')) {
+      expect(card.className).toContain('max-lg:snap-center');
+      expect(card.className).toContain('max-lg:shrink-0');
+    }
   });
 
-  it('keeps native horizontal scrolling on mobile', () => {
-    const { container } = render(<Modulos />);
-    const carousel = container.querySelector('[data-module-carousel]');
-
-    expect(carousel).toHaveAttribute('data-desktop-pin', 'false');
-    expect(ScrollTrigger.create).not.toHaveBeenCalled();
-  });
-
-  it('creates a pinned scrubbed horizontal track on desktop', async () => {
-    installMatchMedia({ desktop: true });
-    const { container } = render(<Modulos />);
-
-    await waitFor(() => {
-      expect(
-        container.querySelector('[data-module-carousel]'),
-      ).toHaveAttribute('data-desktop-pin', 'true');
-    });
-
-    const triggerOptions = vi.mocked(ScrollTrigger.create).mock.calls.at(-1)?.[0];
-    expect(triggerOptions?.trigger).toBe(container.querySelector('.module-pin'));
-    expect(triggerOptions?.pin).toBe(container.querySelector('.module-pin'));
-    expect(triggerOptions?.pinSpacing).toBe(true);
-    expect(triggerOptions?.start).toBe('top top');
-    expect(triggerOptions?.scrub).toBe(0.35);
-    expect(triggerOptions?.invalidateOnRefresh).toBe(true);
-    expect(triggerOptions?.refreshPriority).toBe(1);
-    expect(triggerOptions?.anticipatePin).toBe(1);
-    expect(triggerOptions?.end).toEqual(expect.any(Function));
-    expect(
-      Number(String((triggerOptions?.end as () => string)()).slice(2)),
-    ).toBeGreaterThanOrEqual(360);
-  });
-
-  it('moves the page to the module progress when desktop controls are used', async () => {
-    installMatchMedia({ desktop: true });
+  it('supports arrow-key navigation from the accordion region', () => {
     render(<Modulos />);
+    const trilho = screen.getByRole('region', { name: 'Módulos do curso' });
 
-    await waitFor(() => {
-      expect(ScrollTrigger.create).toHaveBeenCalled();
-    });
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Ver próximos módulos' }),
-    );
-
-    expect(window.scrollTo).toHaveBeenCalledWith({
-      top: 215,
-      behavior: 'smooth',
-    });
-    expect(screen.getByText('02')).toBeInTheDocument();
-  });
-
-  it('does not pin on desktop when reduced motion is requested', async () => {
-    installMatchMedia({ desktop: true, reducedMotion: true });
-    const { container } = render(<Modulos />);
-
-    await waitFor(() => {
-      expect(
-        container.querySelector('[data-module-carousel]'),
-      ).toHaveAttribute('data-desktop-pin', 'false');
-    });
-    expect(ScrollTrigger.create).not.toHaveBeenCalled();
-  });
-
-  it('supports arrow-key navigation from the carousel region', () => {
-    render(<Modulos />);
-    const carousel = screen.getByRole('region', { name: 'Módulos do curso' });
-
-    fireEvent.keyDown(carousel, { key: 'ArrowRight' });
+    fireEvent.keyDown(trilho, { key: 'ArrowRight' });
     expect(screen.getByText('02')).toBeInTheDocument();
 
-    fireEvent.keyDown(carousel, { key: 'ArrowLeft' });
+    fireEvent.keyDown(trilho, { key: 'ArrowLeft' });
     expect(screen.getByText('01')).toBeInTheDocument();
   });
 
-  it('kills the desktop ScrollTrigger when the section unmounts', async () => {
-    installMatchMedia({ desktop: true });
-    const { unmount } = render(<Modulos />);
+  it('no longer pins the section, so it is a plain full-screen band', () => {
+    const { container } = render(<Modulos />);
+    const secao = container.querySelector('#modulos');
 
-    await waitFor(() => {
-      expect(ScrollTrigger.create).toHaveBeenCalled();
-    });
-    const createdTrigger = vi.mocked(ScrollTrigger.create).mock.results.at(-1)
-      ?.value;
-
-    unmount();
-    expect(createdTrigger?.kill).toHaveBeenCalled();
+    // O pin consumia quatro telas de rolagem para arrastar o carrossel.
+    // Com o acordeao os seis cards cabem numa tela so.
+    expect(container.querySelector('.module-pin')).toBeNull();
+    expect(secao?.className).toContain('site-band--full');
   });
 });
