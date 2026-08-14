@@ -20,10 +20,15 @@ export function Hero() {
           O min-h interno saiu: aquele calc foi dimensionado para o
           layout do cartao e agora competiria com a altura da faixa. */}
       <div className="relative mx-auto grid w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
-        {/* Lifted off the vertical centre: the column is `justify-center`, which
-            left the headline sitting low against the video panel. Transform, not
-            margin, because on mobile the column has no free space to give back. */}
-        <div className="flex -translate-y-4 flex-col justify-center text-left md:-translate-y-6 lg:-translate-y-10">
+        {/* `justify-between`, nao `justify-center`: a folga vertical da coluna
+            vai para as duas pontas em vez de ficar sobrando em cima e embaixo.
+            O titulo sobe e o CTA desce pelo mesmo tanto, e os bullets, que
+            ficam no meio, nao saem do lugar.
+
+            No mobile a coluna nao tem folga nenhuma para distribuir, entao
+            `justify-between` nao muda nada la — e por isso a elevacao continua
+            sendo `transform`, que funciona mesmo sem espaco livre. */}
+        <div className="flex -translate-y-4 flex-col justify-between text-left md:-translate-y-6 lg:-translate-y-10">
           <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)]">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
