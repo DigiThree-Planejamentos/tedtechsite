@@ -376,7 +376,7 @@ export function Modulos() {
     <section
       ref={sectionRef}
       id="modulos"
-      className="site-section section-divider scroll-mt-24"
+      className="site-section site-band site-band--light section-divider scroll-mt-24"
     >
       <div ref={pinRef} className="module-pin mx-auto w-full max-w-content">
         <div className="module-pin__header relative z-20">

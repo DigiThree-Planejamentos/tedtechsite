@@ -8,7 +8,7 @@ import { content } from '@/lib/content';
 export function Evolucao() {
   const e = content.evolucao;
   return (
-    <section className="site-section section-divider">
+    <section className="site-section site-band site-band--light site-band--full section-divider">
       <div className="mx-auto grid w-full max-w-content items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center">
           <GaugeRing>
@@ -16,7 +16,7 @@ export function Evolucao() {
               <div className="text-2xl font-extrabold text-grad md:text-3xl">
                 <CountUp value={e.gaugeValue} />
               </div>
-              <div className="mt-1 text-[11px] text-[#526071] md:text-xs">{e.gaugeCaption}</div>
+              <div className="mt-1 text-[11px] text-[color:var(--band-fg-muted)] md:text-xs">{e.gaugeCaption}</div>
             </div>
           </GaugeRing>
         </div>
@@ -35,7 +35,7 @@ export function Evolucao() {
                 {i < e.steps.length - 1 && (
                   <span className="absolute left-[11px] top-6 h-full w-px bg-blue-deep/15" aria-hidden />
                 )}
-                <div className="font-mono text-[11px] uppercase tracking-wide text-[#667284] md:text-xs">{s.k}</div>
+                <div className="font-mono text-[11px] uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-xs">{s.k}</div>
                 <div className="text-sm font-semibold md:text-base">{s.t}</div>
                 <div className="text-xs text-blue md:text-sm">{s.s}</div>
               </li>

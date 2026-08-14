@@ -7,6 +7,11 @@ import Home from '@/app/page';
 // `full: false` marca excecao declarada, nao esquecimento.
 export const RITMO = [
   { id: 'hero', tom: 'light', full: true },
+  { id: 'dores', tom: 'light', full: true },
+  // Modulos e pinada pelo ScrollTrigger e ja ocupa a tela. Altura minima
+  // injetaria uma tela vazia antes do pin. Excecao declarada.
+  { id: 'modulos', tom: 'light', full: false },
+  { id: '', tom: 'light', full: true },
 ];
 
 describe('Faixas da pagina', () => {
