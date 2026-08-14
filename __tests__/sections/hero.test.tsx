@@ -24,23 +24,25 @@ describe('Hero', () => {
     const rest = screen.getByText(content.hero.headline.rest);
     expect(lead).not.toBe(rest);
     expect(lead.className).toMatch(/\btext-blue\b/);
-    expect(lead.className).toMatch(/text-5xl\/\[1\.25\]/);
+    expect(lead.className).toMatch(/text-6xl\/\[1\.25\]/);
     expect(lead.className).toMatch(/\bitalic\b/);
-    expect(rest.className).toMatch(/text-\[19\.09px\]\/\[1\.25\]/);
+    expect(rest.className).toMatch(/text-\[23\.86px\]\/\[1\.25\]/);
     expect(rest.className).toMatch(/\bwhitespace-nowrap\b/);
     // Every size step of BOTH lines must carry the 1.25 leading. The text-*
     // utilities ship line-height 1, and a bare `leading-` class loses to the
     // responsive ones, so the GSAP line mask clips the descenders of "Chega"
     // and "pagar".
-    for (const size of ['text-5xl', 'sm:text-6xl', 'md:text-7xl', 'lg:text-8xl']) {
+    for (const size of ['text-6xl', 'sm:text-7xl', 'md:text-8xl', 'lg:text-9xl']) {
       expect(lead.className).toContain(`${size}/[1.25]`);
     }
     // Measured so this line's right ink edge lands on the same x as "Chega".
+    // Cada valor e o par do lead no mesmo breakpoint: escalar as duas
+    // linhas pelo mesmo fator e o que mantem as bordas alinhadas.
     for (const size of [
-      'text-[19.09px]',
-      'sm:text-[23.82px]',
-      'md:text-[28.56px]',
-      'lg:text-[38.04px]',
+      'text-[23.86px]',
+      'sm:text-[28.58px]',
+      'md:text-[38.08px]',
+      'lg:text-[50.72px]',
     ]) {
       expect(rest.className).toContain(`${size}/[1.25]`);
     }
