@@ -9,6 +9,33 @@ seções "Pra cada rotina, uma Zarpei" e "A conta que importa".
 **Decisão do cliente:** a virada de claro para escuro acontece **antes de Caminhos** —
 quatro telas claras, três escuras.
 
+## Revisão de 2026-08-14, depois da primeira montagem
+
+Com as quatro primeiras tarefas no ar e o ritmo visível no navegador, o cliente reviu duas
+decisões. O texto abaixo registra o que mudou e por quê; o restante do documento foi corrigido
+para refletir a versão nova, e as partes superadas ficam marcadas como tal.
+
+1. **De uma quebra para alternância.** Em vez de um único ponto de virada, claro e escuro se
+   alternam do começo ao fim: `hero` claro, `dores` escura, `modulos` clara, `evolucao`
+   escura, `caminhos` clara, `oferta` escura, `faq` clara.
+2. **As faixas escuras são transparentes, não `#07111f`.** Pedido literal: *"nas escuras deixa
+   o fundo escuro do site com os circuitos"*.
+
+O segundo item corrigiu um erro meu que a primeira versão não tinha visto. O site já monta
+`<CircuitEdges />` em `components/providers/AppProviders.tsx:23` — um `<canvas>` de campo de
+circuitos posicionado `fixed inset-0 -z-10`, atrás de todo o conteúdo, desde sempre. Ao dar
+fundo **opaco** a todas as seções, a primeira versão enterrou esse canvas: o efeito não sumiu
+do código, sumiu da tela. Faixa escura transparente é o que devolve o fundo do site e os
+circuitos ao lugar.
+
+**Consequência de projeto, e a parte interessante:** com as escuras virando janelas, a faixa
+**clara** passa a ser a única superfície sólida da página. Isso reposiciona a aba. Ela deixa
+de ser "o escuro subindo para dentro do claro" e passa a ser "a folha clara reaparecendo e se
+anunciando" — uma saliência da superfície sólida avançando para dentro do vão escuro de cima.
+Como a cor da aba sai de `var(--band-bg)`, o componente não precisou saber de nada disso: ela
+trocou de cor sozinha ao mudar de faixa. A aba passa a aparecer **três vezes**, em toda faixa
+clara precedida de uma escura — `modulos`, `caminhos` e `faq`.
+
 ## Problema
 
 O site inteiro mora dentro de um único elemento: `<div class="site-card">`, renderizado por
@@ -161,8 +188,10 @@ Três caminhos foram considerados:
   color: var(--band-fg);
 }
 
+/* As claras sao folhas solidas; as escuras sao janelas. */
 .site-band--light {
   --band-bg: #f7fbff;
+  --band-solid: #f7fbff;
   --band-fg: #07111f;   /* base herdada — era a cor do .site-card */
   --band-fg-strong: #050914;
   --band-fg-body: #3b4654;
@@ -172,7 +201,11 @@ Três caminhos foram considerados:
 }
 
 .site-band--dark {
-  --band-bg: #07111f;
+  /* Transparente, nao #07111f: e o que deixa aparecer o fundo do site e
+     o canvas de circuitos (fixed inset-0 -z-10). Ver a Revisao no topo. */
+  --band-bg: transparent;
+  /* Cor chapada para o que nao pode ser transparente. */
+  --band-solid: #06080d;
   --band-fg: #eef2f7;
   --band-fg-strong: #ffffff;
   --band-fg-body: #c3ccd8;
@@ -181,6 +214,12 @@ Três caminhos foram considerados:
   --band-rule: rgba(255, 255, 255, 0.1);
 }
 ```
+
+**Por que `--band-solid` existe.** Nem tudo pode ser transparente. O furo do medidor cônico da
+Evolução (`.gauge::before`) pintava `#f7fbff` fixo para vazar o anel; numa faixa escura isso
+vira um disco branco, e deixá-lo transparente faria o próprio gradiente cônico aparecer no
+meio do furo. O token dá a cada tom a sua cor chapada. É o único consumidor hoje, mas qualquer
+elemento que precise "furar" a faixa vai precisar do mesmo.
 
 **Os valores claros são idênticos aos de hoje.** A metade clara do site não muda um pixel por
 construção, não por sorte — é a propriedade que torna a tokenização das quatro seções claras
@@ -287,10 +326,18 @@ ela. A elevação do bloco (`-translate-y-4 md:-translate-y-6 lg:-translate-y-10
 **preservada na primeira passada e re-medida depois** — com a faixa centralizando o conteúdo,
 ela pode virar deslocamento duplo.
 
-### 4. A aba, uma só
+### 4. A aba, três vezes
 
 Componente novo `components/layout/SectionTab.tsx`, renderizado como primeiro filho de
-`Caminhos`, a única fronteira claro → escuro da página.
+**`Modulos`, `Caminhos` e `Faq`** — as três faixas claras que voltam depois de uma escura.
+
+A aba pertence à faixa **clara**, e não à escura. Com as escuras transparentes, a clara é a
+única superfície sólida da página: a aba é uma saliência dessa superfície, subindo para dentro
+do vão escuro de cima. É a mesma lógica do Zarpei — a aba pertence a quem é sólido —, só que
+aqui a cor sólida é a clara.
+
+*(A versão anterior deste documento previa uma aba só, escura, em `Caminhos`. Ver a Revisão no
+topo.)*
 
 ```tsx
 export function SectionTab() {
@@ -324,9 +371,10 @@ export function SectionTab() {
 
 Notas de projeto:
 
-- **A cor vem de `var(--band-bg)`.** A aba não sabe que é escura — ela herda o fundo da faixa
-  que a hospeda. Mover a quebra para outra seção leva a aba junto, com a cor certa, sem editar
-  o componente.
+- **A cor vem de `var(--band-bg)`.** A aba não sabe de que cor é — ela herda o fundo da faixa
+  que a hospeda. Isso foi testado na prática: quando o ritmo mudou de uma quebra para
+  alternância e a aba trocou de dona (da faixa escura para a clara), o componente **não
+  precisou de uma linha de mudança** — trocou de cor sozinho.
 - **`.section-tab__gutter` repete a calha de `.site-section`** (1,25rem / 2rem / 4rem por
   breakpoint) para que a borda esquerda do corpo da aba caia na mesma coluna do conteúdo da
   seção. É a mesma razão do `-ml-7` do Zarpei.
@@ -342,27 +390,37 @@ Notas de projeto:
 
 | Seção | Tom | Tela cheia | Aba |
 |---|---|---|---|
-| hero | claro | sim | — |
-| dores | claro | sim | — |
-| modulos | claro | não (pinada) | — |
-| evolucao | claro | sim | — |
-| **caminhos** | **escuro** | sim | **sim** |
-| oferta | escuro | sim | — |
-| faq | escuro | sim | — |
+| hero | claro (sólido) | sim | — (nada acima) |
+| dores | **escuro (transparente)** | sim | — |
+| modulos | claro (sólido) | não (pinada) | **sim** |
+| evolucao | **escuro (transparente)** | sim | — |
+| caminhos | claro (sólido) | sim | **sim** |
+| oferta | **escuro (transparente)** | sim | — |
+| faq | claro (sólido) | sim | **sim** |
 | footer | escuro (já era) | — | — |
 
-`.section-divider` (o fio de 1px no topo) continua **entre faixas do mesmo tom**, para separar
-seções claras vizinhas. Sai das faixas escuras: lá a virada é a aba, e um fio a mais só sujaria.
+Regra que gera a tabela, e que vale mesmo se a ordem das seções mudar: **os tons alternam, e
+toda faixa clara precedida de uma escura carrega a aba.** O `hero` é a exceção óbvia — não há
+nada acima dele além do header.
+
+`.section-divider` **sai de todas as seções**. Com os tons alternando, a própria troca de cor
+já separa uma seção da outra; um fio de 1px em cima disso seria ruído. A classe continua no
+`globals.css`, agora lendo `var(--band-rule)`, caso volte a ser útil.
 
 ## Testes
 
 Arquivo novo `__tests__/layout/bands.test.tsx`, cobrindo o que dá para quebrar sem perceber:
 
 1. **O ritmo, em ordem.** As sete seções, na ordem do DOM, carregam os tons
-   `[claro, claro, claro, claro, escuro, escuro, escuro]`. É o teste que falha se alguém mover
+   `[claro, escuro, claro, escuro, claro, escuro, claro]`. É o teste que falha se alguém mover
    uma seção sem mover a cor.
-2. **A aba é uma só.** Exatamente um `.section-tab` na página inteira, e ele está dentro de
-   `#caminhos`. Duas abas, ou aba na fronteira errada, é regressão.
+2. **A alternância, como regra e não como lista.** Nenhuma seção vizinha repete o tom. Esse
+   teste pega o que a tabela fixa não pega: se alguém acrescentar uma seção no meio, a tabela
+   é atualizada mecanicamente, mas a regra de alternância é violada e o teste grita.
+3. **A aba aparece exatamente onde deve.** Uma em cada faixa clara precedida de escura
+   (`modulos`, `caminhos`, `faq`), nenhuma nas escuras — uma aba transparente não desenharia
+   forma nenhuma — e o total bate com a contagem esperada.
+4. **Nenhuma seção que hospeda aba tem `overflow-hidden`**, que a cortaria inteira.
 3. **O cartão não voltou.** Nenhum `.site-card` no documento, e `MainCard` não é mais
    importado.
 4. **Módulos é a exceção declarada.** `#modulos` não tem a classe de tela cheia — para que a

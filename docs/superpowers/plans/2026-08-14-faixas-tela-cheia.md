@@ -12,6 +12,32 @@
 
 **Ponto de retorno:** branch `backup/antes-das-faixas` (commit `e26f877`), já no GitHub. Para desfazer tudo: `git reset --hard backup/antes-das-faixas`.
 
+## Estado de execução (2026-08-14)
+
+Tarefas 1 a 5 **executadas**, com uma revisão de rumo depois da T4. Commits, em ordem:
+
+| Commit | Conteúdo |
+|---|---|
+| `1e95749` | T1 — tokens de faixa e o hero |
+| `c3ce7d7` | T2 — dores, módulos e evolução |
+| `933d0c0` | T3 — caminhos, oferta e faq |
+| `66ebbb6` | T4 — remoção do cartão |
+| `ba23751` | **Revisão** + T5 — ritmo alternado, escuras transparentes, três abas |
+
+**A revisão, em duas frases.** O cliente trocou a quebra única por alternância e pediu que as
+faixas escuras mostrassem o fundo do site com os circuitos. Isso corrigiu um erro que este
+plano não tinha previsto: o `<CircuitEdges />` já estava montado em `AppProviders` como canvas
+`fixed inset-0 -z-10`, e dar fundo opaco a toda seção o enterrava — o efeito não sumiu do
+código, sumiu da tela.
+
+As tarefas abaixo ficam como foram escritas, com os tons da versão original. A spec tem a
+versão corrente na seção "Revisão de 2026-08-14"; onde as duas divergirem, **a spec manda**.
+
+Da T6, já foram feitos e conferidos: alturas nos dois tamanhos, sobrevivência do pin de
+Módulos, geometria das três abas e ausência de rolagem lateral. A elevação do Hero foi medida
+em 6px de diferença para o painel de vídeo — dentro da janela aceitável, então **não** foi
+ajustada. Falta rodar o build de produção.
+
 ## Global Constraints
 
 - **Os valores claros dos tokens são idênticos aos hexadecimais de hoje.** `--band-fg: #07111f`, `--band-fg-strong: #050914`, `--band-fg-body: #3b4654`, `--band-fg-muted: #526071`, `--band-fg-faint: #667284`. A metade clara do site não pode mudar um pixel.
