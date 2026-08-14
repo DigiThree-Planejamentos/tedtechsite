@@ -31,7 +31,9 @@ export function Hero() {
               <span className="-mt-[0.12em] block text-5xl/[1.25] text-blue sm:text-6xl/[1.25] md:text-7xl/[1.25] lg:text-8xl/[1.25]">
                 {h.headline.lead}
               </span>{' '}
-              <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+              {/* Same 1.25 leading as the lead line, and for the same reason:
+                  "pagar" has a descender and the mask clips at the line box. */}
+              <span className="-mt-[0.12em] block text-3xl/[1.25] sm:text-4xl/[1.25] md:text-5xl/[1.25] lg:text-6xl/[1.25]">
                 {h.headline.rest}
               </span>
             </SplitReveal>

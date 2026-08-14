@@ -25,12 +25,16 @@ describe('Hero', () => {
     expect(lead).not.toBe(rest);
     expect(lead.className).toMatch(/\btext-blue\b/);
     expect(lead.className).toMatch(/text-5xl\/\[1\.25\]/);
-    expect(rest.className).toMatch(/\btext-3xl\b/);
-    // Every size step must carry the 1.25 leading. The text-* utilities ship
-    // line-height 1, and a bare `leading-` class loses to the responsive ones,
-    // which makes the GSAP line mask clip the descender of the "g".
+    expect(rest.className).toMatch(/text-3xl\/\[1\.25\]/);
+    // Every size step of BOTH lines must carry the 1.25 leading. The text-*
+    // utilities ship line-height 1, and a bare `leading-` class loses to the
+    // responsive ones, so the GSAP line mask clips the descenders of "Chega"
+    // and "pagar".
     for (const size of ['text-5xl', 'sm:text-6xl', 'md:text-7xl', 'lg:text-8xl']) {
       expect(lead.className).toContain(`${size}/[1.25]`);
+    }
+    for (const size of ['text-3xl', 'sm:text-4xl', 'md:text-5xl', 'lg:text-6xl']) {
+      expect(rest.className).toContain(`${size}/[1.25]`);
     }
   });
 
