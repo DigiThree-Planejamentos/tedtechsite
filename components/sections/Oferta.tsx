@@ -12,7 +12,7 @@ export function Oferta() {
   return (
     <section
       id="oferta"
-      className="site-section section-divider scroll-mt-24"
+      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
     >
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{o.label}</SectionLabel>
@@ -20,9 +20,9 @@ export function Oferta() {
           {o.title}
         </SplitReveal>
 
-        <div className="site-panel mx-auto mt-10 grid max-w-3xl overflow-hidden rounded-[1.5rem] text-left md:grid-cols-2">
+        <div className="site-dark-panel mx-auto mt-10 grid max-w-3xl overflow-hidden rounded-[1.5rem] text-left md:grid-cols-2">
           <div className="p-8">
-            <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[#667284] md:text-sm">
+            <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {o.includesTitle}
             </h3>
             <Reveal as="ul" stagger={0.1} className="mt-5 space-y-3">
@@ -36,11 +36,11 @@ export function Oferta() {
           </div>
 
           <div className="flex flex-col justify-center border-t border-blue/20 p-8 text-center md:border-l md:border-t-0">
-            <div className="text-xs text-[#667284] line-through md:text-sm">{o.priceFrom}</div>
+            <div className="text-xs text-[color:var(--band-fg-faint)] line-through md:text-sm">{o.priceFrom}</div>
             <div className="mt-1 text-3xl font-extrabold text-grad md:text-4xl">
               <CountUp value={o.priceNow} />
             </div>
-            <div className="mt-1 text-xs text-[#526071] md:text-sm">{o.installments}</div>
+            <div className="mt-1 text-xs text-[color:var(--band-fg-muted)] md:text-sm">{o.installments}</div>
             <div className="mt-6 flex justify-center">
               <MagneticButton>
                 <Button href={content.checkoutUrl} variant="primary">

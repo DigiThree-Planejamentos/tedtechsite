@@ -376,7 +376,7 @@ export function Modulos() {
     <section
       ref={sectionRef}
       id="modulos"
-      className="site-section section-divider scroll-mt-24"
+      className="site-section site-band site-band--light scroll-mt-24"
     >
       <div ref={pinRef} className="module-pin mx-auto w-full max-w-content">
         <div className="module-pin__header relative z-20">
@@ -410,7 +410,7 @@ export function Modulos() {
           tabIndex={0}
           role="region"
           aria-label="Módulos do curso"
-          className="module-carousel no-scrollbar mt-8 snap-x snap-mandatory pb-2"
+          className="module-carousel no-scrollbar mt-4 snap-x snap-mandatory pb-2"
         >
           <div ref={trackRef} className="module-track">
             {content.modules.map((module, moduleIndex) => {

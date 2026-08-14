@@ -5,6 +5,7 @@ tmp/
 .agents/
 .claude/
 .superpowers/
+.playwright-mcp/
 tsconfig.tsbuildinfo
 *.log
 .DS_Store
