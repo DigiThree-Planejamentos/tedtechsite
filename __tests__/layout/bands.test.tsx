@@ -36,6 +36,11 @@ describe('Faixas da pagina', () => {
     });
   });
 
+  it('nao tem mais o cartao branco envolvendo a pagina', () => {
+    const { container } = render(<Home />);
+    expect(container.querySelector('.site-card')).toBeNull();
+  });
+
   it('nao deixa nenhuma secao fora do ritmo', () => {
     const { container } = render(<Home />);
     const secoes = container.querySelectorAll('main section');

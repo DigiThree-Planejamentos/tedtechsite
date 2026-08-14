@@ -130,45 +130,6 @@ html.lenis body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.015);
   }
-  .site-card {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    border: 1px solid rgba(30, 158, 219, 0.25);
-    border-radius: 1.5rem;
-    background: #f7fbff;
-    color: #07111f;
-    box-shadow:
-      0 30px 90px rgba(0, 0, 0, 0.42),
-      inset 0 1px 0 rgba(255, 255, 255, 0.92);
-  }
-  .site-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(30, 158, 219, 0.85) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(30, 158, 219, 0.85) 1px, transparent 1px);
-    background-size: 34px 34px;
-    opacity: 0.08;
-  }
-  .site-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(360px 300px at 100% 8%, rgba(30, 158, 219, 0.2), transparent 68%),
-      radial-gradient(340px 260px at 36% 0%, rgba(15, 42, 81, 0.11), transparent 72%),
-      radial-gradient(420px 320px at 58% 100%, rgba(30, 158, 219, 0.12), transparent 70%);
-  }
-  .site-card > * {
-    position: relative;
-    z-index: 1;
-  }
   /* ---- Faixas de secao ----------------------------------------------
      Cada secao pinta o proprio fundo e define a cor do texto que seus
      filhos herdam. Antes isso vinha do .site-card, que envolvia a
@@ -273,9 +234,6 @@ html.lenis body {
       0 24px 70px rgba(15, 42, 81, 0.3);
   }
   @media (min-width: 640px) {
-    .site-card {
-      border-radius: 2rem;
-    }
     .site-section {
       padding-inline: 2rem;
     }
