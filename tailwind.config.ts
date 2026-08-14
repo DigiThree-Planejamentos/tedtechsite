@@ -18,6 +18,7 @@ const config: Config = {
         sans: ['var(--font-inter)', 'Arial', 'sans-serif'],
         display: ['var(--font-ibm-plex-sans)', 'Arial', 'sans-serif'],
         subtitle: ['var(--font-space-grotesk)', 'Arial', 'sans-serif'],
+        serif: ['var(--font-instrument-serif)', 'Georgia', 'serif'],
         mono: ['var(--font-jetbrains-mono)', 'Consolas', 'monospace'],
       },
       maxWidth: { content: '1200px' },

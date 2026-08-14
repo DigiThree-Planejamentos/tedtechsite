@@ -19,14 +19,16 @@ export function Hero() {
             {h.eyebrow}
           </p>
 
-          <h1 className="mt-3 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
-            <SplitReveal
-              as="span"
-              type="lines"
-              trigger="ready"
-              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-            >
-              {h.headline}
+          <h1 className="mt-3 max-w-3xl leading-[1.08] tracking-tight text-[#050914]">
+            <SplitReveal as="span" type="lines" trigger="ready" className="block">
+              {/* The space between the spans is load-bearing: it keeps the
+                  accessible name "Chega de pagar técnico" in one piece. */}
+              <span className="block font-serif text-6xl font-normal italic leading-[1.1] tracking-normal sm:text-7xl md:text-8xl lg:text-[7rem]">
+                {h.headline.lead}
+              </span>{' '}
+              <span className="block font-sans text-3xl font-extrabold sm:text-4xl md:text-5xl lg:text-6xl">
+                {h.headline.rest}
+              </span>
             </SplitReveal>
           </h1>
 

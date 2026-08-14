@@ -1,7 +1,13 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { IBM_Plex_Sans, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import {
+  IBM_Plex_Sans,
+  Instrument_Serif,
+  Inter,
+  JetBrains_Mono,
+  Space_Grotesk,
+} from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -9,6 +15,14 @@ const ibmPlexSans = IBM_Plex_Sans({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-ibm-plex-sans',
+  display: 'swap',
+});
+// Only the italic is loaded — the hero headline is its single use.
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: 'italic',
+  variable: '--font-instrument-serif',
   display: 'swap',
 });
 const spaceGrotesk = Space_Grotesk({
@@ -45,7 +59,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${ibmPlexSans.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
+      className={`${inter.variable} ${ibmPlexSans.variable} ${instrumentSerif.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
     >
       <body className={inter.className}>
         {/* If JS is disabled, never trap the user behind the preloader overlay. */}
