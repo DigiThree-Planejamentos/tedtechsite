@@ -169,6 +169,75 @@ html.lenis body {
     position: relative;
     z-index: 1;
   }
+  /* ---- Faixas de secao ----------------------------------------------
+     Cada secao pinta o proprio fundo e define a cor do texto que seus
+     filhos herdam. Antes isso vinha do .site-card, que envolvia a
+     pagina inteira; sem essa fonte de verdade o site perde a cor. */
+  .site-band {
+    position: relative;
+    background: var(--band-bg);
+    color: var(--band-fg);
+  }
+  /* O conteudo fica acima da textura decorativa (::before, z-index 0).
+     A aba fica de fora da regra: ela e `absolute` para se pendurar
+     acima da secao, e um `relative` generico a arrancaria da ancora. */
+  .site-band > *:not(.section-tab) {
+    position: relative;
+    z-index: 1;
+  }
+  .site-band--light {
+    --band-bg: #f7fbff;
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    --band-rule: rgba(15, 42, 81, 0.1);
+  }
+  .site-band--dark {
+    --band-bg: #07111f;
+    --band-fg: #eef2f7;
+    --band-fg-strong: #ffffff;
+    --band-fg-body: #c3ccd8;
+    --band-fg-muted: #9fb0c2;
+    --band-fg-faint: #8a97a8;
+    --band-rule: rgba(255, 255, 255, 0.1);
+  }
+  /* Grade quadriculada herdada do cartao. E textura de marca, nao
+     decoracao do cartao. Uma regra so de remover. */
+  .site-band--light::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(30, 158, 219, 0.85) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 158, 219, 0.85) 1px, transparent 1px);
+    background-size: 34px 34px;
+    opacity: 0.08;
+  }
+  /* Brilho azul da marca nas faixas escuras, dimensionado para faixa de
+     ponta a ponta (o do cartao era para uma caixa de 1280px). */
+  .site-band--dark::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(760px 420px at 12% 0%, rgba(30, 158, 219, 0.16), transparent 62%),
+      radial-gradient(680px 460px at 100% 100%, rgba(15, 42, 81, 0.28), transparent 66%);
+  }
+  /* min-height, nunca height: uma tela e o piso. No mobile Caminhos
+     (1,60 tela), Oferta (1,14) e Modulos (1,07) crescem em vez de
+     cortar conteudo ou criar rolagem dentro de rolagem. */
+  .site-band--full {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100svh;
+  }
   .site-section {
     position: relative;
     padding: 3rem 1.25rem;
@@ -177,8 +246,9 @@ html.lenis body {
   .site-section--compact {
     padding-block: 2.5rem;
   }
+  /* O fio segue o tom da faixa em vez de sumir sobre fundo escuro. */
   .section-divider {
-    border-top: 1px solid rgba(15, 42, 81, 0.1);
+    border-top: 1px solid var(--band-rule, rgba(15, 42, 81, 0.1));
   }
   .site-panel {
     border: 1px solid rgba(30, 158, 219, 0.25);

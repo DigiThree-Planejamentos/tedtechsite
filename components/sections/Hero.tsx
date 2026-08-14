@@ -11,14 +11,20 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="site-section site-section--compact relative overflow-hidden"
+      className="site-section site-section--compact site-band site-band--light site-band--full relative overflow-hidden pt-24 sm:pt-28"
     >
-      <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
+      {/* O pt-24/28 era do <main>, que reservava espaco para o header
+          fixo. Sem o cartao, a faixa do Hero passa a ser a unica
+          responsavel por nao deixar o titulo embaixo do header.
+
+          O min-h interno saiu: aquele calc foi dimensionado para o
+          layout do cartao e agora competiria com a altura da faixa. */}
+      <div className="relative mx-auto grid w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
         {/* Lifted off the vertical centre: the column is `justify-center`, which
             left the headline sitting low against the video panel. Transform, not
             margin, because on mobile the column has no free space to give back. */}
         <div className="flex -translate-y-4 flex-col justify-center text-left md:-translate-y-6 lg:-translate-y-10">
-          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)]">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
                   accessible name "Chega de pagar técnico" in one piece. */}
@@ -50,7 +56,7 @@ export function Hero() {
             {h.bullets.map((bullet) => (
               <li
                 key={bullet}
-                className="flex items-start gap-3 text-xs text-[#050914] sm:text-sm"
+                className="flex items-start gap-3 text-xs text-[color:var(--band-fg-strong)] sm:text-sm"
               >
                 <span className="text-blue" aria-hidden>✓</span>
                 <span>{bullet}</span>
