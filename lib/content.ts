@@ -13,16 +13,16 @@ export interface Stat {
   label: string;
 }
 
-export interface FaqItem {
-  q: string;
-  a: string;
-}
-
-export interface OfferTrust {
-  guarantee: { title: string; desc: string };
-  checkout: string;
-  access: string;
-  payments: string;
+/**
+ * Um par da secao de oferta. `leva` e a linha do card da esquerda,
+ * `duvida` e a mesma linha vista do lado do aluno, e `resposta` abre no
+ * acordeao. A ORDEM do array e a ligacao entre os dois cards: mexer num
+ * lado sem mexer no outro desalinha o par.
+ */
+export interface OfferPair {
+  leva: string;
+  duvida: string;
+  resposta: string;
 }
 
 export const content = {
@@ -227,51 +227,75 @@ export const content = {
   offer: {
     label: 'A oferta',
     title: 'Comece hoje, do zero',
-    includesTitle: 'Tudo que você aprende',
-    includes: [
-      '6 módulos completos',
-      'Fundamentos de hardware e software',
-      'Componentes e montagem passo a passo',
-      'BIOS/UEFI e instalação de sistemas',
-      'Manutenção e diagnóstico de problemas',
-      'Segurança, backup, softwares e drivers',
-    ],
+    includesTitle: 'O que você leva',
+    doubtsTitle: 'Antes de você decidir',
     priceFrom: 'De R$ 497', // TODO
     priceNow: 'R$ 297', // TODO
     installments: 'ou 12x de R$ 29,70', // TODO
     cta: 'Inscrever →',
-    trust: {
-      guarantee: {
-        title: 'Garantia de 7 dias',
-        desc: 'Se não for pra você, é só pedir o reembolso integral em até 7 dias — direito garantido pelo Código de Defesa do Consumidor.',
+    payments: 'Pix · Cartão · Boleto',
+    askHint: 'Ficou outra dúvida?',
+    askCta: 'Falar no WhatsApp',
+
+    // Os sete pares. A ordem E a ligacao entre os dois cards: a linha i da
+    // esquerda e a duvida i da direita sao o mesmo assunto visto de dois
+    // lados. Mexer na ordem de um lado sem mexer no outro quebra o par.
+    //
+    // As respostas se apoiam so no que ja esta neste arquivo — os seis
+    // modulos e suas licoes. Nenhuma promete prazo de acesso, certificado
+    // ou acompanhamento, que continuam sendo decisoes em aberto do cliente.
+    // A duvida 2 e a 7 usam o texto que o cliente ja tinha escrito.
+    pairs: [
+      {
+        leva: '6 módulos completos',
+        duvida: 'São seis módulos… eu vou dar conta?',
+        resposta:
+          'Eles vêm em ordem, e cada um só supõe o anterior: fundamentos, componentes, montagem, manutenção, segurança e backup, softwares e drivers. O primeiro começa explicando o que é cada peça — não há degrau escondido no meio do caminho.',
       },
-      checkout: '', // TODO: confirmar plataforma → ex. 'Compra segura via Kiwify'
-      access: '', // TODO: confirmar liberação e duração do acesso
-      payments: 'Pix · Cartão · Boleto',
-    } as OfferTrust,
+      {
+        leva: 'Fundamentos de hardware e software',
+        duvida: 'Nunca abri um computador na vida. Serve pra mim?',
+        resposta:
+          'Serve. O módulo 01 começa pelos fundamentos — o que é cada componente e como hardware e software se relacionam — antes de qualquer montagem. Não é preciso conhecimento prévio.',
+      },
+      {
+        leva: 'Componentes e montagem passo a passo',
+        duvida: 'Tenho medo de montar e queimar alguma peça.',
+        resposta:
+          'A primeira aula do módulo 03 é justamente ferramentas e segurança durante a montagem, antes de encostar em qualquer componente. Depois vêm as peças uma a uma, a conexão dos cabos e uma verificação final antes de ligar.',
+      },
+      {
+        leva: 'BIOS/UEFI e instalação de sistemas',
+        duvida: 'BIOS, UEFI… isso não é coisa de técnico avançado?',
+        resposta:
+          'Entra no módulo 03, logo depois da montagem: primeiro a configuração inicial da BIOS/UEFI, depois a instalação do sistema operacional e dos drivers. Na ordem certa, deixa de ser mistério.',
+      },
+      {
+        leva: 'Manutenção e diagnóstico de problemas',
+        duvida: 'E quando der problema, vou saber achar o que é?',
+        resposta:
+          'É o módulo 04 inteiro: limpeza interna e externa, quando fazer a preventiva, diagnóstico dos problemas comuns e as ferramentas de diagnóstico. A ideia é você trocar peça sabendo qual, não no escuro.',
+      },
+      {
+        leva: 'Segurança, backup, softwares e drivers',
+        duvida: 'Depois que eu arrumar, como não perco tudo de novo?',
+        resposta:
+          'Os módulos 05 e 06 fecham essa ponta: proteção contra malware e acessos indevidos, boas práticas com os dados, backup local e em nuvem, e como manter drivers e firmware atualizados.',
+      },
+      {
+        leva: 'Garantia de 7 dias',
+        duvida: 'E se eu comprar e não for pra mim?',
+        resposta:
+          'Você tem 7 dias a partir da compra pra pedir o reembolso integral, sem precisar justificar. É o direito de arrependimento previsto no art. 49 do Código de Defesa do Consumidor.',
+      },
+    ] as OfferPair[],
   },
 
-  faq: {
-    label: 'Dúvidas frequentes',
-    title: 'Antes de você decidir',
-    items: [
-      {
-        q: 'O curso serve pra quem nunca mexeu com hardware?',
-        a: 'Serve. O módulo 01 começa pelos fundamentos — o que é cada componente e como hardware e software se relacionam — antes de qualquer montagem. Não é preciso conhecimento prévio.',
-      },
-      { q: 'Preciso ter ferramentas ou um PC pra desmontar?', a: '' }, // TODO
-      { q: 'Por quanto tempo eu tenho acesso ao curso?', a: '' }, // TODO
-      { q: 'O curso tem certificado?', a: '' }, // TODO
-      { q: 'Como funciona o acompanhamento?', a: '' }, // TODO
-      { q: 'Consigo assistir pelo celular?', a: '' }, // TODO
-      {
-        q: 'Como funciona a garantia?',
-        a: 'Você tem 7 dias a partir da compra pra pedir o reembolso integral, sem precisar justificar. É o direito de arrependimento previsto no art. 49 do Código de Defesa do Consumidor.',
-      },
-    ] as FaqItem[],
-    cta: 'Falar no WhatsApp',
-    ctaHint: 'Ficou outra dúvida?',
-  },
+  // A secao de FAQ separada deixou de existir: as duvidas viraram o card
+  // direito da oferta, pareadas com o que o curso entrega. Cinco perguntas
+  // antigas sairam junto por estarem sem resposta ate hoje e por nao terem
+  // par do lado da oferta — ferramentas, prazo de acesso, certificado,
+  // acompanhamento e celular. Voltam quando o cliente decidir as respostas.
 
   floatingCta: {
     urgency: 'Últimas vagas com acompanhamento',

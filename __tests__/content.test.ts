@@ -22,8 +22,25 @@ describe('content', () => {
 
   it('offer has price and confirmed course content', () => {
     expect(content.offer.priceNow).toBeTruthy();
-    expect(content.offer.includes.length).toBeGreaterThanOrEqual(5);
-    expect(content.offer.includes).toContain('6 módulos completos');
+    expect(content.offer.pairs.length).toBeGreaterThanOrEqual(5);
+    expect(content.offer.pairs.map((p) => p.leva)).toContain('6 módulos completos');
+  });
+
+  it('every offer pair is complete, because the accordion has no empty state', () => {
+    // A secao de FAQ tolerava resposta vazia e filtrava a pergunta. Aqui nao
+    // da: cada linha da oferta tem uma duvida ao lado, e uma resposta vazia
+    // viraria um acordeao que abre para o nada.
+    for (const par of content.offer.pairs) {
+      expect(par.leva.length).toBeGreaterThan(0);
+      expect(par.duvida.length).toBeGreaterThan(0);
+      expect(par.resposta.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('closes the offer with the guarantee, since it lost its own block', () => {
+    const ultimo = content.offer.pairs.at(-1)!;
+    expect(ultimo.leva).toMatch(/garantia/i);
+    expect(ultimo.resposta).toMatch(/7 dias/);
   });
 
   it('does not advertise unsupported course deliverables', () => {
@@ -34,17 +51,7 @@ describe('content', () => {
     expect(pageContent).not.toContain('certificado de conclusão');
   });
 
-  it('every faq question is written, answers may be pending', () => {
-    expect(content.faq.items.length).toBeGreaterThanOrEqual(7);
-    for (const item of content.faq.items) {
-      expect(item.q.length).toBeGreaterThan(0);
-      expect(typeof item.a).toBe('string');
-    }
-  });
-
-  it('offer trust always states guarantee and payment methods', () => {
-    expect(content.offer.trust.guarantee.title.length).toBeGreaterThan(0);
-    expect(content.offer.trust.guarantee.desc.length).toBeGreaterThan(0);
-    expect(content.offer.trust.payments.length).toBeGreaterThan(0);
+  it('offer always states the payment methods', () => {
+    expect(content.offer.payments.length).toBeGreaterThan(0);
   });
 });

@@ -17,8 +17,9 @@ describe('Home page', () => {
     expect(container.querySelector('#instrutor')).toBeNull();
     expect(container.querySelector('#tira-duvidas')).toBeNull();
     expect(container.querySelector('#dores')).not.toBeNull();
-    expect(container.querySelector('#faq')).not.toBeNull();
-    expect(screen.getAllByText(content.offer.priceNow)).toHaveLength(2);
+    // O FAQ virou o card direito da oferta e nao e mais uma secao propria.
+    expect(container.querySelector('#faq')).toBeNull();
+    expect(screen.getAllByText(content.offer.priceNow).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText(content.floatingCta.urgency)).toBeInTheDocument();
     expect(container.querySelector('[data-floating-cta] a')).toHaveAttribute(
       'href',
@@ -26,15 +27,18 @@ describe('Home page', () => {
     );
   });
 
-  it('orders the sections for conversion: hero, dores, modulos, oferta, faq', () => {
+  it('orders the sections for conversion: hero, dores, modulos, oferta', () => {
     const { container } = render(<Home />);
     const ids = Array.from(container.querySelectorAll('section[id]')).map((s) => s.id);
-    for (const id of ['hero', 'dores', 'modulos', 'oferta', 'faq']) {
+    for (const id of ['hero', 'dores', 'modulos', 'caminhos', 'oferta']) {
       expect(ids).toContain(id);
     }
     expect(ids.indexOf('hero')).toBeLessThan(ids.indexOf('dores'));
     expect(ids.indexOf('dores')).toBeLessThan(ids.indexOf('modulos'));
-    expect(ids.indexOf('modulos')).toBeLessThan(ids.indexOf('oferta'));
-    expect(ids.indexOf('oferta')).toBeLessThan(ids.indexOf('faq'));
+    expect(ids.indexOf('modulos')).toBeLessThan(ids.indexOf('caminhos'));
+    // A oferta fecha a pagina: as duvidas, que antes vinham depois dela,
+    // agora sao o card ao lado.
+    expect(ids.indexOf('caminhos')).toBeLessThan(ids.indexOf('oferta'));
+    expect(ids.at(-1)).toBe('oferta');
   });
 });

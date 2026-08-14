@@ -19,13 +19,26 @@ export function FloatingCta() {
 
     const updateVisibility = () => {
       frame = null;
-      const offer = document.getElementById(OFFER_ID);
+      // Segue o CARD DO PRECO, nao a secao inteira. No celular os dois cards
+      // empilham e a secao passa de 1500px: rastreando a secao, a barra
+      // ficaria escondida durante toda a leitura das duvidas, justamente
+      // quando o botao de verdade ja saiu da tela.
+      const anchor =
+        document.querySelector('[data-offer-anchor]') ??
+        document.getElementById(OFFER_ID);
       const pastFirstFold =
         window.scrollY >= window.innerHeight * SHOW_AFTER_VIEWPORTS;
-      const offerIsStillBelow =
-        !offer || offer.getBoundingClientRect().top > window.innerHeight;
 
-      setIsVisible(pastFirstFold && offerIsStillBelow);
+      // Vale para os dois lados: quem ainda nao chegou no preco e quem ja
+      // passou dele. Antes so aparecia antes, entao quem rolava ate o fim
+      // ficava sem preco e sem caminho pro checkout.
+      let anchorIsOffscreen = true;
+      if (anchor) {
+        const box = anchor.getBoundingClientRect();
+        anchorIsOffscreen = box.top > window.innerHeight || box.bottom < 0;
+      }
+
+      setIsVisible(pastFirstFold && anchorIsOffscreen);
     };
 
     const scheduleUpdate = () => {
@@ -68,12 +81,17 @@ export function FloatingCta() {
       style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
     >
       <div className='mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] px-3 py-3 text-[#07111f] shadow-[0_14px_42px_rgba(15,42,81,0.22),0_20px_60px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.92)] sm:rounded-[2rem] sm:px-5 md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-6'>
+        {/* No celular a barra e "R$ 297 · Inscrever": o preco ocupa o lugar
+            do texto de urgencia, que so aparece de sm pra cima. */}
         <div className='flex min-w-0 items-center gap-2.5'>
           <span
             aria-hidden
             className='h-2.5 w-2.5 shrink-0 rounded-full bg-blue shadow-[0_0_14px_rgba(30,158,219,0.7)]'
           />
-          <p className='max-w-[11rem] text-[11px] font-bold leading-tight sm:max-w-none sm:text-sm'>
+          <span className='text-base font-extrabold text-blue sm:hidden'>
+            {content.offer.priceNow}
+          </span>
+          <p className='hidden text-[11px] font-bold leading-tight sm:block sm:text-sm'>
             {cta.urgency}
           </p>
         </div>
