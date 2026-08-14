@@ -79,7 +79,7 @@ export function Caminhos() {
   return (
     <section
       id="caminhos"
-      className="site-section section-divider scroll-mt-24"
+      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
     >
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{c.label}</SectionLabel>
@@ -89,7 +89,7 @@ export function Caminhos() {
         >
           {c.title}
         </SplitReveal>
-        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[#526071] md:text-[15px]">
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-[color:var(--band-fg-muted)] md:text-[15px]">
           {c.subtitle}
         </p>
 
@@ -112,7 +112,7 @@ export function Caminhos() {
                 <h3 className="mt-5 text-lg font-bold md:text-xl">
                   {card.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#526071]">
+                <p className="mt-2 text-sm leading-relaxed text-[color:var(--band-fg-muted)]">
                   {card.desc}
                 </p>
                 <ul className="mt-5 space-y-3">

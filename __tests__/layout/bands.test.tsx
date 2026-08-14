@@ -12,6 +12,9 @@ export const RITMO = [
   // injetaria uma tela vazia antes do pin. Excecao declarada.
   { id: 'modulos', tom: 'light', full: false },
   { id: '', tom: 'light', full: true },
+  { id: 'caminhos', tom: 'dark', full: true },
+  { id: 'oferta', tom: 'dark', full: true },
+  { id: 'faq', tom: 'dark', full: true },
 ];
 
 describe('Faixas da pagina', () => {
@@ -31,5 +34,11 @@ describe('Faixas da pagina', () => {
         expect(secao.className).not.toContain('site-band--full');
       }
     });
+  });
+
+  it('nao deixa nenhuma secao fora do ritmo', () => {
+    const { container } = render(<Home />);
+    const secoes = container.querySelectorAll('main section');
+    expect(secoes).toHaveLength(RITMO.length);
   });
 });

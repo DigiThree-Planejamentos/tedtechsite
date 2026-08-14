@@ -11,10 +11,10 @@ export function OfertaTrust() {
         <div className="flex items-start gap-2.5">
           <span className="text-blue" aria-hidden>🛡</span>
           <div>
-            <div className="text-xs font-bold text-[#050914] md:text-sm">
+            <div className="text-xs font-bold text-[color:var(--band-fg-strong)] md:text-sm">
               {t.guarantee.title}
             </div>
-            <p className="mt-1 text-[11px] leading-relaxed text-[#667284] md:text-xs">
+            <p className="mt-1 text-[11px] leading-relaxed text-[color:var(--band-fg-faint)] md:text-xs">
               {t.guarantee.desc}
             </p>
           </div>
@@ -27,7 +27,7 @@ export function OfertaTrust() {
             <li
               key={row}
               data-trust-row
-              className="flex items-center gap-2 text-[11px] text-[#667284] md:text-xs"
+              className="flex items-center gap-2 text-[11px] text-[color:var(--band-fg-faint)] md:text-xs"
             >
               <span className="text-blue" aria-hidden>✓</span>
               <span>{row}</span>
