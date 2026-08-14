@@ -32,7 +32,7 @@ export const content = {
 
   hero: {
     eyebrow: 'Curso de montagem e manutenção de computadores',
-    headline: 'Monte, formate e conserte PCs começando do zero',
+    headline: 'Chega de pagar técnico',
     sub: 'Sem pré-requisito e sem medo de abrir o gabinete.',
     bullets: [
       '6 módulos, dos componentes à manutenção',
