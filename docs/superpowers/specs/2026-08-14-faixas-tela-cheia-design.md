@@ -28,13 +28,22 @@ fundo **opaco** a todas as seções, a primeira versão enterrou esse canvas: o 
 do código, sumiu da tela. Faixa escura transparente é o que devolve o fundo do site e os
 circuitos ao lugar.
 
-**Consequência de projeto, e a parte interessante:** com as escuras virando janelas, a faixa
-**clara** passa a ser a única superfície sólida da página. Isso reposiciona a aba. Ela deixa
-de ser "o escuro subindo para dentro do claro" e passa a ser "a folha clara reaparecendo e se
-anunciando" — uma saliência da superfície sólida avançando para dentro do vão escuro de cima.
-Como a cor da aba sai de `var(--band-bg)`, o componente não precisou saber de nada disso: ela
-trocou de cor sozinha ao mudar de faixa. A aba passa a aparecer **três vezes**, em toda faixa
-clara precedida de uma escura — `modulos`, `caminhos` e `faq`.
+**Consequência de projeto:** com as escuras virando janelas, a faixa **clara** passou a ser a
+única superfície sólida da página, o que reposicionou a aba — ela deixou de ser "o escuro
+subindo para dentro do claro" e virou "a folha clara reaparecendo". Como a cor sai de
+`var(--band-bg)`, o componente trocou de cor sozinho, sem uma linha de mudança.
+
+3. **A aba foi retirada.** Pedido literal, depois de ver as três no ar: *"retira os
+   quadradinhos entre as seções"*. O componente `SectionTab.tsx`, seu CSS e a exceção
+   `:not(.section-tab)` da regra de empilhamento foram removidos. **A emenda entre as seções
+   passa a ser só a troca de tom** — sem aba e sem fio: o `.section-divider` também sai de
+   todas as seções, porque com os tons alternando a própria mudança de cor já separa uma da
+   outra.
+
+   O que sobrou disso: a aba está inteira no commit `ba23751` e descrita neste documento na
+   seção "A aba, retirada", caso um dia volte. E a lição de projeto ficou válida
+   independentemente — foi a prova de que a cor vinda de `var(--band-bg)` deixava o
+   componente indiferente a onde ele morava.
 
 ## Problema
 
@@ -326,18 +335,17 @@ ela. A elevação do bloco (`-translate-y-4 md:-translate-y-6 lg:-translate-y-10
 **preservada na primeira passada e re-medida depois** — com a faixa centralizando o conteúdo,
 ela pode virar deslocamento duplo.
 
-### 4. A aba, três vezes
+### 4. A aba, retirada
 
-Componente novo `components/layout/SectionTab.tsx`, renderizado como primeiro filho de
-**`Modulos`, `Caminhos` e `Faq`** — as três faixas claras que voltam depois de uma escura.
+> **Esta seção descreve algo que não está mais no site.** A aba foi construída, ficou no ar em
+> `modulos`, `caminhos` e `faq`, e foi retirada a pedido do cliente. O registro fica porque a
+> receita é difícil de redescobrir e porque a decisão pode ser revista. O código completo está
+> no commit `ba23751`; a remoção, no commit seguinte.
 
-A aba pertence à faixa **clara**, e não à escura. Com as escuras transparentes, a clara é a
-única superfície sólida da página: a aba é uma saliência dessa superfície, subindo para dentro
-do vão escuro de cima. É a mesma lógica do Zarpei — a aba pertence a quem é sólido —, só que
-aqui a cor sólida é a clara.
-
-*(A versão anterior deste documento previa uma aba só, escura, em `Caminhos`. Ver a Revisão no
-topo.)*
+Componente `components/layout/SectionTab.tsx`, renderizado como primeiro filho das faixas
+claras que voltam depois de uma escura. A aba pertencia à faixa **clara**: com as escuras
+transparentes, a clara era a única superfície sólida, e a aba era uma saliência dela subindo
+para dentro do vão escuro de cima. Mesma lógica do Zarpei — a aba pertence a quem é sólido.
 
 ```tsx
 export function SectionTab() {
@@ -388,24 +396,24 @@ Notas de projeto:
 
 ### 5. Ritmo final
 
-| Seção | Tom | Tela cheia | Aba |
-|---|---|---|---|
-| hero | claro (sólido) | sim | — (nada acima) |
-| dores | **escuro (transparente)** | sim | — |
-| modulos | claro (sólido) | não (pinada) | **sim** |
-| evolucao | **escuro (transparente)** | sim | — |
-| caminhos | claro (sólido) | sim | **sim** |
-| oferta | **escuro (transparente)** | sim | — |
-| faq | claro (sólido) | sim | **sim** |
-| footer | escuro (já era) | — | — |
+| Seção | Tom | Tela cheia |
+|---|---|---|
+| hero | claro (sólido) | sim |
+| dores | escuro (transparente) | sim |
+| modulos | claro (sólido) | não (pinada) |
+| evolucao | escuro (transparente) | sim |
+| caminhos | claro (sólido) | sim |
+| oferta | escuro (transparente) | sim |
+| faq | claro (sólido) | sim |
+| footer | escuro (já era) | — |
 
 Regra que gera a tabela, e que vale mesmo se a ordem das seções mudar: **os tons alternam, e
-toda faixa clara precedida de uma escura carrega a aba.** O `hero` é a exceção óbvia — não há
-nada acima dele além do header.
+nenhuma seção vizinha repete o tom.**
 
-`.section-divider` **sai de todas as seções**. Com os tons alternando, a própria troca de cor
-já separa uma seção da outra; um fio de 1px em cima disso seria ruído. A classe continua no
-`globals.css`, agora lendo `var(--band-rule)`, caso volte a ser útil.
+**Nada de enfeite na emenda.** Nem aba, nem fio: `.section-divider` sai de todas as seções.
+Com os tons alternando, a própria troca de cor já separa uma seção da outra. A classe continua
+definida no `globals.css`, lendo `var(--band-rule)`, caso volte a ser útil — mas não é usada
+por ninguém, e um teste garante que não volte por acidente.
 
 ## Testes
 
@@ -417,10 +425,9 @@ Arquivo novo `__tests__/layout/bands.test.tsx`, cobrindo o que dá para quebrar 
 2. **A alternância, como regra e não como lista.** Nenhuma seção vizinha repete o tom. Esse
    teste pega o que a tabela fixa não pega: se alguém acrescentar uma seção no meio, a tabela
    é atualizada mecanicamente, mas a regra de alternância é violada e o teste grita.
-3. **A aba aparece exatamente onde deve.** Uma em cada faixa clara precedida de escura
-   (`modulos`, `caminhos`, `faq`), nenhuma nas escuras — uma aba transparente não desenharia
-   forma nenhuma — e o total bate com a contagem esperada.
-4. **Nenhuma seção que hospeda aba tem `overflow-hidden`**, que a cortaria inteira.
+3. **A emenda fica limpa.** Zero `.section-tab` e zero `.section-divider` na página. É o teste
+   que impede a aba ou o fio de voltarem por acidente — os dois já estiveram lá, e código que
+   já existiu é o que mais volta sozinho num merge distraído.
 3. **O cartão não voltou.** Nenhum `.site-card` no documento, e `MainCard` não é mais
    importado.
 4. **Módulos é a exceção declarada.** `#modulos` não tem a classe de tela cheia — para que a

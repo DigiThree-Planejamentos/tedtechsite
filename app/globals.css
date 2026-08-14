@@ -139,10 +139,8 @@ html.lenis body {
     background: var(--band-bg);
     color: var(--band-fg);
   }
-  /* O conteudo fica acima da textura decorativa (::before, z-index 0).
-     A aba fica de fora da regra: ela e `absolute` para se pendurar
-     acima da secao, e um `relative` generico a arrancaria da ancora. */
-  .site-band > *:not(.section-tab) {
+  /* O conteudo fica acima da textura decorativa (::before, z-index 0). */
+  .site-band > * {
     position: relative;
     z-index: 1;
   }
@@ -246,47 +244,6 @@ html.lenis body {
   }
   @media (min-width: 1024px) {
     .site-section {
-      padding-inline: 4rem;
-    }
-  }
-  /* ---- Aba de virada entre faixas ------------------------------------
-     A aba pertence a faixa CLARA: com as escuras transparentes, a clara
-     e a unica superficie solida, e a aba e uma saliencia dela subindo
-     para dentro do vao escuro de cima.
-
-     O efeito nao vem do corpo da aba, e sim dos ombros: cada quadradinho
-     de 28px leva uma mascara radial que escava um quarto de circulo no
-     proprio canto, produzindo um canto concavo que emenda com o canto
-     convexo do corpo. A aba deixa de parecer colada e passa a parecer
-     que brota da faixa. */
-  .section-tab__gutter {
-    padding-inline: 1.25rem;
-  }
-  .section-tab__shoulder {
-    align-self: flex-end;
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    background: var(--band-bg);
-    -webkit-mask-image: radial-gradient(28px at var(--tab-corner) 0, transparent 27px, #000 28px);
-    mask-image: radial-gradient(28px at var(--tab-corner) 0, transparent 27px, #000 28px);
-  }
-  /* A margem negativa puxa o ombro para dentro da calha, para que o
-     corpo da aba comece exatamente na coluna de conteudo. */
-  .section-tab__shoulder--l {
-    --tab-corner: 0;
-    margin-left: -28px;
-  }
-  .section-tab__shoulder--r {
-    --tab-corner: 100%;
-  }
-  @media (min-width: 640px) {
-    .section-tab__gutter {
-      padding-inline: 2rem;
-    }
-  }
-  @media (min-width: 1024px) {
-    .section-tab__gutter {
       padding-inline: 4rem;
     }
   }

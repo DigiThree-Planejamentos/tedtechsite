@@ -22,7 +22,8 @@ Tarefas 1 a 5 **executadas**, com uma revisão de rumo depois da T4. Commits, em
 | `c3ce7d7` | T2 — dores, módulos e evolução |
 | `933d0c0` | T3 — caminhos, oferta e faq |
 | `66ebbb6` | T4 — remoção do cartão |
-| `ba23751` | **Revisão** + T5 — ritmo alternado, escuras transparentes, três abas |
+| `ba23751` | **Revisão 1** + T5 — ritmo alternado, escuras transparentes, três abas |
+| (seguinte) | **Revisão 2** — a aba sai; a emenda vira só a troca de tom |
 
 **A revisão, em duas frases.** O cliente trocou a quebra única por alternância e pediu que as
 faixas escuras mostrassem o fundo do site com os circuitos. Isso corrigiu um erro que este

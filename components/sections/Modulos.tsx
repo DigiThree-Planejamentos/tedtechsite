@@ -13,7 +13,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitReveal } from '@/components/motion/SplitReveal';
 import { SectionLabel } from '@/components/ui/SectionLabel';
 import { ModuleStepper } from '@/components/sections/ModuleStepper';
-import { SectionTab } from '@/components/layout/SectionTab';
 import { content } from '@/lib/content';
 
 if (typeof window !== 'undefined') {
@@ -379,7 +378,6 @@ export function Modulos() {
       id="modulos"
       className="site-section site-band site-band--light scroll-mt-24"
     >
-      <SectionTab />
       <div ref={pinRef} className="module-pin mx-auto w-full max-w-content">
         <div className="module-pin__header relative z-20">
           <SectionLabel>{content.modulos.label}</SectionLabel>

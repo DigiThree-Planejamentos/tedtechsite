@@ -7,21 +7,18 @@ import Home from '@/app/page';
 // `full: false` marca excecao declarada, nao esquecimento.
 // Claro e escuro se alternam do inicio ao fim. As faixas escuras sao
 // transparentes: quem preenche o vao e o fundo do site com o canvas de
-// circuitos. Isso faz das claras as unicas superficies solidas — e por
-// isso a aba pertence a elas.
-//
-// `aba: true` marca toda faixa clara que vem depois de uma escura, que
-// e onde a superficie solida reaparece e se anuncia.
+// circuitos. A propria troca de tom e a separacao entre uma secao e a
+// seguinte — sem fio, sem aba, sem nenhum enfeite na emenda.
 export const RITMO = [
-  { id: 'hero', tom: 'light', full: true, aba: false },
-  { id: 'dores', tom: 'dark', full: true, aba: false },
+  { id: 'hero', tom: 'light', full: true },
+  { id: 'dores', tom: 'dark', full: true },
   // Modulos e pinada pelo ScrollTrigger e ja ocupa a tela. Altura minima
   // injetaria uma tela vazia antes do pin. Excecao declarada.
-  { id: 'modulos', tom: 'light', full: false, aba: true },
-  { id: '', tom: 'dark', full: true, aba: false },
-  { id: 'caminhos', tom: 'light', full: true, aba: true },
-  { id: 'oferta', tom: 'dark', full: true, aba: false },
-  { id: 'faq', tom: 'light', full: true, aba: true },
+  { id: 'modulos', tom: 'light', full: false },
+  { id: '', tom: 'dark', full: true },
+  { id: 'caminhos', tom: 'light', full: true },
+  { id: 'oferta', tom: 'dark', full: true },
+  { id: 'faq', tom: 'light', full: true },
 ];
 
 describe('Faixas da pagina', () => {
@@ -54,31 +51,13 @@ describe('Faixas da pagina', () => {
     }
   });
 
-  it('poe a aba em toda faixa clara que volta depois de uma escura', () => {
+  it('deixa a emenda entre as secoes limpa, so a troca de tom', () => {
     const { container } = render(<Home />);
-    const secoes = Array.from(container.querySelectorAll('main section'));
-
-    RITMO.forEach((esperado, i) => {
-      const temAba = !!secoes[i].querySelector('.section-tab');
-      expect(temAba, `secao ${esperado.id || 'evolucao'}: aba ${temAba ? 'sobrando' : 'faltando'}`).toBe(
-        esperado.aba,
-      );
-    });
-    // Nenhuma faixa escura carrega aba: ela e transparente, e uma aba
-    // transparente nao desenha forma nenhuma.
-    expect(container.querySelectorAll('.section-tab')).toHaveLength(
-      RITMO.filter((r) => r.aba).length,
-    );
-  });
-
-  it('nao deixa a aba ser cortada por overflow na secao que a hospeda', () => {
-    const { container } = render(<Home />);
-    for (const aba of Array.from(container.querySelectorAll('.section-tab'))) {
-      const secao = aba.closest('section');
-      // A aba fica pendurada acima da secao (bottom-full); um
-      // overflow-hidden na secao a cortaria inteira.
-      expect(secao?.className, `${secao?.id} corta a aba`).not.toContain('overflow-hidden');
-    }
+    // A aba de canto concavo foi tirada por decisao do cliente. Este
+    // teste existe para que ela nao volte por acidente junto com algum
+    // outro enfeite de emenda — o fio do .section-divider inclusive.
+    expect(container.querySelectorAll('.section-tab')).toHaveLength(0);
+    expect(container.querySelectorAll('.section-divider')).toHaveLength(0);
   });
 
   it('nao tem mais o cartao branco envolvendo a pagina', () => {
