@@ -1,5 +1,6 @@
 import type { ComponentType, SVGProps } from 'react';
 import { MagneticButton } from '@/components/motion/MagneticButton';
+import { SectionTab } from '@/components/layout/SectionTab';
 import { Reveal } from '@/components/motion/Reveal';
 import { SplitReveal } from '@/components/motion/SplitReveal';
 import { Button } from '@/components/ui/Button';
@@ -79,8 +80,9 @@ export function Caminhos() {
   return (
     <section
       id="caminhos"
-      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
+      className="site-section site-band site-band--light site-band--full scroll-mt-24"
     >
+      <SectionTab />
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{c.label}</SectionLabel>
         <SplitReveal

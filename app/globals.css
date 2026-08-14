@@ -146,8 +146,10 @@ html.lenis body {
     position: relative;
     z-index: 1;
   }
+  /* As faixas claras sao folhas solidas; as escuras sao janelas. */
   .site-band--light {
     --band-bg: #f7fbff;
+    --band-solid: #f7fbff;
     --band-fg: #07111f;
     --band-fg-strong: #050914;
     --band-fg-body: #3b4654;
@@ -155,8 +157,14 @@ html.lenis body {
     --band-fg-faint: #667284;
     --band-rule: rgba(15, 42, 81, 0.1);
   }
+  /* Transparente de proposito: e o que deixa aparecer o fundo escuro do
+     site e o canvas de circuitos (CircuitEdges, fixed inset-0 -z-10).
+     Pintar um #07111f opaco aqui enterra os circuitos. */
   .site-band--dark {
-    --band-bg: #07111f;
+    --band-bg: transparent;
+    /* Onde algo precisa de uma cor chapada em vez de transparencia —
+       o furo do medidor conico, por exemplo. */
+    --band-solid: #06080d;
     --band-fg: #eef2f7;
     --band-fg-strong: #ffffff;
     --band-fg-body: #c3ccd8;
@@ -178,18 +186,8 @@ html.lenis body {
     background-size: 34px 34px;
     opacity: 0.08;
   }
-  /* Brilho azul da marca nas faixas escuras, dimensionado para faixa de
-     ponta a ponta (o do cartao era para uma caixa de 1280px). */
-  .site-band--dark::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background:
-      radial-gradient(760px 420px at 12% 0%, rgba(30, 158, 219, 0.16), transparent 62%),
-      radial-gradient(680px 460px at 100% 100%, rgba(15, 42, 81, 0.28), transparent 66%);
-  }
+  /* As faixas escuras nao tem textura propria: quem preenche o vao e o
+     fundo do site com os circuitos, que ja existem atras de tudo. */
   /* min-height, nunca height: uma tela e o piso. No mobile Caminhos
      (1,60 tela), Oferta (1,14) e Modulos (1,07) crescem em vez de
      cortar conteudo ou criar rolagem dentro de rolagem. */
@@ -251,6 +249,47 @@ html.lenis body {
       padding-inline: 4rem;
     }
   }
+  /* ---- Aba de virada entre faixas ------------------------------------
+     A aba pertence a faixa CLARA: com as escuras transparentes, a clara
+     e a unica superficie solida, e a aba e uma saliencia dela subindo
+     para dentro do vao escuro de cima.
+
+     O efeito nao vem do corpo da aba, e sim dos ombros: cada quadradinho
+     de 28px leva uma mascara radial que escava um quarto de circulo no
+     proprio canto, produzindo um canto concavo que emenda com o canto
+     convexo do corpo. A aba deixa de parecer colada e passa a parecer
+     que brota da faixa. */
+  .section-tab__gutter {
+    padding-inline: 1.25rem;
+  }
+  .section-tab__shoulder {
+    align-self: flex-end;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    background: var(--band-bg);
+    -webkit-mask-image: radial-gradient(28px at var(--tab-corner) 0, transparent 27px, #000 28px);
+    mask-image: radial-gradient(28px at var(--tab-corner) 0, transparent 27px, #000 28px);
+  }
+  /* A margem negativa puxa o ombro para dentro da calha, para que o
+     corpo da aba comece exatamente na coluna de conteudo. */
+  .section-tab__shoulder--l {
+    --tab-corner: 0;
+    margin-left: -28px;
+  }
+  .section-tab__shoulder--r {
+    --tab-corner: 100%;
+  }
+  @media (min-width: 640px) {
+    .section-tab__gutter {
+      padding-inline: 2rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-tab__gutter {
+      padding-inline: 4rem;
+    }
+  }
   /* CSS-only conic gauge; --val is 0..100 */
   .gauge {
     --val: 100;
@@ -264,13 +303,16 @@ html.lenis body {
       rgba(15, 42, 81, 0.12) 0
     );
   }
+  /* O furo do anel conico precisa de cor chapada, nao de transparencia:
+     transparente deixaria o proprio gradiente aparecer no meio. Segue o
+     tom da faixa para nao virar um disco branco sobre fundo escuro. */
   .gauge::before {
     content: '';
     position: absolute;
     width: 152px;
     height: 152px;
     border-radius: 50%;
-    background: #f7fbff;
+    background: var(--band-solid, #f7fbff);
   }
   .gauge > * {
     position: relative;

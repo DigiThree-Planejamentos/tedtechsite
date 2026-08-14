@@ -2,6 +2,7 @@ import { SectionLabel } from '@/components/ui/SectionLabel';
 import { Button } from '@/components/ui/Button';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { SplitReveal } from '@/components/motion/SplitReveal';
+import { SectionTab } from '@/components/layout/SectionTab';
 import { content } from '@/lib/content';
 
 export function Faq() {
@@ -11,7 +12,8 @@ export function Faq() {
   if (items.length === 0) return null;
 
   return (
-    <section id="faq" className="site-section site-band site-band--dark site-band--full scroll-mt-24">
+    <section id="faq" className="site-section site-band site-band--light site-band--full scroll-mt-24">
+      <SectionTab />
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{f.label}</SectionLabel>
         <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">

@@ -8,7 +8,7 @@ import { content } from '@/lib/content';
 export function Evolucao() {
   const e = content.evolucao;
   return (
-    <section className="site-section site-band site-band--light site-band--full section-divider">
+    <section className="site-section site-band site-band--dark site-band--full">
       <div className="mx-auto grid w-full max-w-content items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center">
           <GaugeRing>

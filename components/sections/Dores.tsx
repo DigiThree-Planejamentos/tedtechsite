@@ -7,7 +7,7 @@ export function Dores() {
   const d = content.dores;
 
   return (
-    <section id="dores" className="site-section site-band site-band--light site-band--full section-divider scroll-mt-24">
+    <section id="dores" className="site-section site-band site-band--dark site-band--full scroll-mt-24">
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{d.label}</SectionLabel>
         <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">
