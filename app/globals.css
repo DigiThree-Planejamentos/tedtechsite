@@ -685,3 +685,31 @@ html.lenis body {
     transform: none;
   }
 }
+
+/* FAQ — acordeão nativo. A animação é progressive enhancement:
+   onde ::details-content não é suportado, abre instantaneamente. */
+.faq-item[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq-item {
+    interpolate-size: allow-keywords;
+  }
+
+  .faq-item .faq-chevron {
+    transition: transform 0.3s ease;
+  }
+
+  .faq-item::details-content {
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .faq-item[open]::details-content {
+    height: auto;
+    opacity: 1;
+  }
+}

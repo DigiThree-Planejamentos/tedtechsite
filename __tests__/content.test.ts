@@ -33,4 +33,18 @@ describe('content', () => {
     expect(pageContent).not.toContain('acesso vitalício');
     expect(pageContent).not.toContain('certificado de conclusão');
   });
+
+  it('every faq question is written, answers may be pending', () => {
+    expect(content.faq.items.length).toBeGreaterThanOrEqual(7);
+    for (const item of content.faq.items) {
+      expect(item.q.length).toBeGreaterThan(0);
+      expect(typeof item.a).toBe('string');
+    }
+  });
+
+  it('offer trust always states guarantee and payment methods', () => {
+    expect(content.offer.trust.guarantee.title.length).toBeGreaterThan(0);
+    expect(content.offer.trust.guarantee.desc.length).toBeGreaterThan(0);
+    expect(content.offer.trust.payments.length).toBeGreaterThan(0);
+  });
 });

@@ -7,7 +7,6 @@ import { content } from '@/lib/content';
 
 export function Hero() {
   const h = content.hero;
-  const d = content.dores;
 
   return (
     <section
@@ -16,36 +15,36 @@ export function Hero() {
     >
       <div className="relative mx-auto grid min-h-[calc(100svh-24rem)] w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
         <div className="flex flex-col justify-center text-left">
-          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-blue sm:text-xs">
+            {h.eyebrow}
+          </p>
+
+          <h1 className="mt-3 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
             <SplitReveal
               as="span"
               type="lines"
-            trigger="ready"
-            className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-          >
-              <span className="text-blue">Já pensou</span>{' '}
-              <span className="inline-block text-[22px] sm:text-[26px] md:text-[32px] lg:text-[40px]">
-                alguma dessas?
-              </span>
+              trigger="ready"
+              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
+            >
+              {h.headline}
             </SplitReveal>
           </h1>
 
-          <Reveal stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
-            {d.thoughts.map((t) => (
-              <div key={t.q} className="border-l-2 border-blue pl-4">
-                <p className="text-xs italic leading-snug text-[#3b4654] sm:text-sm">
-                  “{t.q}”
-                </p>
-                <small className="mt-1 block text-[11px] not-italic text-[#667284]">{t.s}</small>
-              </div>
+          <p className="mt-4 max-w-xl text-sm text-[#3b4654] sm:text-base">{h.sub}</p>
+
+          <Reveal as="ul" stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
+            {h.bullets.map((bullet) => (
+              <li
+                key={bullet}
+                className="flex items-start gap-3 text-xs text-[#050914] sm:text-sm"
+              >
+                <span className="text-blue" aria-hidden>✓</span>
+                <span>{bullet}</span>
+              </li>
             ))}
           </Reveal>
 
-          <p className="mt-5 max-w-xl text-xs font-semibold text-[#050914] sm:text-sm">
-            {d.turn}
-          </p>
-
-          <div className="mt-5 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-6 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}

@@ -13,4 +13,21 @@ describe('Oferta', () => {
     const cta = screen.getByRole('link', { name: content.offer.cta });
     expect(cta).toHaveAttribute('href', content.checkoutUrl);
   });
+
+  it('shows the guarantee next to the price', () => {
+    render(<Oferta />);
+    expect(screen.getByText(content.offer.trust.guarantee.title)).toBeInTheDocument();
+    expect(screen.getByText(content.offer.trust.guarantee.desc)).toBeInTheDocument();
+  });
+
+  it('renders only the filled trust rows', () => {
+    const { container } = render(<Oferta />);
+    const t = content.offer.trust;
+    const filled = [t.checkout, t.access, t.payments].filter((value) => value !== '');
+    const rows = container.querySelectorAll('[data-trust-row]');
+    expect(rows).toHaveLength(filled.length);
+    for (const value of filled) {
+      expect(screen.getByText(value)).toBeInTheDocument();
+    }
+  });
 });

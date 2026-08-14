@@ -4,33 +4,34 @@ import { Hero } from '@/components/sections/Hero';
 import { content } from '@/lib/content';
 
 describe('Hero', () => {
-  it('renders the headline, diagnostic questions as quotes and the turn phrase', () => {
+  it('names the product in the h1 and supports it with eyebrow, sub and bullets', () => {
     render(<Hero />);
-    expect(screen.queryByText(content.dores.label)).not.toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: content.dores.title }),
+      screen.getByRole('heading', { level: 1, name: content.hero.headline }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Já pensou')).toHaveClass('text-blue');
-    expect(screen.getByText('alguma dessas?')).toHaveClass('text-[22px]');
-    for (const thought of content.dores.thoughts) {
-      expect(screen.getByText(`“${thought.q}”`)).toBeInTheDocument();
-      expect(screen.getByText(thought.s)).toBeInTheDocument();
+    expect(screen.getByText(content.hero.eyebrow)).toBeInTheDocument();
+    expect(screen.getByText(content.hero.sub)).toBeInTheDocument();
+    for (const bullet of content.hero.bullets) {
+      expect(screen.getByText(bullet)).toBeInTheDocument();
     }
-    expect(screen.getByText(content.dores.turn)).toBeInTheDocument();
   });
 
-  it('renders the full-height instructor video panel with overlay copy', () => {
+  it('links the CTA to checkout and keeps the instructor video panel', () => {
     const { container } = render(<Hero />);
+    expect(screen.getByRole('link', { name: content.hero.cta })).toHaveAttribute(
+      'href',
+      content.checkoutUrl,
+    );
     expect(container.querySelector('[data-video]')).not.toBeNull();
-    expect(screen.getByText(content.instrutor.label)).toBeInTheDocument();
     expect(screen.getByText(content.instrutor.name)).toBeInTheDocument();
-    expect(screen.getByText(content.instrutor.heroQuote)).toBeInTheDocument();
   });
 
-  it('does not render the old stats band or subtitle', () => {
+  it('no longer renders any of the pain copy', () => {
     render(<Hero />);
-    expect(screen.queryByText('módulos')).toBeNull();
-    expect(screen.queryByText('100%')).toBeNull();
-    expect(screen.queryByText('medo de começar sem base')).toBeNull();
+    expect(screen.queryByText(content.dores.title)).toBeNull();
+    expect(screen.queryByText(content.dores.turn)).toBeNull();
+    for (const thought of content.dores.thoughts) {
+      expect(screen.queryByText(`“${thought.q}”`)).toBeNull();
+    }
   });
 });

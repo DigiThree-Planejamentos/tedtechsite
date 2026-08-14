@@ -4,6 +4,7 @@ import { MagneticButton } from '@/components/motion/MagneticButton';
 import { SplitReveal } from '@/components/motion/SplitReveal';
 import { Reveal } from '@/components/motion/Reveal';
 import { CountUp } from '@/components/motion/CountUp';
+import { OfertaTrust } from '@/components/sections/OfertaTrust';
 import { content } from '@/lib/content';
 
 export function Oferta() {
@@ -47,7 +48,7 @@ export function Oferta() {
                 </Button>
               </MagneticButton>
             </div>
-            <div className="mt-4 text-[11px] text-[#667284] md:text-xs">{o.payments}</div>
+            <OfertaTrust />
           </div>
         </div>
       </div>

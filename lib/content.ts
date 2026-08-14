@@ -13,16 +13,31 @@ export interface Stat {
   label: string;
 }
 
+export interface FaqItem {
+  q: string;
+  a: string;
+}
+
+export interface OfferTrust {
+  guarantee: { title: string; desc: string };
+  checkout: string;
+  access: string;
+  payments: string;
+}
+
 export const content = {
   // ---- Links (PLACEHOLDERS — replace before launch) ----
   checkoutUrl: 'https://checkout.exemplo.com/tedtech', // TODO: link real do checkout
   whatsappUrl: 'https://wa.me/5500000000000', // TODO: número real
 
   hero: {
-    headlineWords: ['Hardware', 'Montagem', 'Manutenção'],
-    subLines: [
-      'Conheça os componentes, monte seu computador, instale o sistema',
-      'e aprenda a diagnosticar e prevenir os problemas mais comuns.',
+    eyebrow: 'Curso de montagem e manutenção de computadores',
+    headline: 'Monte, formate e conserte PCs começando do zero',
+    sub: 'Sem pré-requisito e sem medo de abrir o gabinete.',
+    bullets: [
+      '6 módulos, dos componentes à manutenção',
+      'Do zero — nenhum conhecimento prévio',
+      'Pra cuidar do seu PC ou atender clientes',
     ],
     cta: 'Quero me inscrever',
   },
@@ -204,20 +219,6 @@ export const content = {
     videoSrc: '', // TODO: embed/mp4
   },
 
-  tiraDuvidas: {
-    label: 'Tira-dúvidas',
-    title: 'Converse com a gente antes de decidir',
-    chatTitle: 'TedTech · Atendimento',
-    chatStatus: 'online',
-    bubbles: [
-      { from: 'them', text: 'Oi! Posso te ajudar a escolher? 👋' },
-      { from: 'me', text: 'Sou iniciante total, consigo acompanhar?' },
-      { from: 'them', text: 'Com certeza — o curso começa pelos fundamentos e avança até a manutenção.' },
-    ],
-    inputPlaceholder: 'Digite sua dúvida…',
-    cta: 'Continuar no WhatsApp',
-  },
-
   offer: {
     label: 'A oferta',
     title: 'Comece hoje, do zero',
@@ -234,7 +235,37 @@ export const content = {
     priceNow: 'R$ 297', // TODO
     installments: 'ou 12x de R$ 29,70', // TODO
     cta: 'Inscrever →',
-    payments: 'Pix · Cartão · Boleto',
+    trust: {
+      guarantee: {
+        title: 'Garantia de 7 dias',
+        desc: 'Se não for pra você, é só pedir o reembolso integral em até 7 dias — direito garantido pelo Código de Defesa do Consumidor.',
+      },
+      checkout: '', // TODO: confirmar plataforma → ex. 'Compra segura via Kiwify'
+      access: '', // TODO: confirmar liberação e duração do acesso
+      payments: 'Pix · Cartão · Boleto',
+    } as OfferTrust,
+  },
+
+  faq: {
+    label: 'Dúvidas frequentes',
+    title: 'Antes de você decidir',
+    items: [
+      {
+        q: 'O curso serve pra quem nunca mexeu com hardware?',
+        a: 'Serve. O módulo 01 começa pelos fundamentos — o que é cada componente e como hardware e software se relacionam — antes de qualquer montagem. Não é preciso conhecimento prévio.',
+      },
+      { q: 'Preciso ter ferramentas ou um PC pra desmontar?', a: '' }, // TODO
+      { q: 'Por quanto tempo eu tenho acesso ao curso?', a: '' }, // TODO
+      { q: 'O curso tem certificado?', a: '' }, // TODO
+      { q: 'Como funciona o acompanhamento?', a: '' }, // TODO
+      { q: 'Consigo assistir pelo celular?', a: '' }, // TODO
+      {
+        q: 'Como funciona a garantia?',
+        a: 'Você tem 7 dias a partir da compra pra pedir o reembolso integral, sem precisar justificar. É o direito de arrependimento previsto no art. 49 do Código de Defesa do Consumidor.',
+      },
+    ] as FaqItem[],
+    cta: 'Falar no WhatsApp',
+    ctaHint: 'Ficou outra dúvida?',
   },
 
   floatingCta: {

@@ -2,6 +2,6 @@ export const site = {
   name: 'TedTech',
   nav: {
     modulos: '#modulos',
-    tiraDuvidas: '#tira-duvidas',
+    duvidas: '#faq',
   },
 } as const;
