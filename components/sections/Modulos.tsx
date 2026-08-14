@@ -410,7 +410,7 @@ export function Modulos() {
           tabIndex={0}
           role="region"
           aria-label="Módulos do curso"
-          className="module-carousel no-scrollbar mt-8 snap-x snap-mandatory pb-2"
+          className="module-carousel no-scrollbar mt-4 snap-x snap-mandatory pb-2"
         >
           <div ref={trackRef} className="module-track">
             {content.modules.map((module, moduleIndex) => {

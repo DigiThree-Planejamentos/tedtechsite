@@ -487,7 +487,7 @@ html.lenis body {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92);
   }
   .module-card {
-    min-height: 610px;
+    min-height: 540px;
     background: linear-gradient(165deg, #20344c 0%, #14263c 48%, #0a1525 100%);
     color: #ffffff;
     transform: translateZ(0) scale(0.985);
@@ -513,8 +513,10 @@ html.lenis body {
       rgba(7, 17, 31, 0.99) 100%
     );
   }
+  /* Reserva de imagem acima do texto. Anda junto com a altura do card:
+     encolher um sem o outro espreme o texto contra a base. */
   .module-card__body {
-    padding-top: 255px;
+    padding-top: 190px;
   }
   .module-card__lesson {
     opacity: 0.86;
@@ -549,11 +551,11 @@ html.lenis body {
     padding-inline: max(0px, calc((100% - min(460px, 78%)) / 2));
   }
   .module-card {
-    height: clamp(550px, calc(100svh - 17rem), 610px);
+    height: clamp(490px, calc(100svh - 21rem), 545px);
     min-height: 0;
   }
   .module-card__body {
-    padding-top: 235px;
+    padding-top: 172px;
   }
 }
 
