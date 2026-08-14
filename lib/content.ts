@@ -32,7 +32,12 @@ export const content = {
 
   hero: {
     eyebrow: 'Curso de montagem e manutenção de computadores',
-    headline: 'Chega de pagar técnico',
+    // Duas partes tipográficas de uma frase só: `lead` sai grande e em azul,
+    // `rest` na linha de baixo no tamanho normal. O h1 lê os dois juntos.
+    headline: {
+      lead: 'Chega',
+      rest: 'de pagar técnico',
+    },
     sub: 'Sem pré-requisito e sem medo de abrir o gabinete.',
     bullets: [
       '6 módulos, dos componentes à manutenção',

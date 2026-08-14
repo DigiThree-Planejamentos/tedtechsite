@@ -7,7 +7,10 @@ describe('Home page', () => {
   it('renders the product hero, module anchor and offer price together', () => {
     const { container } = render(<Home />);
     expect(
-      screen.getByRole('heading', { level: 1, name: content.hero.headline }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: `${content.hero.headline.lead} ${content.hero.headline.rest}`,
+      }),
     ).toBeInTheDocument();
     expect(container.querySelector('#modulos')).not.toBeNull();
     expect(container.querySelector('#caminhos')).not.toBeNull();

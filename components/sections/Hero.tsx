@@ -20,13 +20,15 @@ export function Hero() {
           </p>
 
           <h1 className="mt-3 max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[#050914]">
-            <SplitReveal
-              as="span"
-              type="lines"
-              trigger="ready"
-              className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-            >
-              {h.headline}
+            <SplitReveal as="span" type="lines" trigger="ready" className="block">
+              {/* The space between the spans is load-bearing: it keeps the
+                  accessible name "Chega de pagar técnico" in one piece. */}
+              <span className="block text-5xl text-blue sm:text-6xl md:text-7xl lg:text-8xl">
+                {h.headline.lead}
+              </span>{' '}
+              <span className="block text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                {h.headline.rest}
+              </span>
             </SplitReveal>
           </h1>
 

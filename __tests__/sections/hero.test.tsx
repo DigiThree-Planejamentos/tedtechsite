@@ -3,17 +3,29 @@ import { render, screen } from '@testing-library/react';
 import { Hero } from '@/components/sections/Hero';
 import { content } from '@/lib/content';
 
+const fullHeadline = `${content.hero.headline.lead} ${content.hero.headline.rest}`;
+
 describe('Hero', () => {
   it('names the product in the h1 and supports it with eyebrow, sub and bullets', () => {
     render(<Hero />);
     expect(
-      screen.getByRole('heading', { level: 1, name: content.hero.headline }),
+      screen.getByRole('heading', { level: 1, name: fullHeadline }),
     ).toBeInTheDocument();
     expect(screen.getByText(content.hero.eyebrow)).toBeInTheDocument();
     expect(screen.getByText(content.hero.sub)).toBeInTheDocument();
     for (const bullet of content.hero.bullets) {
       expect(screen.getByText(bullet)).toBeInTheDocument();
     }
+  });
+
+  it('sets the lead word larger and in the brand blue above the remainder', () => {
+    render(<Hero />);
+    const lead = screen.getByText(content.hero.headline.lead);
+    const rest = screen.getByText(content.hero.headline.rest);
+    expect(lead).not.toBe(rest);
+    expect(lead.className).toMatch(/\btext-blue\b/);
+    expect(lead.className).toMatch(/\btext-5xl\b/);
+    expect(rest.className).toMatch(/\btext-3xl\b/);
   });
 
   it('links the CTA to checkout and keeps the instructor video panel', () => {
