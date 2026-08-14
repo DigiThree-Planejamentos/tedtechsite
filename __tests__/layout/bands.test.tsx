@@ -12,9 +12,10 @@ import Home from '@/app/page';
 export const RITMO = [
   { id: 'hero', tom: 'light', full: true },
   { id: 'dores', tom: 'dark', full: true },
-  // Modulos e pinada pelo ScrollTrigger e ja ocupa a tela. Altura minima
-  // injetaria uma tela vazia antes do pin. Excecao declarada.
-  { id: 'modulos', tom: 'light', full: false },
+  // Modulos era a excecao enquanto o carrossel era pinado por
+  // ScrollTrigger. O acordeao poe os seis cards numa tela so, o pin saiu,
+  // e a secao virou uma faixa normal como as outras.
+  { id: 'modulos', tom: 'light', full: true },
   { id: '', tom: 'dark', full: true },
   { id: 'caminhos', tom: 'light', full: true },
   { id: 'oferta', tom: 'dark', full: true },
