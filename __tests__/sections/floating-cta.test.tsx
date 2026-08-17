@@ -52,10 +52,12 @@ describe('FloatingCta', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders the configured urgency, desktop price and checkout link', () => {
+  it('renders the urgency, the price on both layouts and the checkout link', () => {
     const { container } = render(<FloatingCta />);
     expect(screen.getByText(content.floatingCta.urgency)).toBeInTheDocument();
-    expect(screen.getByText(content.offer.priceNow)).toBeInTheDocument();
+    // Duas ocorrencias de proposito: no celular a barra e "R$ 297 ·
+    // Inscrever", e o preco ocupa o lugar do texto de urgencia.
+    expect(screen.getAllByText(content.offer.priceNow)).toHaveLength(2);
     expect(screen.getByText(content.offer.installments)).toBeInTheDocument();
     expect(container.querySelector('a')).toHaveAttribute(
       'href',
@@ -74,25 +76,29 @@ describe('FloatingCta', () => {
     expect(link).toHaveAttribute('tabindex', '-1');
   });
 
-  it('appears after the threshold, then hides at and below the offer', () => {
+  it('follows whoever is not looking at the offer, before it and after it', () => {
     const { container } = render(<FloatingCta />);
     const root = container.querySelector('[data-floating-cta]');
     const link = container.querySelector('a');
 
+    // Antes de chegar na oferta: a barra carrega o preco e o botao.
     setScrollY(700);
     fireEvent.scroll(window);
     expect(root).toHaveAttribute('data-visible', 'true');
     expect(root).toHaveAttribute('aria-hidden', 'false');
     expect(link).not.toHaveAttribute('tabindex');
 
+    // Com a oferta na tela ela sai de cena: seria concorrer com os cards.
     offerTop = 1000;
     fireEvent.scroll(window);
     expect(root).toHaveAttribute('data-visible', 'false');
 
+    // Depois de passar dos cards ela VOLTA. Antes nao voltava, e quem
+    // rolava ate o rodape ficava sem preco e sem caminho pro checkout.
     offerTop = -700;
     setScrollY(3000);
     fireEvent.scroll(window);
-    expect(root).toHaveAttribute('data-visible', 'false');
+    expect(root).toHaveAttribute('data-visible', 'true');
 
     offerTop = 1800;
     setScrollY(700);

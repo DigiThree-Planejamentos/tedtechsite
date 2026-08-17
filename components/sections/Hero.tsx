@@ -19,7 +19,7 @@ export function Hero() {
 
           O min-h interno saiu: aquele calc foi dimensionado para o
           layout do cartao e agora competiria com a altura da faixa. */}
-      <div className="relative mx-auto grid w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.85fr_1.15fr] md:pt-14 lg:pt-16">
+      <div className="relative mx-auto grid w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.78fr_1.22fr] md:pt-14 lg:pt-16">
         {/* `justify-between`, nao `justify-center`: a folga vertical da coluna
             vai para as duas pontas em vez de ficar sobrando em cima e embaixo.
             O titulo sobe e o CTA desce pelo mesmo tanto, e os bullets, que
@@ -38,29 +38,16 @@ export function Hero() {
                   descender of the "g". The font needs >= 1.19em to fit it.
                   The negative top margin cancels the extra half-leading so
                   the headline keeps sitting close under the eyebrow. */}
-              <span className="-mt-[0.12em] block font-subtitle text-6xl/[1.25] italic text-blue sm:text-7xl/[1.25] md:text-8xl/[1.25] lg:text-9xl/[1.25]">
+              <span className="-mt-[0.12em] block font-hero text-6xl/[1.25] font-bold italic tracking-[-0.045em] text-blue sm:text-7xl/[1.25] md:text-8xl/[1.25] lg:text-9xl/[1.25]">
                 {h.headline.lead}
               </span>{' '}
               {/* Same 1.25 leading as the lead line, and for the same reason:
                   "pagar" has a descender and the mask clips at the line box.
 
                   The sizes are measured, not chosen: each one lands this line's
-                  right ink edge on the same x as the "a" of "Chega" above it.
-                  Measured against the glyph ink, not the advance box, because
-                  the italic overhangs its box and the eye reads the ink. They
-                  are tied to these two exact strings and to Space Grotesk
-                  italic above — changing either text or font means measuring
-                  again.
-
-                  Cada tamanho e o par do tamanho do lead NO MESMO breakpoint,
-                  multiplicado pelo mesmo fator. E o que preserva o alinhamento
-                  ao mudar de escala: a largura da tinta cresce linearmente com
-                  o corpo, entao escalar as duas linhas junto mantem a razao.
-                    base 48>60 (x1,25)   19,09 > 23,86
-                    sm   60>72 (x1,20)   23,82 > 28,58
-                    md   72>96 (x1,333)  28,56 > 38,08
-                    lg   96>128 (x1,333) 38,04 > 50,72 */}
-              <span className="-mt-[0.12em] block whitespace-nowrap text-[23.86px]/[1.25] sm:text-[28.58px]/[1.25] md:text-[38.08px]/[1.25] lg:text-[50.72px]/[1.25]">
+                  This supporting line stays deliberately smaller than the
+                  display word above it at every breakpoint. */}
+              <span className="-mt-[0.12em] block whitespace-nowrap text-[20px]/[1.25] font-semibold tracking-[0em] [word-spacing:0.22em] sm:text-[24px]/[1.25] md:text-[31px]/[1.25] lg:text-[42px]/[1.25]">
                 {h.headline.rest}
               </span>
             </SplitReveal>
