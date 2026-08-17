@@ -18,16 +18,18 @@ export function Footer() {
           </BackToTop>
           <p className="mt-2 max-w-xs text-sm text-muted md:text-[15px]">{f.tagline}</p>
         </div>
-        <div className="text-sm text-muted md:text-[15px]">
-          <div className="font-mono">{f.cnpj}</div>
-          <div className="mt-1 font-mono">{f.email}</div>
-          <a
-            href={f.phone.href}
-            className="mt-1 block font-mono transition-colors hover:text-[#07111f]"
-          >
-            Tel. {f.phone.label}
-          </a>
-          <div className="mt-1 flex flex-col gap-1">
+        <div className="flex flex-col gap-6 text-sm text-muted sm:flex-row sm:gap-12 md:text-[15px]">
+          <div>
+            <div className="font-mono">{f.cnpj}</div>
+            <div className="mt-1 font-mono">{f.email}</div>
+            <a
+              href={f.phone.href}
+              className="mt-1 block font-mono transition-colors hover:text-[#07111f]"
+            >
+              Tel. {f.phone.label}
+            </a>
+          </div>
+          <div className="flex flex-col gap-1">
             {f.links.map((l) => (
               <a
                 key={l.label}
