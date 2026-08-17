@@ -310,6 +310,7 @@ export const content = {
       label: '(24) 99999-9999', // TODO: número real
       href: 'tel:+5524999999999',
     },
+
     links: [
       { label: 'Termos', href: '#' },
       { label: 'Privacidade', href: '#' },
@@ -320,7 +321,6 @@ export const content = {
         label: 'Instagram @tedtechangra',
         href: 'https://www.instagram.com/tedtechangra/',
       },
-      { label: 'YouTube', href: '#' },
     ],
   },
 } as const;

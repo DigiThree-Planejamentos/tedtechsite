@@ -47,7 +47,7 @@ export function Hero() {
                   The sizes are measured, not chosen: each one lands this line's
                   This supporting line stays deliberately smaller than the
                   display word above it at every breakpoint. */}
-                <span className="-mt-[0.12em] block -translate-y-2 whitespace-nowrap text-[20px]/[1.25] sm:text-[24px]/[1.25] md:text-[31px]/[1.25] lg:text-[42px]/[1.25] text-[22px]/[1.25] font-semibold tracking-[0em] [word-spacing:0.22em] md:translate-x-4 lg:translate-x-4 sm:text-[28px]/[1.25] md:text-[36px]/[1.25] lg:text-[48px]/[1.25]">
+                <span className="-mt-[0.12em] block translate-y-0 whitespace-nowrap text-[20px]/[1.25] sm:-translate-y-2 sm:text-[24px]/[1.25] md:text-[31px]/[1.25] lg:text-[42px]/[1.25] text-[22px]/[1.25] font-semibold tracking-[0em] [word-spacing:0.22em] md:translate-x-4 lg:translate-x-4 sm:text-[28px]/[1.25] md:text-[36px]/[1.25] lg:text-[48px]/[1.25]">
                 {h.headline.rest}
               </span>
             </SplitReveal>
@@ -57,11 +57,11 @@ export function Hero() {
             <span className="block">Pare de gastar com técnico e comece a ganhar</span>
             <span className="block">como um. Aprenda manutenção do zero, resolva</span>
             <span className="block">seus próprios problemas e use essa habilidade</span>
-            <span className="block">para prestar serviços e gerar uma nova renda.</span>
+            <span className="block">para ganhar uma renda extra ou até como profissão.</span>
           </p>
           </div>
 
-          <div className="mt-6 flex translate-x-2 translate-y-0 flex-wrap items-center gap-4 md:translate-x-4 lg:translate-x-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-6 flex translate-x-2 translate-y-2 flex-wrap items-center gap-4 sm:translate-y-0 md:translate-x-4 lg:translate-x-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}
