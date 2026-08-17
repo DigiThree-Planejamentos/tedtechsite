@@ -34,20 +34,51 @@ function buildHeroClipPath(width: number, height: number) {
     mobile ? 140 : 216,
   );
   const previousSideTop = height * 0.01;
-  const sideTop = 16;
-  const topLeftRadius = Math.max(sideTop, 1);
-  const sideBottom = Math.min(height - cornerRadius, previousSideTop + sideHeight - 16);
+  const sideTopOpeningX = sideDepth + sideRadius;
+  const sideVerticalOffset = -32;
+  const sideBottom = Math.min(
+    height - cornerRadius,
+    previousSideTop + sideHeight - 16 + sideVerticalOffset,
+  );
 
   const topNotchX = width - topNotchWidth;
   const topNotchInnerY = Math.max(topNotchHeight - topRadius, topRadius);
   const sidePlateauY = sideBottom - sideRadius;
   const sideInnerY = sideBottom - sideRadius * 2;
-  const sideTopPlateauY = sideTop + sideRadius;
-  const sideTopInnerY = sideTop + sideRadius * 2;
+  const sideTopInnerY = Math.max(8, sideRadius * 2 + sideVerticalOffset);
 
   const n = (value: number) => value.toFixed(1);
 
-  return `path('M ${n(topLeftRadius)} 0 L ${n(topNotchX - topRadius)} 0 A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)} L ${n(topNotchX)} ${n(topNotchInnerY)} A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)} L ${n(width - topRadius)} ${n(topNotchHeight)} A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)} L ${n(width)} ${n(height - cornerRadius)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)} L ${n(bottomNotchRight + bottomRadius)} ${n(height)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchRight)} ${n(height - bottomRadius)} L ${n(bottomNotchRight)} ${n(bottomNotchTop + bottomRadius)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchRight - bottomRadius)} ${n(bottomNotchTop)} L ${n(bottomNotchLeft + bottomRadius)} ${n(bottomNotchTop)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchLeft)} ${n(bottomNotchTop + bottomRadius)} L ${n(bottomNotchLeft)} ${n(height - bottomRadius)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchLeft - bottomRadius)} ${n(height)} L ${n(cornerRadius)} ${n(height)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 0 ${n(height - cornerRadius)} L 0 ${n(sideBottom)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 ${n(sideRadius)} ${n(sidePlateauY)} L ${n(sideDepth - sideRadius)} ${n(sidePlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth)} ${n(sideInnerY)} L ${n(sideDepth)} ${n(sideTopInnerY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth - sideRadius)} ${n(sideTopPlateauY)} L ${n(sideRadius)} ${n(sideTopPlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 0 ${n(sideTop)} L 0 ${n(topLeftRadius)} A ${n(topLeftRadius)} ${n(topLeftRadius)} 0 0 1 ${n(topLeftRadius)} 0 Z')`;
+  const commands = [
+    `M ${n(sideTopOpeningX)} 0`,
+    `L ${n(topNotchX - topRadius)} 0`,
+    `A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)}`,
+    `L ${n(topNotchX)} ${n(topNotchInnerY)}`,
+    `A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)}`,
+    `L ${n(width - topRadius)} ${n(topNotchHeight)}`,
+    `A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)}`,
+    `L ${n(width)} ${n(height - cornerRadius)}`,
+    `A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)}`,
+    `L ${n(bottomNotchRight + bottomRadius)} ${n(height)}`,
+    `A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchRight)} ${n(height - bottomRadius)}`,
+    `L ${n(bottomNotchRight)} ${n(bottomNotchTop + bottomRadius)}`,
+    `A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchRight - bottomRadius)} ${n(bottomNotchTop)}`,
+    `L ${n(bottomNotchLeft + bottomRadius)} ${n(bottomNotchTop)}`,
+    `A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchLeft)} ${n(bottomNotchTop + bottomRadius)}`,
+    `L ${n(bottomNotchLeft)} ${n(height - bottomRadius)}`,
+    `A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchLeft - bottomRadius)} ${n(height)}`,
+    `L ${n(cornerRadius)} ${n(height)}`,
+    `A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 0 ${n(height - cornerRadius)}`,
+    `L 0 ${n(sideBottom)}`,
+    `A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 ${n(sideRadius)} ${n(sidePlateauY)}`,
+    `L ${n(sideDepth - sideRadius)} ${n(sidePlateauY)}`,
+    `A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth)} ${n(sideInnerY)}`,
+    `L ${n(sideDepth)} ${n(sideTopInnerY)}`,
+    `Q ${n(sideDepth)} 0 ${n(sideTopOpeningX)} 0`,
+    'Z',
+  ];
+
+  return `path('${commands.join(' ')}')`;
 }
 
 /**
