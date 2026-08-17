@@ -19,7 +19,7 @@ export function Hero() {
 
           O min-h interno saiu: aquele calc foi dimensionado para o
           layout do cartao e agora competiria com a altura da faixa. */}
-      <div className="relative mx-auto grid w-full max-w-content items-stretch gap-10 pt-10 md:grid-cols-[0.78fr_1.22fr] md:pt-14 lg:pt-16">
+      <div className="relative mx-auto grid w-full max-w-[1280px] items-stretch gap-10 pt-10 md:grid-cols-[0.78fr_1.22fr] md:pt-14 lg:grid-cols-[0.8fr_1.2fr] lg:pt-16">
         {/* `justify-between`, nao `justify-center`: a folga vertical da coluna
             vai para as duas pontas em vez de ficar sobrando em cima e embaixo.
             O titulo sobe e o CTA desce pelo mesmo tanto, e os bullets, que
@@ -29,7 +29,8 @@ export function Hero() {
             `justify-between` nao muda nada la — e por isso a elevacao continua
             sendo `transform`, que funciona mesmo sem espaco livre. */}
         <div className="flex -translate-y-4 flex-col justify-between text-left md:-translate-y-6 lg:-translate-y-10">
-          <h1 className="max-w-3xl font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)]">
+          <div>
+          <h1 className="max-w-3xl translate-y-4 font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)] md:translate-y-5 lg:translate-y-6">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
                   accessible name "Chega de pagar técnico" in one piece. */}
@@ -38,7 +39,7 @@ export function Hero() {
                   descender of the "g". The font needs >= 1.19em to fit it.
                   The negative top margin cancels the extra half-leading so
                   the headline keeps sitting close under the eyebrow. */}
-              <span className="-mt-[0.12em] block font-hero text-6xl/[1.25] font-bold italic tracking-[-0.045em] text-blue sm:text-7xl/[1.25] md:text-8xl/[1.25] lg:text-9xl/[1.25]">
+                <span className="-mt-[0.12em] block font-hero text-6xl/[1.25] sm:text-7xl/[1.25] md:text-8xl/[1.25] lg:text-9xl/[1.25] text-[4.25rem]/[1.25] font-bold italic tracking-[-0.045em] text-blue sm:text-[5rem]/[1.25] md:text-[7rem]/[1.25] lg:text-[9rem]/[1.25]">
                 {h.headline.lead}
               </span>{' '}
               {/* Same 1.25 leading as the lead line, and for the same reason:
@@ -47,13 +48,21 @@ export function Hero() {
                   The sizes are measured, not chosen: each one lands this line's
                   This supporting line stays deliberately smaller than the
                   display word above it at every breakpoint. */}
-              <span className="-mt-[0.12em] block whitespace-nowrap text-[20px]/[1.25] font-semibold tracking-[0em] [word-spacing:0.22em] sm:text-[24px]/[1.25] md:text-[31px]/[1.25] lg:text-[42px]/[1.25]">
+                <span className="-mt-[0.12em] block -translate-y-2 whitespace-nowrap text-[20px]/[1.25] sm:text-[24px]/[1.25] md:text-[31px]/[1.25] lg:text-[42px]/[1.25] text-[22px]/[1.25] font-semibold tracking-[0em] [word-spacing:0.22em] md:translate-x-4 lg:translate-x-4 sm:text-[28px]/[1.25] md:text-[36px]/[1.25] lg:text-[48px]/[1.25]">
                 {h.headline.rest}
               </span>
             </SplitReveal>
           </h1>
 
-          <Reveal as="ul" stagger={0.1} className="mt-5 grid max-w-xl gap-2.5">
+          <p className="mt-5 max-w-xl translate-x-2 translate-y-6 text-xs leading-relaxed text-[color:var(--band-fg-strong)] sm:text-sm md:translate-x-4 lg:translate-x-4">
+            <span className="block">Pare de gastar com técnico e comece a ganhar como um.</span>
+            <span className="block">Aprenda manutenção do zero, resolva seus próprios problemas</span>
+            <span className="block">e use essa habilidade para prestar serviços e gerar uma nova</span>
+            <span className="block">renda.</span>
+          </p>
+          </div>
+
+          <Reveal as="ul" stagger={0.1} className="mt-5 grid max-w-xl translate-x-2 translate-y-6 gap-1.5 md:translate-x-4 lg:translate-x-4">
             {h.bullets.map((bullet) => (
               <li
                 key={bullet}
@@ -65,7 +74,7 @@ export function Hero() {
             ))}
           </Reveal>
 
-          <div className="mt-6 flex flex-wrap items-center gap-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-6 flex translate-x-2 translate-y-4 flex-wrap items-center gap-4 md:translate-x-4 lg:translate-x-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}

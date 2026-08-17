@@ -7,12 +7,15 @@ html.lenis,
 html.lenis body {
   height: auto;
 }
+
 .lenis:not(.lenis-autoToggle).lenis-stopped {
   overflow: clip;
 }
+
 .lenis [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
+
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
@@ -38,21 +41,26 @@ html.lenis body {
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
+
   h1,
   h2 {
     font-family: var(--font-ibm-plex-sans), Arial, sans-serif;
   }
+
   h3 {
     font-family: var(--font-space-grotesk), Arial, sans-serif;
   }
+
   button,
   [role='button'] {
     font-family: var(--font-inter), Arial, sans-serif;
     font-weight: 600;
   }
+
   ::selection {
     background: rgba(30, 158, 219, 0.3);
   }
+
   :focus-visible {
     outline: 2px solid var(--blue);
     outline-offset: 2px;
@@ -66,10 +74,12 @@ html.lenis body {
     background-clip: text;
     color: transparent;
   }
+
   .btn-grad {
     background: linear-gradient(180deg, var(--blue), var(--blue-2));
     color: #fff;
   }
+
   .glow-button {
     --glow-x: 50%;
     --glow-y: 50%;
@@ -79,6 +89,7 @@ html.lenis body {
     isolation: isolate;
     overflow: hidden;
   }
+
   .glow-button::before,
   .glow-button::after {
     content: '';
@@ -88,22 +99,20 @@ html.lenis body {
     pointer-events: none;
     opacity: 0;
   }
+
   .glow-button::before {
-    background: radial-gradient(
-      90px circle at var(--glow-x) var(--glow-y),
-      rgba(var(--glow-rgb), 0.48),
-      rgba(var(--glow-rgb), 0.16) 38%,
-      transparent 72%
-    );
+    background: radial-gradient(90px circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-rgb), 0.48),
+        rgba(var(--glow-rgb), 0.16) 38%,
+        transparent 72%);
     transition: opacity 280ms ease;
   }
+
   .glow-button::after {
     padding: 1px;
-    background: radial-gradient(
-      76px circle at var(--glow-x) var(--glow-y),
-      rgba(var(--glow-border-rgb), 0.95),
-      transparent 70%
-    );
+    background: radial-gradient(76px circle at var(--glow-x) var(--glow-y),
+        rgba(var(--glow-border-rgb), 0.95),
+        transparent 70%);
     -webkit-mask:
       linear-gradient(#fff 0 0) content-box,
       linear-gradient(#fff 0 0);
@@ -111,6 +120,7 @@ html.lenis body {
     mask-composite: exclude;
     transition: opacity 280ms ease;
   }
+
   .glow-button:hover::before,
   .glow-button:hover::after,
   .glow-button:focus-visible::before,
@@ -118,18 +128,22 @@ html.lenis body {
     opacity: 1;
     transition-duration: 180ms;
   }
+
   .glow-button:disabled::before,
   .glow-button:disabled::after {
     opacity: 0;
   }
+
   .glow-button--whatsapp {
     --glow-rgb: 220, 255, 231;
     --glow-border-rgb: 22, 163, 74;
   }
+
   .clean-border {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.015);
   }
+
   /* ---- Faixas de secao ----------------------------------------------
      Cada secao pinta o proprio fundo e define a cor do texto que seus
      filhos herdam. Antes isso vinha do .site-card, que envolvia a
@@ -139,6 +153,7 @@ html.lenis body {
     background: var(--band-bg);
     color: var(--band-fg);
   }
+
   /* As faixas claras sao folhas solidas; as escuras sao janelas. */
   .site-band--light {
     --band-bg: #f7fbff;
@@ -150,6 +165,7 @@ html.lenis body {
     --band-fg-faint: #667284;
     --band-rule: rgba(15, 42, 81, 0.1);
   }
+
   /* Transparente de proposito: e o que deixa aparecer o fundo escuro do
      site e o canvas de circuitos (CircuitEdges, fixed inset-0 -z-10).
      Pintar um #07111f opaco aqui enterra os circuitos. */
@@ -165,6 +181,7 @@ html.lenis body {
     --band-fg-faint: #8a97a8;
     --band-rule: rgba(255, 255, 255, 0.1);
   }
+
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
      fundo do site com os circuitos, que ja existem atras de tudo. */
   /* min-height, nunca height: uma tela e o piso. No mobile Caminhos
@@ -176,18 +193,22 @@ html.lenis body {
     justify-content: center;
     min-height: 100svh;
   }
+
   .site-section {
     position: relative;
     padding: 3rem 1.25rem;
     scroll-margin-top: 6rem;
   }
+
   .site-section--compact {
     padding-block: 2.5rem;
   }
+
   /* O fio segue o tom da faixa em vez de sumir sobre fundo escuro. */
   .section-divider {
     border-top: 1px solid var(--band-rule, rgba(15, 42, 81, 0.1));
   }
+
   .site-panel {
     border: 1px solid rgba(30, 158, 219, 0.25);
     background: rgba(247, 251, 255, 0.86);
@@ -195,39 +216,19 @@ html.lenis body {
       inset 0 1px 0 rgba(255, 255, 255, 0.92),
       0 18px 46px rgba(15, 42, 81, 0.13);
   }
-  /* Moldura inspirada no Hero da Zarpei: cantos amplos e dois recortes
-     que quebram a silhueta retangular do painel. */
+
+  /* Fallback antes do ResizeObserver aplicar o path SVG inspirado no Zarpei. */
   .hero-video-frame {
     isolation: isolate;
-    border-radius: 1.75rem 0 1.75rem 1.75rem;
+    border-radius: 1.75rem;
   }
-  .hero-video-frame::before,
-  .hero-video-frame::after {
-    content: '';
-    position: absolute;
-    z-index: 20;
-    background: var(--band-bg, #f7fbff);
-    pointer-events: none;
-  }
-  .hero-video-frame::before {
-    top: 0;
-    right: 0;
-    width: clamp(8rem, 28%, 12rem);
-    height: clamp(2.5rem, 12%, 3.5rem);
-    border-radius: 0 0 1.75rem 1.75rem;
-  }
-  .hero-video-frame::after {
-    top: 27%;
-    left: -1px;
-    width: clamp(2.75rem, 10%, 4rem);
-    height: clamp(6rem, 36%, 9rem);
-    border-radius: 0 1.75rem 1.75rem 0;
-  }
+
   .path-card {
     border: 0;
     background: transparent;
     box-shadow: none;
   }
+
   .site-dark-panel {
     border: 1px solid rgba(30, 158, 219, 0.25);
     background:
@@ -238,6 +239,7 @@ html.lenis body {
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 24px 70px rgba(15, 42, 81, 0.3);
   }
+
   .site-offer-panel {
     --band-fg: #07111f;
     --band-fg-strong: #050914;
@@ -251,24 +253,29 @@ html.lenis body {
       inset 0 1px 0 rgba(255, 255, 255, 0.92),
       0 24px 70px rgba(0, 0, 0, 0.22);
   }
+
   @media (min-width: 640px) {
     .site-section {
       padding-inline: 2rem;
     }
   }
+
   @media (min-width: 768px) {
     .site-section {
       padding-block: 4rem;
     }
+
     .site-section--compact {
       padding-block: 3rem;
     }
   }
+
   @media (min-width: 1024px) {
     .site-section {
       padding-inline: 4rem;
     }
   }
+
   /* ---- Pares da oferta ------------------------------------------------
      A mesma regra pinta os dois lados: o item da oferta e a duvida
      correspondente carregam o mesmo data-ativo, entao acendem juntos sem
@@ -281,10 +288,12 @@ html.lenis body {
       border-color 240ms ease,
       background-color 240ms ease;
   }
+
   .par[data-ativo='true'] {
     border-left-color: var(--blue);
     background-color: rgba(30, 158, 219, 0.08);
   }
+
   /* Acordeao sem medir altura em JS: 0fr -> 1fr anima porque o proprio
      grid resolve a altura do conteudo. */
   .par-resposta {
@@ -292,18 +301,23 @@ html.lenis body {
     grid-template-rows: 0fr;
     transition: grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .par-resposta > * {
+
+  .par-resposta>* {
     overflow: hidden;
   }
+
   .par[data-ativo='true'] .par-resposta {
     grid-template-rows: 1fr;
   }
+
   .par-chevron {
     transition: transform 300ms ease;
   }
+
   .par[data-ativo='true'] .par-chevron {
     transform: rotate(180deg);
   }
+
   /* CSS-only conic gauge; --val is 0..100 */
   .gauge {
     --val: 100;
@@ -312,11 +326,10 @@ html.lenis body {
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: conic-gradient(
-      var(--blue) calc(var(--val) * 1%),
-      rgba(15, 42, 81, 0.12) 0
-    );
+    background: conic-gradient(var(--blue) calc(var(--val) * 1%),
+        rgba(15, 42, 81, 0.12) 0);
   }
+
   /* O furo do anel conico precisa de cor chapada, nao de transparencia:
      transparente deixaria o proprio gradiente aparecer no meio. Segue o
      tom da faixa para nao virar um disco branco sobre fundo escuro. */
@@ -328,19 +341,24 @@ html.lenis body {
     border-radius: 50%;
     background: var(--band-solid, #f7fbff);
   }
-  .gauge > * {
+
+  .gauge>* {
     position: relative;
   }
+
   .no-scrollbar {
     scrollbar-width: none;
   }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .split-line {
     padding-bottom: 0.1em;
     margin-bottom: -0.1em;
   }
+
   /* ---- Acordeao de modulos -------------------------------------------
      Layout e animacao portados do hero do digithree.com.br: os cards
      dividem a largura por flex-grow e o ativo cresce de 1 para 3.6 em
@@ -351,6 +369,7 @@ html.lenis body {
     gap: 0.75rem;
     overscroll-behavior-x: contain;
   }
+
   .module-stepper {
     --stepper-arrow-width: 36px;
     --stepper-number-width: 44px;
@@ -374,11 +393,11 @@ html.lenis body {
       box-shadow 320ms cubic-bezier(0.22, 1, 0.36, 1),
       transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper:hover,
   .module-stepper:focus-within {
     grid-template-columns:
-      var(--stepper-arrow-width) var(--stepper-number-width)
-      var(--stepper-arrow-width);
+      var(--stepper-arrow-width) var(--stepper-number-width) var(--stepper-arrow-width);
     border-color: rgba(127, 208, 245, 1);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.55),
@@ -387,10 +406,12 @@ html.lenis body {
       0 3px 8px rgba(15, 42, 81, 0.18);
     transform: translate3d(0, -1px, 0);
   }
-  .module-stepper > * {
+
+  .module-stepper>* {
     position: relative;
     z-index: 1;
   }
+
   .module-stepper-button {
     isolation: isolate;
     overflow: hidden;
@@ -406,12 +427,15 @@ html.lenis body {
       opacity 220ms ease,
       transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper-button--prev {
     border-radius: 999px 0 0 999px;
   }
+
   .module-stepper-button--next {
     border-radius: 0 999px 999px 0;
   }
+
   .module-stepper-button__ink {
     position: absolute;
     inset: 2px;
@@ -427,18 +451,22 @@ html.lenis body {
       opacity 180ms ease,
       transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper-button:not(:disabled):hover .module-stepper-button__ink,
   .module-stepper-button:not(:disabled):focus-visible .module-stepper-button__ink {
     opacity: 1;
     transform: scale(1);
   }
+
   .module-stepper-button:not(:disabled):active {
     transform: translate3d(0, 0, 0) scale(0.9);
   }
+
   .module-stepper-button:disabled {
     background: transparent;
     color: rgba(255, 255, 255, 0.36);
   }
+
   .module-stepper-arrow {
     position: relative;
     display: block;
@@ -447,6 +475,7 @@ html.lenis body {
     height: 18px;
     line-height: 1;
   }
+
   .module-stepper-arrow__base,
   .module-stepper-arrow__reveal {
     position: absolute;
@@ -462,34 +491,39 @@ html.lenis body {
       opacity 180ms ease,
       transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper-arrow__base {
     opacity: 0.82;
     transform: translate3d(0, 0, 0);
   }
+
   .module-stepper-arrow__reveal {
     opacity: 0;
   }
+
   .module-stepper-button[data-stepper-direction='prev'] .module-stepper-arrow__reveal {
     transform: translate3d(8px, 0, 0);
   }
+
   .module-stepper-button[data-stepper-direction='next'] .module-stepper-arrow__reveal {
     transform: translate3d(-8px, 0, 0);
   }
-  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):is(:hover, :focus-visible)
-    .module-stepper-arrow__base {
+
+  .module-stepper-button[data-stepper-direction='prev']:not(:disabled):is(:hover, :focus-visible) .module-stepper-arrow__base {
     opacity: 0;
     transform: translate3d(-9px, 0, 0);
   }
-  .module-stepper-button[data-stepper-direction='next']:not(:disabled):is(:hover, :focus-visible)
-    .module-stepper-arrow__base {
+
+  .module-stepper-button[data-stepper-direction='next']:not(:disabled):is(:hover, :focus-visible) .module-stepper-arrow__base {
     opacity: 0;
     transform: translate3d(9px, 0, 0);
   }
-  .module-stepper-button:not(:disabled):is(:hover, :focus-visible)
-    .module-stepper-arrow__reveal {
+
+  .module-stepper-button:not(:disabled):is(:hover, :focus-visible) .module-stepper-arrow__reveal {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
+
   .module-stepper-status {
     height: 100%;
     min-width: 0;
@@ -509,19 +543,23 @@ html.lenis body {
       background 220ms ease,
       transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper:is(:hover, :focus-within) .module-stepper-status {
     border-inline-color: rgba(255, 255, 255, 0.2);
     opacity: 1;
     pointer-events: auto;
     transform: translate3d(0, 0, 0) scaleX(1);
   }
+
   .module-stepper-status:hover,
   .module-stepper-status:focus-visible {
     background: rgba(127, 208, 245, 0.24);
   }
+
   .module-stepper-status:active {
     transform: scale(0.9);
   }
+
   .module-stepper-status__value {
     opacity: 0;
     transform: translate3d(0, 55%, 0);
@@ -530,42 +568,48 @@ html.lenis body {
       transform 420ms cubic-bezier(0.22, 1, 0.36, 1) 70ms;
     animation: module-stepper-number-in 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
+
   .module-stepper:is(:hover, :focus-within) .module-stepper-status__value {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
+
   .module-stepper-button:focus-visible,
   .module-stepper-status:focus-visible {
     outline: 0;
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92);
   }
+
   .module-card {
     height: 540px;
     background: linear-gradient(165deg, #20344c 0%, #14263c 48%, #0a1525 100%);
     color: #ffffff;
   }
+
   /* A foto entra levemente ampliada e assenta ao ativar. */
   .module-card__image {
     transform: scale(1.06);
     transition: transform 1400ms ease-in-out;
   }
+
   .module-card[data-active='true'] .module-card__image {
     transform: scale(1.01);
   }
+
   /* O titulo na vertical so existe onde ha acordeao. */
   .module-card__spine {
     display: none;
   }
+
   .module-card__shade {
-    background: linear-gradient(
-      180deg,
-      rgba(3, 10, 24, 0.02) 0%,
-      rgba(3, 10, 24, 0.08) 26%,
-      rgba(7, 17, 31, 0.78) 44%,
-      rgba(7, 17, 31, 0.96) 68%,
-      rgba(7, 17, 31, 0.99) 100%
-    );
+    background: linear-gradient(180deg,
+        rgba(3, 10, 24, 0.02) 0%,
+        rgba(3, 10, 24, 0.08) 26%,
+        rgba(7, 17, 31, 0.78) 44%,
+        rgba(7, 17, 31, 0.96) 68%,
+        rgba(7, 17, 31, 0.99) 100%);
   }
+
   .module-card__lesson {
     opacity: 0.86;
     transform: translate3d(0, 4px, 0);
@@ -574,10 +618,12 @@ html.lenis body {
       transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
     transition-delay: calc(var(--lesson-index) * 45ms);
   }
+
   .module-card[data-active='true'] .module-card__lesson {
     opacity: 1;
     transform: translate3d(0, 0, 0);
   }
+
   .module-card__cta {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.95),
@@ -603,9 +649,11 @@ html.lenis body {
     cursor: pointer;
     transition: flex 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }
+
   .module-card[data-active='true'] {
     flex: 3.6 1 0%;
   }
+
   /* Veu sobre o card colapsado. Nao e enfeite: o titulo vertical e branco
      e fica na metade do card, onde o degrade do shade tem so 0.39 de
      opacidade — e tres das seis fotos sao claras ali. Sem o veu o titulo
@@ -619,9 +667,11 @@ html.lenis body {
     background: rgba(7, 17, 31, 0.5);
     transition: opacity 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }
+
   .module-card[data-active='true']::after {
     opacity: 0;
   }
+
   .module-card__spine {
     display: block;
     position: absolute;
@@ -639,9 +689,11 @@ html.lenis body {
     pointer-events: none;
     transition: opacity 300ms ease;
   }
+
   .module-card[data-active='true'] .module-card__spine {
     opacity: 0;
   }
+
   /* O atraso de 120ms nao e enfeite: enquanto o card cresce, o texto
      reflui: aparecer so depois esconde essa reflow do olho. */
   .module-card__body {
@@ -651,6 +703,7 @@ html.lenis body {
       opacity 500ms ease 120ms,
       transform 500ms ease 120ms;
   }
+
   .module-card[data-active='true'] .module-card__body {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -662,6 +715,7 @@ html.lenis body {
     opacity: 0.65;
     transform: translate3d(var(--module-enter-x), 0, 0) scale(0.985);
   }
+
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0) scale(1);
@@ -673,6 +727,7 @@ html.lenis body {
     opacity: 0;
     transform: translate3d(0, 70%, 0);
   }
+
   to {
     opacity: 1;
     transform: translate3d(0, 0, 0);
@@ -684,6 +739,7 @@ html.lenis body {
   overflow: hidden;
   width: 100%;
 }
+
 .marquee__track {
   display: inline-flex;
   align-items: center;
@@ -691,9 +747,11 @@ html.lenis body {
   width: max-content;
   animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
 }
+
 .marquee__track--reverse {
   animation-direction: reverse;
 }
+
 .marquee__item {
   display: inline-flex;
   align-items: center;
@@ -705,9 +763,11 @@ html.lenis body {
   letter-spacing: 0.02em;
   color: var(--muted);
 }
+
 .marquee__sep {
   font-size: 0.7em;
 }
+
 @keyframes marquee-scroll {
   to {
     transform: translateX(-50%);
@@ -719,6 +779,7 @@ html.lenis body {
 .has-custom-cursor * {
   cursor: none !important;
 }
+
 .cursor-dot,
 .cursor-ring {
   position: fixed;
@@ -729,12 +790,14 @@ html.lenis body {
   border-radius: 9999px;
   will-change: transform;
 }
+
 .cursor-dot {
   width: 7px;
   height: 7px;
   margin: -3.5px 0 0 -3.5px;
   background: var(--blue);
 }
+
 .cursor-ring {
   width: 38px;
   height: 38px;
@@ -747,13 +810,16 @@ html.lenis body {
     margin 0.22s ease,
     background 0.22s ease;
 }
+
 .cursor-ring[data-hover='true'] {
   width: 66px;
   height: 66px;
   margin: -33px 0 0 -33px;
   background: rgba(30, 158, 219, 0.12);
 }
+
 @media (pointer: coarse) {
+
   .cursor-dot,
   .cursor-ring {
     display: none;
@@ -761,6 +827,7 @@ html.lenis body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .glow-button::before,
   .glow-button::after,
   .glow-button:hover::before,
@@ -769,6 +836,7 @@ html.lenis body {
   .glow-button:focus-visible::after {
     transition: none;
   }
+
   .module-stepper,
   .module-stepper-button,
   .module-stepper-button__ink,
@@ -778,6 +846,7 @@ html.lenis body {
   .module-stepper-status__value {
     transition: none;
   }
+
   .module-stepper-button:not(:disabled):hover,
   .module-stepper-button:not(:disabled):focus-visible,
   .module-stepper-button:not(:disabled):active,
@@ -786,9 +855,11 @@ html.lenis body {
   .module-stepper-status:active {
     transform: none;
   }
+
   .module-stepper-status__value {
     animation: none;
   }
+
   /* Sem movimento: o acordeao troca de estado na hora, e a foto, o
      titulo vertical e o corpo do card param de animar. */
   .module-card,
@@ -798,9 +869,11 @@ html.lenis body {
   .module-card__lesson {
     transition: none;
   }
+
   .module-card__body {
     transform: none;
   }
+
   .marquee__track {
     animation: none;
     transform: none;
