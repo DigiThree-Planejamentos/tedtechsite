@@ -6,7 +6,7 @@ import { content } from '@/lib/content';
 const fullHeadline = `${content.hero.headline.lead} ${content.hero.headline.rest}`;
 
 describe('Hero', () => {
-  it('names the product in the h1 and supports it with bullets', () => {
+  it('names the product without the removed supporting copy', () => {
     render(<Hero />);
     expect(
       screen.getByRole('heading', { level: 1, name: fullHeadline }),
@@ -14,8 +14,9 @@ describe('Hero', () => {
     expect(screen.queryByText(content.hero.eyebrow)).toBeNull();
     expect(screen.queryByText(content.hero.sub)).toBeNull();
     for (const bullet of content.hero.bullets) {
-      expect(screen.getByText(bullet)).toBeInTheDocument();
+      expect(screen.queryByText(bullet)).toBeNull();
     }
+    expect(screen.queryByText(content.instrutor.heroQuote)).toBeNull();
   });
 
   it('sets the lead word larger and keeps the remainder on one smaller line', () => {
