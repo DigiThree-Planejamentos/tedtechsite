@@ -31,7 +31,7 @@ export function Header() {
           : 'translate-y-0 opacity-100'
       }`}
     >
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] py-2.5 pl-5 pr-2.5 text-[#07111f] shadow-[0_8px_30px_rgba(15,42,81,0.18)] transition-all duration-300 ease-out sm:rounded-[2rem]">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] py-2.5 pl-5 pr-2.5 text-[#07111f] shadow-[0_20px_64px_rgba(30,158,219,0.48)] transition-all duration-300 ease-out sm:rounded-[2rem]">
         <Logo compact />
         <nav className="hidden max-w-xs items-center gap-7 overflow-hidden whitespace-nowrap text-sm text-[#3b4654] transition-all duration-300 ease-out md:flex">
           <a href={site.nav.modulos} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Módulos</a>

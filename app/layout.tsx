@@ -1,7 +1,14 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { IBM_Plex_Sans, Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import {
+  IBM_Plex_Sans,
+  Inter,
+  JetBrains_Mono,
+  Josefin_Sans,
+  Montserrat,
+  Space_Grotesk,
+} from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
@@ -14,6 +21,20 @@ const ibmPlexSans = IBM_Plex_Sans({
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+const josefinSans = Josefin_Sans({
+  subsets: ['latin'],
+  weight: '700',
+  style: 'italic',
+  variable: '--font-josefin-sans',
+  display: 'swap',
+});
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: '700',
+  style: 'italic',
+  variable: '--font-montserrat',
   display: 'swap',
 });
 const jetBrainsMono = JetBrains_Mono({
@@ -45,7 +66,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${ibmPlexSans.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
+      className={`${inter.variable} ${ibmPlexSans.variable} ${spaceGrotesk.variable} ${josefinSans.variable} ${montserrat.variable} ${jetBrainsMono.variable}`}
     >
       <body className={inter.className}>
         {/* If JS is disabled, never trap the user behind the preloader overlay. */}

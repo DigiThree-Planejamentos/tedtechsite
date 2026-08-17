@@ -24,9 +24,15 @@ describe('Hero', () => {
     const rest = screen.getByText(content.hero.headline.rest);
     expect(lead).not.toBe(rest);
     expect(lead.className).toMatch(/\btext-blue\b/);
+    expect(lead.className).toMatch(/\bfont-hero\b/);
+    expect(lead.className).toMatch(/\bfont-bold\b/);
     expect(lead.className).toMatch(/text-6xl\/\[1\.25\]/);
     expect(lead.className).toMatch(/\bitalic\b/);
-    expect(rest.className).toMatch(/text-\[23\.86px\]\/\[1\.25\]/);
+    expect(lead.className).toContain('tracking-[-0.045em]');
+    expect(rest.className).toMatch(/text-\[20px\]\/\[1\.25\]/);
+    expect(rest.className).toMatch(/\bfont-semibold\b/);
+    expect(rest.className).toContain('tracking-[0em]');
+    expect(rest.className).toContain('[word-spacing:0.22em]');
     expect(rest.className).toMatch(/\bwhitespace-nowrap\b/);
     // Every size step of BOTH lines must carry the 1.25 leading. The text-*
     // utilities ship line-height 1, and a bare `leading-` class loses to the
@@ -39,10 +45,10 @@ describe('Hero', () => {
     // Cada valor e o par do lead no mesmo breakpoint: escalar as duas
     // linhas pelo mesmo fator e o que mantem as bordas alinhadas.
     for (const size of [
-      'text-[23.86px]',
-      'sm:text-[28.58px]',
-      'md:text-[38.08px]',
-      'lg:text-[50.72px]',
+      'text-[20px]',
+      'sm:text-[24px]',
+      'md:text-[31px]',
+      'lg:text-[42px]',
     ]) {
       expect(rest.className).toContain(`${size}/[1.25]`);
     }

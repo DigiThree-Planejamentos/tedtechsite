@@ -7,7 +7,7 @@ import { content } from '@/lib/content';
 export function Footer() {
   const f = content.footer;
   return (
-    <footer className="border-t border-white/5 px-5 py-12">
+    <footer className="px-5 py-12">
       <Reveal
         variant="simple"
         className="mx-auto flex max-w-[1280px] flex-col gap-6 md:flex-row md:items-center md:justify-between"

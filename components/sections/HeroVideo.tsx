@@ -26,7 +26,7 @@ export function HeroVideo() {
   return (
     <div
       data-video
-      className="relative aspect-[16/10] w-full self-center overflow-hidden rounded-[1.5rem] border border-blue/20 bg-[linear-gradient(145deg,#1a2438,#0b1220)]"
+      className="hero-video-frame relative aspect-[16/10] min-w-0 w-full self-center overflow-hidden bg-[linear-gradient(145deg,#1a2438,#0b1220)]"
     >
       {hasVideo && (
         <video

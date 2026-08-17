@@ -139,11 +139,6 @@ html.lenis body {
     background: var(--band-bg);
     color: var(--band-fg);
   }
-  /* O conteudo fica acima da textura decorativa (::before, z-index 0). */
-  .site-band > * {
-    position: relative;
-    z-index: 1;
-  }
   /* As faixas claras sao folhas solidas; as escuras sao janelas. */
   .site-band--light {
     --band-bg: #f7fbff;
@@ -169,20 +164,6 @@ html.lenis body {
     --band-fg-muted: #9fb0c2;
     --band-fg-faint: #8a97a8;
     --band-rule: rgba(255, 255, 255, 0.1);
-  }
-  /* Grade quadriculada herdada do cartao. E textura de marca, nao
-     decoracao do cartao. Uma regra so de remover. */
-  .site-band--light::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image:
-      linear-gradient(rgba(30, 158, 219, 0.85) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(30, 158, 219, 0.85) 1px, transparent 1px);
-    background-size: 34px 34px;
-    opacity: 0.08;
   }
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
      fundo do site com os circuitos, que ja existem atras de tudo. */
@@ -214,6 +195,34 @@ html.lenis body {
       inset 0 1px 0 rgba(255, 255, 255, 0.92),
       0 18px 46px rgba(15, 42, 81, 0.13);
   }
+  /* Moldura inspirada no Hero da Zarpei: cantos amplos e dois recortes
+     que quebram a silhueta retangular do painel. */
+  .hero-video-frame {
+    isolation: isolate;
+    border-radius: 1.75rem 0 1.75rem 1.75rem;
+  }
+  .hero-video-frame::before,
+  .hero-video-frame::after {
+    content: '';
+    position: absolute;
+    z-index: 20;
+    background: var(--band-bg, #f7fbff);
+    pointer-events: none;
+  }
+  .hero-video-frame::before {
+    top: 0;
+    right: 0;
+    width: clamp(8rem, 28%, 12rem);
+    height: clamp(2.5rem, 12%, 3.5rem);
+    border-radius: 0 0 1.75rem 1.75rem;
+  }
+  .hero-video-frame::after {
+    top: 27%;
+    left: -1px;
+    width: clamp(2.75rem, 10%, 4rem);
+    height: clamp(6rem, 36%, 9rem);
+    border-radius: 0 1.75rem 1.75rem 0;
+  }
   .path-card {
     border: 0;
     background: transparent;
@@ -228,6 +237,19 @@ html.lenis body {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 24px 70px rgba(15, 42, 81, 0.3);
+  }
+  .site-offer-panel {
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    border: 1px solid rgba(30, 158, 219, 0.25);
+    background: #ffffff;
+    color: var(--band-fg);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      0 24px 70px rgba(0, 0, 0, 0.22);
   }
   @media (min-width: 640px) {
     .site-section {

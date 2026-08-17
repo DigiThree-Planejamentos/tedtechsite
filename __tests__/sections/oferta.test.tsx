@@ -93,6 +93,17 @@ describe('Oferta', () => {
     expect(indiceAtivo(leva)).toBe(indiceAtivo(duvida));
   });
 
+  it('closes the active pair when it is clicked again', () => {
+    const { container } = render(<Oferta />);
+    const { leva, duvida } = lados(container);
+
+    fireEvent.click(duvida[0].querySelector('button')!);
+
+    expect(indiceAtivo(leva)).toBe(-1);
+    expect(indiceAtivo(duvida)).toBe(-1);
+    expect(container.querySelectorAll('[data-ativo="true"]')).toHaveLength(0);
+  });
+
   it('announces the open answer to assistive tech', () => {
     const { container } = render(<Oferta />);
     const { duvida } = lados(container);

@@ -44,7 +44,7 @@ export const content = {
       'Do zero — nenhum conhecimento prévio',
       'Pra cuidar do seu PC ou atender clientes',
     ],
-    cta: 'Quero me inscrever',
+    cta: 'Quero aprender',
   },
 
   dores: {
@@ -173,7 +173,7 @@ export const content = {
     title: 'Um curso, três caminhos',
     subtitle:
       'O que você aprende nos 6 módulos serve tanto pra cuidar do seu próprio computador quanto pra ganhar dinheiro com isso — na hora vaga ou como profissão.',
-    cta: 'Quero me inscrever',
+    cta: 'Quero aprender',
     cards: [
       {
         icon: 'home',
@@ -232,10 +232,10 @@ export const content = {
     priceFrom: 'De R$ 497', // TODO
     priceNow: 'R$ 297', // TODO
     installments: 'ou 12x de R$ 29,70', // TODO
-    cta: 'Inscrever →',
+    cta: 'Quero aprender',
     payments: 'Pix · Cartão · Boleto',
     askHint: 'Ficou outra dúvida?',
-    askCta: 'Falar no WhatsApp',
+    askCta: 'Quero conhecer mais',
 
     // Os sete pares. A ordem E a ligacao entre os dois cards: a linha i da
     // esquerda e a duvida i da direita sao o mesmo assunto visto de dois
@@ -299,7 +299,7 @@ export const content = {
 
   floatingCta: {
     urgency: 'Últimas vagas com acompanhamento',
-    cta: 'Quero me inscrever',
+    cta: 'Quero aprender',
   },
 
   footer: {
