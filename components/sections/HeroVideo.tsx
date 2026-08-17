@@ -1,9 +1,48 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { GlowIconButton } from '@/components/ui/GlowIconButton';
 import { content } from '@/lib/content';
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
+/**
+ * Mesmo desenho usado no hero da Zarpei: a moldura inteira e recortada por
+ * um unico path SVG. Os flags 1/0 dos arcos alternam a curvatura e formam a
+ * continuidade em S sem depender de elipses ou elementos sobrepostos.
+ */
+function buildHeroClipPath(width: number, height: number) {
+  const topNotchWidth = clamp(width * 0.16, 72, 112);
+  const topNotchHeight = clamp(height * 0.12, 40, 56);
+  const topRadius = Math.min(28, topNotchHeight / 2);
+  const cornerRadius = topRadius;
+
+  const mobile = width < 480;
+  const sideDepth = clamp(width * 0.07, mobile ? 28 : 36, mobile ? 42 : 52);
+  const sideRadius = sideDepth * (24 / 92);
+  const sideHeight = clamp(
+    height * (mobile ? 0.42 : 0.5),
+    mobile ? 96 : 128,
+    mobile ? 128 : 192,
+  );
+  const previousSideTop = height * 0.01;
+  const sideTop = Math.max(12, cornerRadius - 8);
+  const topLeftRadius = sideTop;
+  const sideBottom = Math.min(height - cornerRadius, previousSideTop + sideHeight - 16);
+
+  const topNotchX = width - topNotchWidth;
+  const topNotchInnerY = Math.max(topNotchHeight - topRadius, topRadius);
+  const sidePlateauY = sideBottom - sideRadius;
+  const sideInnerY = sideBottom - sideRadius * 2;
+  const sideTopPlateauY = sideTop + sideRadius;
+  const sideTopInnerY = sideTop + sideRadius * 2;
+
+  const n = (value: number) => value.toFixed(1);
+
+  return `path('M ${n(topLeftRadius)} 0 L ${n(topNotchX - topRadius)} 0 A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)} L ${n(topNotchX)} ${n(topNotchInnerY)} A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)} L ${n(width - topRadius)} ${n(topNotchHeight)} A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)} L ${n(width)} ${n(height - cornerRadius)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)} L ${n(cornerRadius)} ${n(height)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 0 ${n(height - cornerRadius)} L 0 ${n(sideBottom)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 ${n(sideRadius)} ${n(sidePlateauY)} L ${n(sideDepth - sideRadius)} ${n(sidePlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth)} ${n(sideInnerY)} L ${n(sideDepth)} ${n(sideTopInnerY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth - sideRadius)} ${n(sideTopPlateauY)} L ${n(sideRadius)} ${n(sideTopPlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 0 ${n(sideTop)} L 0 ${n(topLeftRadius)} A ${n(topLeftRadius)} ${n(topLeftRadius)} 0 0 1 ${n(topLeftRadius)} 0 Z')`;
+}
 
 /**
  * Painel de vídeo do hero, em proporção fixa 16:10 em todos os breakpoints
@@ -13,9 +52,32 @@ import { content } from '@/lib/content';
  */
 export function HeroVideo() {
   const i = content.instrutor;
+  const frameRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [clipPath, setClipPath] = useState<string | null>(null);
   const hasVideo = i.videoSrc !== '';
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    const updateClipPath = () => {
+      if (!frame.clientWidth || !frame.clientHeight) return;
+      setClipPath(buildHeroClipPath(frame.clientWidth, frame.clientHeight));
+    };
+
+    updateClipPath();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', updateClipPath);
+      return () => window.removeEventListener('resize', updateClipPath);
+    }
+
+    const observer = new ResizeObserver(updateClipPath);
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, []);
 
   const handlePlay = () => {
     if (!hasVideo) return;
@@ -25,8 +87,14 @@ export function HeroVideo() {
 
   return (
     <div
+      ref={frameRef}
       data-video
-      className="hero-video-frame relative aspect-[16/10] min-w-0 w-full self-center overflow-hidden bg-[linear-gradient(145deg,#1a2438,#0b1220)]"
+      className="hero-video-frame relative aspect-[16/10] min-w-0 w-full self-center overflow-hidden bg-[linear-gradient(145deg,#1a2438,#0b1220)] md:-translate-y-6 lg:-translate-y-10"
+      style={{
+        clipPath: clipPath ?? undefined,
+        WebkitClipPath: clipPath ?? undefined,
+        borderRadius: clipPath ? 0 : undefined,
+      }}
     >
       {hasVideo && (
         <video
