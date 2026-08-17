@@ -14,22 +14,28 @@ const clamp = (value: number, min: number, max: number) =>
  * continuidade em S sem depender de elipses ou elementos sobrepostos.
  */
 function buildHeroClipPath(width: number, height: number) {
-  const topNotchWidth = clamp(width * 0.16, 72, 112);
+  const topNotchWidth = clamp(width * 0.26, 72, 180);
   const topNotchHeight = clamp(height * 0.12, 40, 56);
   const topRadius = Math.min(28, topNotchHeight / 2);
   const cornerRadius = topRadius;
 
   const mobile = width < 480;
-  const sideDepth = clamp(width * 0.07, mobile ? 28 : 36, mobile ? 42 : 52);
-  const sideRadius = sideDepth * (24 / 92);
+  const bottomNotchWidth = clamp(width * 0.27, mobile ? 88 : 124, mobile ? 116 : 188);
+  const bottomNotchHeight = clamp(height * 0.12, mobile ? 40 : 44, mobile ? 48 : 60);
+  const bottomRadius = Math.min(28, bottomNotchHeight / 2);
+  const bottomNotchLeft = (width - bottomNotchWidth) / 2 + width * 0.1;
+  const bottomNotchRight = bottomNotchLeft + bottomNotchWidth;
+  const bottomNotchTop = height - bottomNotchHeight;
+  const sideDepth = clamp(width * 0.08, mobile ? 32 : 40, mobile ? 48 : 60);
+  const sideRadius = sideDepth * (32 / 92);
   const sideHeight = clamp(
-    height * (mobile ? 0.42 : 0.5),
-    mobile ? 96 : 128,
-    mobile ? 128 : 192,
+    height * (mobile ? 0.46 : 0.56),
+    mobile ? 104 : 144,
+    mobile ? 140 : 216,
   );
   const previousSideTop = height * 0.01;
-  const sideTop = Math.max(12, cornerRadius - 8);
-  const topLeftRadius = sideTop;
+  const sideTop = 16;
+  const topLeftRadius = Math.max(sideTop, 1);
   const sideBottom = Math.min(height - cornerRadius, previousSideTop + sideHeight - 16);
 
   const topNotchX = width - topNotchWidth;
@@ -41,7 +47,7 @@ function buildHeroClipPath(width: number, height: number) {
 
   const n = (value: number) => value.toFixed(1);
 
-  return `path('M ${n(topLeftRadius)} 0 L ${n(topNotchX - topRadius)} 0 A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)} L ${n(topNotchX)} ${n(topNotchInnerY)} A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)} L ${n(width - topRadius)} ${n(topNotchHeight)} A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)} L ${n(width)} ${n(height - cornerRadius)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)} L ${n(cornerRadius)} ${n(height)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 0 ${n(height - cornerRadius)} L 0 ${n(sideBottom)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 ${n(sideRadius)} ${n(sidePlateauY)} L ${n(sideDepth - sideRadius)} ${n(sidePlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth)} ${n(sideInnerY)} L ${n(sideDepth)} ${n(sideTopInnerY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth - sideRadius)} ${n(sideTopPlateauY)} L ${n(sideRadius)} ${n(sideTopPlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 0 ${n(sideTop)} L 0 ${n(topLeftRadius)} A ${n(topLeftRadius)} ${n(topLeftRadius)} 0 0 1 ${n(topLeftRadius)} 0 Z')`;
+  return `path('M ${n(topLeftRadius)} 0 L ${n(topNotchX - topRadius)} 0 A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)} L ${n(topNotchX)} ${n(topNotchInnerY)} A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)} L ${n(width - topRadius)} ${n(topNotchHeight)} A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)} L ${n(width)} ${n(height - cornerRadius)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)} L ${n(bottomNotchRight + bottomRadius)} ${n(height)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchRight)} ${n(height - bottomRadius)} L ${n(bottomNotchRight)} ${n(bottomNotchTop + bottomRadius)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchRight - bottomRadius)} ${n(bottomNotchTop)} L ${n(bottomNotchLeft + bottomRadius)} ${n(bottomNotchTop)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 0 ${n(bottomNotchLeft)} ${n(bottomNotchTop + bottomRadius)} L ${n(bottomNotchLeft)} ${n(height - bottomRadius)} A ${n(bottomRadius)} ${n(bottomRadius)} 0 0 1 ${n(bottomNotchLeft - bottomRadius)} ${n(height)} L ${n(cornerRadius)} ${n(height)} A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 0 ${n(height - cornerRadius)} L 0 ${n(sideBottom)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 ${n(sideRadius)} ${n(sidePlateauY)} L ${n(sideDepth - sideRadius)} ${n(sidePlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth)} ${n(sideInnerY)} L ${n(sideDepth)} ${n(sideTopInnerY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 0 ${n(sideDepth - sideRadius)} ${n(sideTopPlateauY)} L ${n(sideRadius)} ${n(sideTopPlateauY)} A ${n(sideRadius)} ${n(sideRadius)} 0 0 1 0 ${n(sideTop)} L 0 ${n(topLeftRadius)} A ${n(topLeftRadius)} ${n(topLeftRadius)} 0 0 1 ${n(topLeftRadius)} 0 Z')`;
 }
 
 /**
@@ -135,9 +141,6 @@ export function HeroVideo() {
             <div className="mt-1 text-lg font-extrabold text-white md:text-xl">
               {i.name}
             </div>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-[#dbe3ec]">
-              {i.heroQuote}
-            </p>
           </div>
         </>
       )}

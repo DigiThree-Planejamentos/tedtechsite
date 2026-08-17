@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { SplitReveal } from '@/components/motion/SplitReveal';
-import { Reveal } from '@/components/motion/Reveal';
 import { HeroVideo } from '@/components/sections/HeroVideo';
 import { content } from '@/lib/content';
 
@@ -54,27 +53,15 @@ export function Hero() {
             </SplitReveal>
           </h1>
 
-          <p className="mt-5 max-w-xl translate-x-2 translate-y-6 text-xs leading-relaxed text-[color:var(--band-fg-strong)] sm:text-sm md:translate-x-4 lg:translate-x-4">
-            <span className="block">Pare de gastar com técnico e comece a ganhar como um.</span>
-            <span className="block">Aprenda manutenção do zero, resolva seus próprios problemas</span>
-            <span className="block">e use essa habilidade para prestar serviços e gerar uma nova</span>
-            <span className="block">renda.</span>
+          <p className="mt-5 max-w-xl translate-x-2 translate-y-6 text-sm leading-relaxed text-[color:var(--band-fg-strong)] sm:text-base md:translate-x-4 lg:translate-x-4">
+            <span className="block">Pare de gastar com técnico e comece a ganhar</span>
+            <span className="block">como um. Aprenda manutenção do zero, resolva</span>
+            <span className="block">seus próprios problemas e use essa habilidade</span>
+            <span className="block">para prestar serviços e gerar uma nova renda.</span>
           </p>
           </div>
 
-          <Reveal as="ul" stagger={0.1} className="mt-5 grid max-w-xl translate-x-2 translate-y-6 gap-1.5 md:translate-x-4 lg:translate-x-4">
-            {h.bullets.map((bullet) => (
-              <li
-                key={bullet}
-                className="flex items-start gap-3 text-xs text-[color:var(--band-fg-strong)] sm:text-sm"
-              >
-                <span className="text-blue" aria-hidden>✓</span>
-                <span>{bullet}</span>
-              </li>
-            ))}
-          </Reveal>
-
-          <div className="mt-6 flex translate-x-2 translate-y-4 flex-wrap items-center gap-4 md:translate-x-4 lg:translate-x-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
+          <div className="mt-6 flex translate-x-2 translate-y-0 flex-wrap items-center gap-4 md:translate-x-4 lg:translate-x-4 [&_a]:min-h-[48px] [&_a]:rounded-[1.15rem] [&_a]:px-6 [&_a]:text-sm">
             <MagneticButton>
               <Button href={content.checkoutUrl} variant="primary">
                 {h.cta}
