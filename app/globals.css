@@ -195,6 +195,13 @@ html.lenis body {
     --band-fg-muted: #526071;
     --band-fg-faint: #667284;
     --band-rule: rgba(15, 42, 81, 0.1);
+    /* A fronteira com o rodape cai em coordenada fracionaria (medido:
+       506.875px com devicePixelRatio 1.25). Nao ha vao no layout — o
+       fio cinza e a antialiasing das duas caixas brancas misturando com
+       o fundo escuro do body por baixo. Este 1px de branco logo abaixo
+       cobre a fresta sem mexer no fluxo, que e o que uma margem negativa
+       ou um wrapper branco fariam. */
+    box-shadow: 0 1px 0 0 #ffffff;
   }
 
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
