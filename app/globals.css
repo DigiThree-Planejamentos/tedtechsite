@@ -185,7 +185,11 @@ html.lenis body {
   /* Folha branca PURA para a secao de fechamento: o mesmo #ffffff do
      rodape, de proposito — os dois emendam sem linha visivel e o rodape
      le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
-     encostado no rodape branco, a diferenca aparece como mancha azulada. */
+     encostado no rodape branco, a diferenca aparece como mancha azulada.
+     O box-shadow no fim da regra supoe que o que vier depois desta faixa
+     tambem seja branco (hoje: o rodape); uma segunda faixa branca no meio
+     da pagina, sobre uma secao escura, mostraria uma linha branca de 1px
+     sobrando por baixo dela. */
   .site-band--white {
     --band-bg: #ffffff;
     --band-solid: #ffffff;

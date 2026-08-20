@@ -70,7 +70,7 @@ describe('Hero', () => {
     expect(screen.queryByText(content.dores.title)).toBeNull();
     expect(screen.queryByText(content.dores.turn)).toBeNull();
     for (const thought of content.dores.thoughts) {
-            expect(screen.queryByText(`“${thought.q}”`)).toBeNull();
+      expect(screen.queryByText(`“${thought.q}”`)).toBeNull();
     }
   });
 

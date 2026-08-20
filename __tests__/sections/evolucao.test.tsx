@@ -4,7 +4,7 @@ import { Evolucao } from '@/components/sections/Evolucao';
 import { content } from '@/lib/content';
 
 describe('Evolucao', () => {
-  it('renders the gauge value and all three steps', () => {
+  it('renders the gauge value and all four steps', () => {
     render(<Evolucao />);
     expect(screen.getByText(content.evolucao.gaugeValue)).toBeInTheDocument();
     for (const s of content.evolucao.steps) {

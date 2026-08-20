@@ -3,7 +3,9 @@ import { render } from '@testing-library/react';
 import Home from '@/app/page';
 
 // O ritmo da pagina, na ordem do DOM. Cresce nas tarefas 2 e 3 ate
-// cobrir as sete secoes. `id` vazio = a secao Evolucao, que nao tem id.
+// cobrir as sete secoes. `id` vazio = a secao nao tem id — hoje duas
+// entradas sao assim (Evolucao e Fechamento), distinguidas pela posicao
+// no array.
 // `full: false` marca excecao declarada, nao esquecimento.
 // Claro e escuro se alternam do inicio ao fim. As faixas escuras sao
 // transparentes: quem preenche o vao e o fundo do site com o canvas de

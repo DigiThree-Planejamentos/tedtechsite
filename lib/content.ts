@@ -242,14 +242,17 @@ export const content = {
     askHint: 'Ficou outra dúvida?',
     askCta: 'Quero conhecer mais',
 
-    // Os sete pares. A ordem E a ligacao entre os dois cards: a linha i da
+    // Os oito pares. A ordem E a ligacao entre os dois cards: a linha i da
     // esquerda e a duvida i da direita sao o mesmo assunto visto de dois
     // lados. Mexer na ordem de um lado sem mexer no outro quebra o par.
     //
     // As respostas se apoiam so no que ja esta neste arquivo — os seis
     // modulos e suas licoes. Nenhuma promete prazo de acesso, certificado
-    // ou acompanhamento, que continuam sendo decisoes em aberto do cliente.
-    // A duvida 2 e a 7 usam o texto que o cliente ja tinha escrito.
+    // ou acompanhamento, que continuam sendo decisoes em aberto do cliente —
+    // exceto o par "Ajuda de quem entende para comecar a vender", que ja
+    // promete esse acompanhamento; falta so definir o formato dele, o que
+    // precisa ser resolvido antes do lancamento.
+    // A duvida 2 e a 8 usam o texto que o cliente ja tinha escrito.
     pairs: [
       {
         leva: '6 módulos completos',
