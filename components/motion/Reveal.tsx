@@ -78,6 +78,11 @@ export function Reveal({
           trigger: el,
           start: REVEAL_START,
           end: 'bottom top',
+          // Sem isso, um scroll rapido (tecla End, arrastar a barra, fling no
+          // trackpad) pode pular a janela start->end inteira num so frame.
+          // Para variant="simple" (footer) isso e fatal: once:true mata o
+          // trigger e o elemento fica preso em opacity:0 pra sempre.
+          fastScrollEnd: true,
           ...(arrival
             ? { toggleActions: REVEAL_TOGGLE }
             : { once: true, toggleActions: 'play none none none' }),
