@@ -57,7 +57,8 @@ export function Hero() {
             <span className="block">Pare de gastar com técnico e comece a ganhar</span>
             <span className="block">como um. Aprenda manutenção do zero, resolva</span>
             <span className="block">seus próprios problemas e use essa habilidade</span>
-            <span className="block">para ganhar uma renda extra ou até como profissão.</span>
+            <span className="block">como renda extra ou profissão — no final, o Ted</span>
+            <span className="block">te ajuda a conseguir seus primeiros clientes.</span>
           </p>
           </div>
 
