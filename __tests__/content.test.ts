@@ -60,4 +60,12 @@ describe('content', () => {
     expect(rendaExtra.bullets).toContain('No final te ajudo a conseguir seus primeiros clientes');
     expect(rendaExtra.bullets).not.toContain('Primeiros clientes como freelancer');
   });
+
+  it('oferece a ajuda do Ted para vender, sem tirar a garantia do fim', () => {
+    const levas = content.offer.pairs.map((p) => p.leva);
+    const indice = levas.indexOf('Ajuda de quem entende para começar a vender');
+    expect(indice).toBeGreaterThanOrEqual(0);
+    // Penultimo: o fechamento do card continua sendo a garantia.
+    expect(indice).toBe(content.offer.pairs.length - 2);
+  });
 });

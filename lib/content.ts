@@ -288,6 +288,15 @@ export const content = {
           'Os módulos 05 e 06 fecham essa ponta: proteção contra malware e acessos indevidos, boas práticas com os dados, backup local e em nuvem, e como manter drivers e firmware atualizados.',
       },
       {
+        // A novidade do produto (2026-08-20): no final do curso o Ted ajuda
+        // o aluno a vender. "definir o preço", nunca "precificar" — o
+        // content.test proibe a palavra.
+        leva: 'Ajuda de quem entende para começar a vender',
+        duvida: 'Aprendi. E como eu consigo meus primeiros clientes?',
+        resposta:
+          'Essa é a última etapa do curso: o Ted te ajuda a oferecer seus serviços, definir o preço e fechar os primeiros clientes — pra transformar o que você aprendeu em renda.',
+      },
+      {
         leva: 'Garantia de 7 dias',
         duvida: 'E se eu comprar e não for pra mim?',
         resposta:
