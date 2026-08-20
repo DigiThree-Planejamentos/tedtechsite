@@ -6,7 +6,8 @@ import Home from '@/app/page';
 // cobrir as sete secoes. `id` vazio = a secao nao tem id — hoje duas
 // entradas sao assim (Evolucao e Fechamento), distinguidas pela posicao
 // no array.
-// `full: false` marca excecao declarada, nao esquecimento.
+// Hoje as sete sao de tela cheia. O campo `full` continua existindo para
+// que uma futura excecao seja declarada aqui, e nao passe por esquecimento.
 // Claro e escuro se alternam do inicio ao fim. As faixas escuras sao
 // transparentes: quem preenche o vao e o fundo do site com o canvas de
 // circuitos. A propria troca de tom e a separacao entre uma secao e a
@@ -23,10 +24,10 @@ export const RITMO = [
   // O FAQ deixou de ser secao: virou o card direito da oferta.
   { id: 'oferta', tom: 'dark', full: true },
   // Fechamento: faixa branca PURA (#ffffff do rodape, nao o #f7fbff das
-  // claras), sem id (page.test exige oferta como ultima section[id]) e sem
-  // tela cheia — excecao declarada. O rodape branco emenda nela sem linha:
-  // a pagina termina numa superficie so.
-  { id: '', tom: 'white', full: false },
+  // claras) e de tela cheia como as outras seis. Sem id porque page.test
+  // exige oferta como ultima section[id]. O rodape branco emenda nela sem
+  // linha: a pagina termina numa superficie so.
+  { id: '', tom: 'white', full: true },
 ];
 
 describe('Faixas da pagina', () => {

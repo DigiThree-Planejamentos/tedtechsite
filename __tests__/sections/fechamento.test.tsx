@@ -4,11 +4,11 @@ import { Fechamento } from '@/components/sections/Fechamento';
 import { content } from '@/lib/content';
 
 describe('Fechamento', () => {
-  it('renders the closing copy on the pure white band, without an id', () => {
+  it('renders the closing copy on the full-height pure white band, without an id', () => {
     const { container } = render(<Fechamento />);
     const section = container.querySelector('section')!;
     expect(section.className).toContain('site-band--white');
-    expect(section.className).not.toContain('site-band--full');
+    expect(section.className).toContain('site-band--full');
     expect(section.id).toBe('');
     expect(
       screen.getByRole('heading', { level: 2, name: content.fechamento.title }),

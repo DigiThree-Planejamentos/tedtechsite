@@ -6,15 +6,16 @@ import { Button } from '@/components/ui/Button';
 import { content } from '@/lib/content';
 
 /**
- * Fechamento da pagina: faixa branca pura (site-band--white), sem id e sem
- * tela cheia, as tres coisas de proposito — o rodape, que ja e branco,
- * emenda nela sem linha e a pagina termina numa superficie so. Sem id
- * tambem porque page.test exige `oferta` como ultima section[id].
+ * Fechamento da pagina: faixa branca pura (site-band--white) de tela cheia,
+ * no mesmo ritmo das outras seis. O rodape, que ja e branco, emenda nela
+ * sem linha e a pagina termina numa superficie so.
+ *
+ * Sem id de proposito: page.test exige `oferta` como ultima section[id].
  */
 export function Fechamento() {
   const f = content.fechamento;
   return (
-    <section className="site-section site-band site-band--white text-center">
+    <section className="site-section site-band site-band--white site-band--full text-center">
       <div className="mx-auto w-full max-w-content">
         <SectionLabel>{f.label}</SectionLabel>
         <SplitReveal
