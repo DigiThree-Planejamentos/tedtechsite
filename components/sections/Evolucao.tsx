@@ -26,7 +26,11 @@ export function Evolucao() {
           <SplitReveal as="h2" className="mt-3 text-2xl font-extrabold tracking-tight md:text-4xl">
             {e.title}
           </SplitReveal>
-          <Reveal as="ol" stagger={0.14} className="mt-7 space-y-6">
+          <Reveal
+            as="ol"
+            stagger={0.14}
+            className="site-quote-panel mt-7 space-y-6 rounded-[1.25rem] p-6 md:p-7"
+          >
             {e.steps.map((s, i) => (
               <li key={s.k} className="relative pl-8">
                 <span className="absolute left-0 top-0 grid h-6 w-6 place-items-center rounded-full btn-grad text-xs font-bold">
@@ -37,7 +41,12 @@ export function Evolucao() {
                 )}
                 <div className="font-mono text-[11px] uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-xs">{s.k}</div>
                 <div className="text-sm font-semibold md:text-base">{s.t}</div>
-                <div className="text-xs text-blue md:text-sm">{s.s}</div>
+                {/* blue-2, nao blue: dentro do painel branco, o blue de
+                    destaque (feito pra faixa escura) cai pra ~3:1 de
+                    contraste — abaixo do minimo de 4.5:1 do WCAG AA pra
+                    texto normal. blue-2 mantem o acento azul e passa em
+                    ~5.3:1. */}
+                <div className="text-xs text-blue-2 md:text-sm">{s.s}</div>
               </li>
             ))}
           </Reveal>

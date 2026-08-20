@@ -254,6 +254,27 @@ html.lenis body {
       0 24px 70px rgba(0, 0, 0, 0.22);
   }
 
+  /* Superficie branca leve para blocos pequenos dentro de faixa escura —
+     os cartoes de "voce se identifica", que liam direto sobre os circuitos.
+
+     A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
+     esses tokens valem tons CLAROS, entao um fundo branco sem virar os
+     tokens deixaria texto claro sobre branco, ilegivel. Mesma mecanica da
+     .site-offer-panel, com sombra mais discreta por serem blocos pequenos
+     e repetidos. A borda esquerda azul fica por conta do utilitario. */
+  .site-quote-panel {
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    background: #ffffff;
+    color: var(--band-fg);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      0 14px 38px rgba(0, 0, 0, 0.2);
+  }
+
   @media (min-width: 640px) {
     .site-section {
       padding-inline: 2rem;
