@@ -305,6 +305,16 @@ export const content = {
     ] as OfferPair[],
   },
 
+  // Secao de fechamento: a ultima faixa, branca pura, que o rodape
+  // continua. Repete a promessa nova do produto como ultimo argumento
+  // antes do CTA final.
+  fechamento: {
+    label: 'Comece agora',
+    title: 'Do primeiro parafuso ao primeiro cliente',
+    sub: 'Seis módulos pra aprender do zero — e, no final, o Ted junto de você pra transformar o que aprendeu em renda.',
+    cta: 'Quero aprender',
+  },
+
   // A secao de FAQ separada deixou de existir: as duvidas viraram o card
   // direito da oferta, pareadas com o que o curso entrega. Cinco perguntas
   // antigas sairam junto por estarem sem resposta ate hoje e por nao terem

@@ -5,6 +5,7 @@ import { Modulos } from '@/components/sections/Modulos';
 import { Evolucao } from '@/components/sections/Evolucao';
 import { Caminhos } from '@/components/sections/Caminhos';
 import { Oferta } from '@/components/sections/Oferta';
+import { Fechamento } from '@/components/sections/Fechamento';
 import { FloatingCta } from '@/components/sections/FloatingCta';
 import { Footer } from '@/components/sections/Footer';
 
@@ -21,6 +22,7 @@ export default function Home() {
         <Evolucao />
         <Caminhos />
         <Oferta />
+        <Fechamento />
       </main>
       <FloatingCta />
       <Footer />

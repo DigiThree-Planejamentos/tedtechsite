@@ -182,6 +182,21 @@ html.lenis body {
     --band-rule: rgba(255, 255, 255, 0.1);
   }
 
+  /* Folha branca PURA para a secao de fechamento: o mesmo #ffffff do
+     rodape, de proposito — os dois emendam sem linha visivel e o rodape
+     le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
+     encostado no rodape branco, a diferenca aparece como mancha azulada. */
+  .site-band--white {
+    --band-bg: #ffffff;
+    --band-solid: #ffffff;
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    --band-rule: rgba(15, 42, 81, 0.1);
+  }
+
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
      fundo do site com os circuitos, que ja existem atras de tudo. */
   /* min-height, nunca height: uma tela e o piso. No mobile Caminhos

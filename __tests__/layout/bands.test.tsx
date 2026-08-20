@@ -18,10 +18,13 @@ export const RITMO = [
   { id: 'modulos', tom: 'light', full: true },
   { id: '', tom: 'dark', full: true },
   { id: 'caminhos', tom: 'light', full: true },
-  // O FAQ deixou de ser secao: virou o card direito da oferta. Sobraram
-  // seis faixas, e a alternancia continua fechando — a pagina termina
-  // escura, emendando no rodape, que ja era.
+  // O FAQ deixou de ser secao: virou o card direito da oferta.
   { id: 'oferta', tom: 'dark', full: true },
+  // Fechamento: faixa branca PURA (#ffffff do rodape, nao o #f7fbff das
+  // claras), sem id (page.test exige oferta como ultima section[id]) e sem
+  // tela cheia — excecao declarada. O rodape branco emenda nela sem linha:
+  // a pagina termina numa superficie so.
+  { id: '', tom: 'white', full: false },
 ];
 
 describe('Faixas da pagina', () => {
