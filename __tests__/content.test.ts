@@ -54,4 +54,10 @@ describe('content', () => {
   it('offer always states the payment methods', () => {
     expect(content.offer.payments.length).toBeGreaterThan(0);
   });
+
+  it('renda extra promete a ajuda do Ted nos primeiros clientes', () => {
+    const rendaExtra = content.caminhos.cards.find((c) => c.title === 'Como renda extra')!;
+    expect(rendaExtra.bullets).toContain('No final te ajudo a conseguir seus primeiros clientes');
+    expect(rendaExtra.bullets).not.toContain('Primeiros clientes como freelancer');
+  });
 });

@@ -196,7 +196,8 @@ export const content = {
         bullets: [
           'Montagens e formatações avulsas',
           'Manutenção pra quem está por perto',
-          'Primeiros clientes como freelancer',
+          // Primeira pessoa de proposito: e o Ted falando — decisao do cliente.
+          'No final te ajudo a conseguir seus primeiros clientes',
         ],
       },
       {
