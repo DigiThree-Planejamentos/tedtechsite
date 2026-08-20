@@ -20,14 +20,23 @@ function buildHeroClipPath(width: number, height: number) {
   const cornerRadius = topRadius;
 
   const mobile = width < 480;
-  const bottomNotchWidth = clamp(width * 0.27, mobile ? 88 : 124, mobile ? 116 : 188);
+  // Teto menor no mobile: la o recorte encosta na faixa do nome do instrutor,
+  // que fica na base do painel. Com 146 sobrava so ~13px entre o texto e a
+  // borda do recorte — e o nome ainda e placeholder, entao um nome real mais
+  // longo colidiria. Com 132 a folga volta pra ~20px.
+  const bottomNotchWidth = clamp(width * 0.34, mobile ? 108 : 158, mobile ? 132 : 252);
   const bottomNotchHeight = clamp(height * 0.12, mobile ? 40 : 44, mobile ? 48 : 60);
   const bottomRadius = Math.min(28, bottomNotchHeight / 2);
   const bottomNotchLeft = (width - bottomNotchWidth) / 2 + width * 0.1;
   const bottomNotchRight = bottomNotchLeft + bottomNotchWidth;
   const bottomNotchTop = height - bottomNotchHeight;
-  const sideDepth = clamp(width * 0.08, mobile ? 32 : 40, mobile ? 48 : 60);
-  const sideRadius = sideDepth * (32 / 92);
+  const sideDepth = clamp(width * 0.11, mobile ? 38 : 52, mobile ? 62 : 84);
+  // Metade da profundidade, mesma regra do topRadius (topNotchHeight / 2) do
+  // recorte da direita: raio = metade do degrau e os dois arcos se encontram
+  // sem reta no meio, formando o S continuo. Com a proporcao antiga (32/92)
+  // sobrava uma reta de ~18px entre os arcos — virava prateleira, nao S — e
+  // ainda esmagava o arredondamento do topo (sideTopInnerY caia pra 9px).
+  const sideRadius = sideDepth / 2;
   const sideHeight = clamp(
     height * (mobile ? 0.46 : 0.56),
     mobile ? 104 : 144,
