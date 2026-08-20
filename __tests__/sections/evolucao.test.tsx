@@ -11,4 +11,12 @@ describe('Evolucao', () => {
       expect(screen.getByText(s.t)).toBeInTheDocument();
     }
   });
+
+  it('fecha a jornada com o passo de venda ajudado pelo Ted', () => {
+    expect(content.evolucao.steps).toHaveLength(4);
+    const ultimo = content.evolucao.steps.at(-1)!;
+    expect(ultimo.k).toBe('Venda');
+    expect(ultimo.s).toMatch(/Ted/);
+    expect(content.evolucao.title).toBe('Dos fundamentos ao primeiro cliente');
+  });
 });

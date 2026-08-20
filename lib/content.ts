@@ -158,13 +158,17 @@ export const content = {
 
   evolucao: {
     label: 'Sua evolução',
-    title: 'Dos fundamentos ao cuidado completo',
+    title: 'Dos fundamentos ao primeiro cliente',
     gaugeValue: '6',
     gaugeCaption: 'módulos de aprendizado',
     steps: [
       { k: 'Fundamentos', t: 'Entenda o computador', s: 'História, hardware e software' },
       { k: 'Montagem', t: 'Monte e configure', s: 'Componentes, cabos, BIOS/UEFI e sistema' },
       { k: 'Manutenção', t: 'Diagnostique e cuide', s: 'Limpeza, segurança, backup e drivers' },
+      // A novidade do produto: o curso nao termina no conserto. O anel
+      // continua dizendo "6 modulos" — a ajuda do Ted e alem dos modulos,
+      // nao um setimo.
+      { k: 'Venda', t: 'Comece a ganhar', s: 'O Ted te ajuda a oferecer, cobrar e fechar os primeiros clientes' },
     ],
   },
 
