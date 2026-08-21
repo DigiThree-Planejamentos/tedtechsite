@@ -184,12 +184,22 @@ describe('Modulos', () => {
     expect(Element.prototype.animate).not.toHaveBeenCalled();
   });
 
-  it('renders module cards without decorative borders', () => {
+  // A decisao de "card sem borda" CAIU. Com o overlay branco, a base do card
+  // ficava a 1.02:1 da faixa clara da secao — invisivel — e o card perdia a
+  // silhueta da metade pra baixo. O cliente pediu a borda no azul da marca,
+  // e ela vive em `.module-card` no globals.css.
+  //
+  // O teste sobrevive a reversao porque o que ele guarda de verdade continua
+  // valendo: borda e fundo do card tem UM dono so. O card e desenhado em
+  // cinco camadas empilhadas (foto, shade, espinho, corpo, veu); espalhar
+  // `border-*` ou `bg-*` pelo JSX poe utilitario e CSS brigando, e quem
+  // perde a briga so aparece no print.
+  it('keeps the card border and background in CSS, not in utility classes', () => {
     const { container } = render(<Modulos />);
     for (const card of container.querySelectorAll('article')) {
+      expect(card).toHaveClass('module-card');
       expect(card).toHaveClass('rounded-[1.5rem]');
-      expect(card).not.toHaveClass('border', 'border-blue/25');
-      expect(card).not.toHaveClass('clean-border');
+      expect(card.className).not.toMatch(/\bborder/);
       expect(card.className).not.toMatch(/\bbg-/);
     }
   });
