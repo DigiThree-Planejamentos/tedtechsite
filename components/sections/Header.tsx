@@ -33,9 +33,37 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] py-2.5 pl-5 pr-2.5 text-[#07111f] shadow-[0_20px_64px_rgba(30,158,219,0.48)] transition-all duration-300 ease-out sm:rounded-[2rem]">
         <Logo compact />
-        <nav className="hidden max-w-xs items-center gap-7 overflow-hidden whitespace-nowrap text-sm text-[#3b4654] transition-all duration-300 ease-out md:flex">
-          <a href={site.nav.modulos} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Módulos</a>
-          <a href={site.nav.duvidas} tabIndex={isHidden ? -1 : undefined} className="hover:text-blue">Dúvidas</a>
+        {/* Um botao por secao, na ordem da pagina (site.nav). O header so
+            existe enquanto o hero esta na tela — passou dele, ele sobe e some
+            — entao esta barra e o indice que o visitante ve ao CHEGAR, nao
+            uma nav de acompanhamento. E por isso que vale listar todas as
+            secoes em vez de escolher duas.
+
+            Saiu o max-w-xs: aquele teto era de quando havia dois links e, com
+            cinco, cortaria os ultimos — e o overflow-hidden que vinha junto
+            escondia justamente a prova de que estavam sendo cortados.
+
+            As medidas apertam no md e folgam no lg porque no md esta linha
+            divide ~380px com o logo e o botao de compra. */}
+        <nav
+          aria-label="Seções da página"
+          className="hidden min-w-0 items-center gap-0.5 whitespace-nowrap text-[13px] text-[#3b4654] md:flex lg:gap-1 lg:text-sm"
+        >
+          {site.nav.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              tabIndex={isHidden ? -1 : undefined}
+              /* Pilula so no hover e no foco: em repouso sao texto. O botao
+                 de compra esta a centimetros dali e deve ser o unico que
+                 parece botao o tempo todo — cinco pilulas permanentes
+                 competiriam com ele. O estado de foco repete o do hover pra
+                 quem navega por teclado ver onde esta. */
+              className="rounded-full px-2.5 py-1.5 transition-colors duration-200 hover:bg-blue/10 hover:text-blue focus-visible:bg-blue/10 focus-visible:text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/50 lg:px-3"
+            >
+              {item.label}
+            </a>
+          ))}
         </nav>
         <MagneticButton>
           <Button href={content.checkoutUrl} variant="primary" tabIndex={isHidden ? -1 : undefined}>
