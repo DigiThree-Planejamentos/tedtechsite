@@ -1,26 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
 import { SectionNav } from '@/components/ui/SectionNav';
 import { MagneticButton } from '@/components/motion/MagneticButton';
+import { useHeroPassed } from '@/components/motion/useHeroPassed';
 import { content } from '@/lib/content';
 
 export function Header() {
-  const [isHidden, setIsHidden] = useState(false);
-
-  useEffect(() => {
-    const hero = document.getElementById('hero');
-    if (!hero || typeof IntersectionObserver === 'undefined') return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsHidden(!entry.isIntersecting),
-      { rootMargin: '-80px 0px 0px 0px', threshold: 0 }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
+  // O observer que ficava aqui virou hook porque a barra flutuante precisa
+  // do MESMO instante: quando isto vira true, o header sobe e some e a barra
+  // ocupa o lugar dele no topo, na mesma animacao de 500ms. Duas copias do
+  // gatilho abririam buraco ou colisao no topo — ver useHeroPassed.
+  const isHidden = useHeroPassed();
 
   return (
     <header

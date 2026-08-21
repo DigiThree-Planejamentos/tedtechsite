@@ -54,10 +54,7 @@ export function Oferta() {
 
         {/* No celular vira coluna unica: oferta em cima, duvidas embaixo. */}
         <div className="mx-auto mt-8 grid max-w-[1140px] gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-[92px]">
-          {/* ---- Card da esquerda: o que voce leva ----
-              data-offer-anchor: e este card que a barra fixa do rodape
-              observa. Enquanto ele estiver na tela, o preco e o botao ja
-              estao a vista e a barra sai de cena. */}
+          {/* ---- Card da esquerda: o que voce leva ---- */}
           {/* Sem superficie propria: a faixa ja e branca, entao pintar um
               cartao branco em cima de branco so acrescentaria borda e sombra
               sem separar nada. Quem separa as duas colunas e o vao (gap), o
@@ -69,7 +66,6 @@ export function Oferta() {
               escura. Numa faixa branca os tokens da propria faixa ja sao
               esses, entao o texto continua identico ao de antes. */}
           <div
-            data-offer-anchor
             className="flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4"
           >
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">

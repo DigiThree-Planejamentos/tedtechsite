@@ -1,82 +1,52 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { MagneticButton } from '@/components/motion/MagneticButton';
+import { useHeroPassed } from '@/components/motion/useHeroPassed';
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
 import { Button } from '@/components/ui/Button';
 import { SectionNav } from '@/components/ui/SectionNav';
 import { content } from '@/lib/content';
 
-const SHOW_AFTER_VIEWPORTS = 0.7;
-const OFFER_ID = 'oferta';
-
+/**
+ * A barra em que o header SE TRANSFORMA quando o hero acaba. Nao e um
+ * segundo elemento que aparece por conta propria: ela ocupa a mesma vaga no
+ * topo (top-4 / sm:top-5), com a mesma largura, o mesmo raio, a mesma borda,
+ * o mesmo fundo e a mesma sombra do header, e entra vindo de -translate-y-28,
+ * que e exatamente pra onde o header sai. Na metade dos 500ms os dois estao
+ * na mesma posicao com opacidade complementar — le como um objeto so trocando
+ * de conteudo, nao como um sumindo e outro nascendo.
+ *
+ * O gatilho vem do useHeroPassed, o MESMO que esconde o header. Isso e o que
+ * garante que nao exista quadro com dois no topo nem quadro com nenhum.
+ *
+ * O QUE SAIU DAQUI, e por que:
+ *
+ * - o limiar de 70% da primeira tela. Ele fazia a barra aparecer ANTES do
+ *   header sair, o que era inofensivo com um em cima e outro embaixo e vira
+ *   colisao com os dois no topo;
+ * - a regra de sumir quando o card de preco estava na tela. Ela existia
+ *   porque, na base da tela, a barra repetia o botao que ja estava visivel
+ *   logo acima. No topo o cliente pediu que a barra FIQUE ("assim que acabar
+ *   o hero o header vira essa barra visivel"), e o motivo pesa menos: um
+ *   header que some ao chegar na ultima secao deixaria a pagina terminar sem
+ *   nada no topo e sem navegacao. O preco aparecer na barra e no card e o
+ *   preco a pagar, e e o barato dos dois.
+ *
+ * Com as duas regras foi junto o listener de scroll com requestAnimationFrame:
+ * o IntersectionObserver do hook faz o mesmo trabalho sem rodar a cada quadro.
+ */
 export function FloatingCta() {
-  const [isVisible, setIsVisible] = useState(false);
+  // O mesmo instante que esconde o header, pelo mesmo hook — nao um gatilho
+  // parecido. Ver useHeroPassed pra por que duas copias quebrariam calado.
+  const isVisible = useHeroPassed();
   const reducedMotion = useReducedMotion();
   const cta = content.floatingCta;
-
-  useEffect(() => {
-    let frame: number | null = null;
-
-    const updateVisibility = () => {
-      frame = null;
-      // Segue o CARD DO PRECO, nao a secao inteira. No celular os dois cards
-      // empilham e a secao passa de 1500px: rastreando a secao, a barra
-      // ficaria escondida durante toda a leitura das duvidas, justamente
-      // quando o botao de verdade ja saiu da tela.
-      const anchor =
-        document.querySelector('[data-offer-anchor]') ??
-        document.getElementById(OFFER_ID);
-      const pastFirstFold =
-        window.scrollY >= window.innerHeight * SHOW_AFTER_VIEWPORTS;
-
-      // Vale para os dois lados: quem ainda nao chegou no preco e quem ja
-      // passou dele. Antes so aparecia antes, entao quem rolava ate o fim
-      // ficava sem preco e sem caminho pro checkout.
-      //
-      // Depois da inversao (a oferta virou a ultima secao) o segundo lado so
-      // acontece em tela estreita, onde a secao mede 1,7 tela e o card sai
-      // por cima antes da pagina acabar. Em desktop nao ha mais "depois":
-      // medido em 1536x695, no fim da rolagem o card ainda esta na tela
-      // (topo -112, base 475) e a barra fica escondida — o botao de verdade
-      // acompanha o leitor ate o fim, que era o problema que ela resolvia.
-      // O segundo lado fica porque o mobile ainda depende dele.
-      let anchorIsOffscreen = true;
-      if (anchor) {
-        const box = anchor.getBoundingClientRect();
-        anchorIsOffscreen = box.top > window.innerHeight || box.bottom < 0;
-      }
-
-      setIsVisible(pastFirstFold && anchorIsOffscreen);
-    };
-
-    const scheduleUpdate = () => {
-      if (frame !== null) return;
-      if (typeof window.requestAnimationFrame !== 'function') {
-        updateVisibility();
-        return;
-      }
-      frame = window.requestAnimationFrame(updateVisibility);
-    };
-
-    updateVisibility();
-    window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate);
-
-    return () => {
-      window.removeEventListener('scroll', scheduleUpdate);
-      window.removeEventListener('resize', scheduleUpdate);
-      if (frame !== null && typeof window.cancelAnimationFrame === 'function') {
-        window.cancelAnimationFrame(frame);
-      }
-    };
-  }, []);
 
   const motionClasses = reducedMotion
     ? 'translate-y-0 transition-none'
     : isVisible
       ? 'translate-y-0 transition-[opacity,transform] duration-500 ease-out'
-      : 'translate-y-5 transition-[opacity,transform] duration-500 ease-out';
+      : '-translate-y-28 transition-[opacity,transform] duration-500 ease-out';
 
   return (
     <aside
@@ -84,12 +54,11 @@ export function FloatingCta() {
       aria-label='Inscrição no curso TedTech'
       data-floating-cta
       data-visible={isVisible ? 'true' : 'false'}
-      className={`fixed inset-x-0 z-40 px-4 ${motionClasses} ${
+      className={`fixed inset-x-0 top-4 z-40 px-4 ${motionClasses} ${
         isVisible ? 'opacity-100' : 'pointer-events-none opacity-0'
-      } sm:px-6`}
-      style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+      } sm:top-5 sm:px-6`}
     >
-      <div className='mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] px-3 py-3 text-[#07111f] shadow-[0_14px_42px_rgba(15,42,81,0.22),0_20px_60px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.92)] sm:rounded-[2rem] sm:px-5 md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-6 xl:grid-cols-[minmax(0,1fr)_auto_auto_auto]'>
+      <div className='mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] px-3 py-3 text-[#07111f] shadow-[0_20px_64px_rgba(30,158,219,0.48)] sm:rounded-[2rem] sm:px-5 md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-6 xl:grid-cols-[minmax(0,1fr)_auto_auto_auto]'>
         {/* No celular a barra e "R$ 297 · Inscrever": o preco ocupa o lugar
             do texto de urgencia, que so aparece de sm pra cima. */}
         <div className='flex min-w-0 items-center gap-2.5'>

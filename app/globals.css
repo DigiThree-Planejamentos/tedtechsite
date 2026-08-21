@@ -493,9 +493,24 @@ html.lenis body {
      Era isto o "clico no botao do header e a ida fica quebrada": a posicao
      estava certa, o ENQUADRAMENTO e que nao.
 
-     Nada fica escondido atras da barra: o header some quando o hero sai da
-     tela, e ja sumiu quando qualquer uma destas cinco chega. Medido nas
-     cinco: headerVisivel false, titulo entre 135px e 230px do topo.
+     ATENCAO — A PREMISSA ANTIGA CAIU. Aqui estava escrito que nada ficava
+     escondido atras da barra fixa, porque o header sumia quando o hero saia
+     e ja tinha sumido quando qualquer uma destas cinco chegava. Isso deixou
+     de valer: a barra flutuante agora ASSUME o topo no lugar do header e
+     fica ate o fim da pagina.
+     Medido em 1536x695 clicando os cinco atalhos: a base da barra fica em
+     86px e o titulo da secao chega em 79 (O problema), 86 (Modulos), 108
+     (Evolucao), 68 (Caminhos) e 68 (Oferta) — ou seja, tres dos cinco
+     chegam parcialmente atras da barra.
+     So morde em tela BAIXA. A faixa centraliza o conteudo, entao em tela
+     alta o titulo desce sozinho e passa longe (era o caso quando isto foi
+     medido pela primeira vez: 135px a 230px).
+     Devolver os 6rem aqui NAO e a saida — quebra o enquadramento pelo
+     motivo aritmetico descrito acima. A saida seria reservar o topo por
+     dentro (padding-top na .site-band--full, que com box-sizing: border-box
+     mantem a faixa em uma tela exata e so recentra o conteudo abaixo da
+     barra). Fica pendente de decisao: mexe na composicao vertical de TODAS
+     as faixas de tela cheia, em toda largura.
 
      Os 6rem de .site-section continuam valendo para secao que NAO seja de
      tela cheia — ali a margem faz sentido, porque a secao nao depende de

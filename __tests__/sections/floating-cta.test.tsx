@@ -1,11 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { FloatingCta } from '@/components/sections/FloatingCta';
+import { Header } from '@/components/sections/Header';
 import { content } from '@/lib/content';
 import { site } from '@/lib/site';
-
-let offer: HTMLElement;
-let offerTop: number;
 
 // Pelo href, nunca por `querySelector('a')`: desde que os atalhos de secao
 // entraram na barra, o PRIMEIRO link do DOM e um atalho, nao o checkout. E
@@ -17,49 +15,58 @@ const checkoutLink = (container: HTMLElement) =>
 const navLinks = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLAnchorElement>('nav a'));
 
-function setScrollY(value: number) {
-  Object.defineProperty(window, 'scrollY', {
+// O jsdom nao tem IntersectionObserver, e o gatilho da barra agora depende
+// dele: quem manda e o hero saindo da tela, nao mais a posicao do scroll.
+// Este falso guarda os callbacks pra que o teste possa dizer "o hero saiu".
+type IoCallback = (entries: IntersectionObserverEntry[]) => void;
+let callbacks: IoCallback[] = [];
+let options: IntersectionObserverInit[] = [];
+let hero: HTMLElement;
+
+function installIntersectionObserver() {
+  callbacks = [];
+  options = [];
+  class FakeIntersectionObserver {
+    constructor(cb: IoCallback, init?: IntersectionObserverInit) {
+      callbacks.push(cb);
+      options.push(init ?? {});
+    }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
+    }
+  }
+  Object.defineProperty(globalThis, 'IntersectionObserver', {
     configurable: true,
-    value,
+    writable: true,
+    value: FakeIntersectionObserver,
   });
 }
 
-function makeRect(top: number): DOMRect {
-  return {
-    x: 0,
-    y: top,
-    top,
-    right: 1000,
-    bottom: top + 600,
-    left: 0,
-    width: 1000,
-    height: 600,
-    toJSON: () => ({}),
-  };
+/** Dispara em TODOS os observers de uma vez: header e barra leem o mesmo. */
+function setHeroOnScreen(isIntersecting: boolean) {
+  act(() => {
+    for (const cb of callbacks) {
+      cb([{ isIntersecting } as IntersectionObserverEntry]);
+    }
+  });
 }
+
+const barra = (container: HTMLElement) =>
+  container.querySelector('[data-floating-cta]')!;
 
 describe('FloatingCta', () => {
   beforeEach(() => {
-    Object.defineProperty(window, 'innerHeight', {
-      configurable: true,
-      value: 1000,
-    });
-    Object.defineProperty(window, 'requestAnimationFrame', {
-      configurable: true,
-      value: undefined,
-    });
-    setScrollY(0);
-    offerTop = 2400;
-    offer = document.createElement('section');
-    offer.id = 'oferta';
-    vi.spyOn(offer, 'getBoundingClientRect').mockImplementation(() =>
-      makeRect(offerTop),
-    );
-    document.body.appendChild(offer);
+    installIntersectionObserver();
+    hero = document.createElement('section');
+    hero.id = 'hero';
+    document.body.appendChild(hero);
   });
 
   afterEach(() => {
-    offer.remove();
+    hero.remove();
     vi.restoreAllMocks();
   });
 
@@ -90,22 +97,20 @@ describe('FloatingCta', () => {
     const nav = container.querySelector('nav')!;
     expect(nav.contains(checkoutLink(container))).toBe(false);
 
-    // Landmark com nome proprio: existe uma janela em que a barra e o header
-    // estao os dois na tela, e dois <nav> com o mesmo nome deixam quem usa
-    // leitor de tela sem saber a qual esta indo.
+    // Landmarks com nomes diferentes: durante os 500ms da troca os dois
+    // estao no DOM, e dois <nav> com o mesmo nome deixam quem usa leitor de
+    // tela sem saber a qual esta indo.
     expect(nav.getAttribute('aria-label')).toBe('Atalhos para as seções');
     expect(nav.getAttribute('aria-label')).not.toBe('Seções da página');
   });
 
-  it('stays hidden before 70% of the first viewport and leaves the tab order', () => {
-    setScrollY(699);
+  it('stays hidden while the hero is on screen, and out of the tab order', () => {
     const { container } = render(<FloatingCta />);
-    const root = container.querySelector('[data-floating-cta]');
-    const link = checkoutLink(container);
+    const root = barra(container);
 
     expect(root).toHaveAttribute('data-visible', 'false');
     expect(root).toHaveAttribute('aria-hidden', 'true');
-    expect(link).toHaveAttribute('tabindex', '-1');
+    expect(checkoutLink(container)).toHaveAttribute('tabindex', '-1');
 
     // Os atalhos saem junto. Eles continuam no DOM com a barra invisivel, e
     // sem isto quem navega por teclado tabularia por cinco links que nao
@@ -115,34 +120,80 @@ describe('FloatingCta', () => {
     }
   });
 
-  it('follows whoever is not looking at the offer, before it and after it', () => {
+  // O pedido do cliente, na letra: "assim que acabar o hero o header vira
+  // essa barra visivel". Aparece quando o hero passa e FICA — nao ha mais a
+  // regra de sumir quando o card de preco entra na tela.
+  it('appears when the hero passes and stays for the rest of the page', () => {
     const { container } = render(<FloatingCta />);
-    const root = container.querySelector('[data-floating-cta]');
-    const link = checkoutLink(container);
+    const root = barra(container);
 
-    // Antes de chegar na oferta: a barra carrega o preco e o botao.
-    setScrollY(700);
-    fireEvent.scroll(window);
+    setHeroOnScreen(false);
     expect(root).toHaveAttribute('data-visible', 'true');
     expect(root).toHaveAttribute('aria-hidden', 'false');
-    expect(link).not.toHaveAttribute('tabindex');
+    expect(checkoutLink(container)).not.toHaveAttribute('tabindex');
+    for (const a of navLinks(container)) {
+      expect(a).not.toHaveAttribute('tabindex');
+    }
 
-    // Com a oferta na tela ela sai de cena: seria concorrer com os cards.
-    offerTop = 1000;
-    fireEvent.scroll(window);
+    // Voltar ao topo devolve o header, entao a barra tem que sair de novo.
+    setHeroOnScreen(true);
     expect(root).toHaveAttribute('data-visible', 'false');
+  });
 
-    // Depois de passar dos cards ela VOLTA. Antes nao voltava, e quem
-    // rolava ate o rodape ficava sem preco e sem caminho pro checkout.
-    offerTop = -700;
-    setScrollY(3000);
-    fireEvent.scroll(window);
-    expect(root).toHaveAttribute('data-visible', 'true');
+  // ESTE e o teste do pedido. O header nao "some e depois algo aparece": ele
+  // VIRA a barra. Os dois disputam a mesma vaga no topo, entao um quadro com
+  // os dois visiveis empilha duas barras, e um quadro com nenhum deixa o topo
+  // vazio. Nenhum dos dois defeitos aparece testando os componentes sozinhos:
+  // so rolando a pagina de verdade.
+  it('hands the top slot over: never both visible, never neither', () => {
+    const { container } = render(
+      <>
+        <Header />
+        <FloatingCta />
+      </>,
+    );
+    const cabecalho = container.querySelector('header')!;
+    const root = barra(container);
 
-    offerTop = 1800;
-    setScrollY(700);
-    fireEvent.scroll(window);
-    expect(root).toHaveAttribute('data-visible', 'true');
+    const estado = () => ({
+      header: cabecalho.getAttribute('aria-hidden') !== 'true',
+      barra: root.getAttribute('data-visible') === 'true',
+    });
+
+    // Com o hero na tela: header sim, barra nao.
+    expect(estado()).toEqual({ header: true, barra: false });
+
+    // Hero passou: a troca acontece no MESMO evento, nao em dois momentos.
+    setHeroOnScreen(false);
+    expect(estado()).toEqual({ header: false, barra: true });
+
+    setHeroOnScreen(true);
+    expect(estado()).toEqual({ header: true, barra: false });
+
+    // E a garantia estrutural por tras disso: os dois pediram o mesmo
+    // recorte ao IntersectionObserver. Se alguem der um gatilho proprio a um
+    // deles, os valores divergem e este assert cai antes do bug chegar na
+    // tela.
+    expect(callbacks).toHaveLength(2);
+    expect(options[0]).toEqual(options[1]);
+    expect(options[0].rootMargin).toBe('-80px 0px 0px 0px');
+  });
+
+  // A barra ocupa a vaga do header, nao uma vaga propria: mesmo `top`, mesmo
+  // recuo lateral, e entra de -translate-y-28, que e exatamente pra onde o
+  // header sai. Na metade da animacao os dois estao na mesma posicao com
+  // opacidade complementar — e o que faz a troca ler como um objeto so.
+  it('sits in the header slot and enters from where the header leaves', () => {
+    const { container } = render(<FloatingCta />);
+    const root = barra(container);
+
+    expect(root.className).toContain('top-4');
+    expect(root.className).toContain('sm:top-5');
+    expect(root.className).not.toContain('bottom-');
+    expect(root.className).toContain('-translate-y-28');
+
+    setHeroOnScreen(false);
+    expect(root.className).toContain('translate-y-0');
   });
 
   it('removes movement when reduced motion is requested', async () => {
@@ -162,10 +213,7 @@ describe('FloatingCta', () => {
 
     const { container } = render(<FloatingCta />);
     await waitFor(() => {
-      expect(container.querySelector('[data-floating-cta]')).toHaveClass(
-        'translate-y-0',
-        'transition-none',
-      );
+      expect(barra(container)).toHaveClass('translate-y-0', 'transition-none');
     });
   });
 });
