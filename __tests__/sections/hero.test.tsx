@@ -73,4 +73,11 @@ describe('Hero', () => {
       expect(screen.queryByText(`“${thought.q}”`)).toBeNull();
     }
   });
+
+  it('promete a ajuda do Ted para conseguir os primeiros clientes', () => {
+    render(<Hero />);
+    expect(
+      screen.getByText('te ajuda a conseguir seus primeiros clientes.'),
+    ).toBeInTheDocument();
+  });
 });

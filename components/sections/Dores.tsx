@@ -27,10 +27,13 @@ export function Dores() {
 
         <Reveal
           stagger={0.1}
-          className="mx-auto grid w-full max-w-3xl gap-8 text-left md:grid-cols-2 md:gap-12"
+          className="mx-auto grid w-full max-w-3xl gap-10 text-left md:grid-cols-2 md:gap-x-16 md:gap-y-14"
         >
           {d.thoughts.map((t) => (
-            <div key={t.q} className="border-l-2 border-blue pl-5">
+            <div
+              key={t.q}
+              className="site-quote-panel rounded-[1rem] border-l-2 border-blue py-4 pl-5 pr-4"
+            >
               <p className="text-sm italic leading-relaxed text-[color:var(--band-fg-body)] md:text-[15px]">“{t.q}”</p>
               <small className="mt-2 block text-xs not-italic leading-relaxed text-[color:var(--band-fg-faint)]">{t.s}</small>
             </div>

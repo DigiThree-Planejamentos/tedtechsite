@@ -182,6 +182,32 @@ html.lenis body {
     --band-rule: rgba(255, 255, 255, 0.1);
   }
 
+  /* Folha branca PURA para a secao de fechamento: o mesmo #ffffff do
+     rodape, de proposito — os dois emendam sem linha visivel e o rodape
+     le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
+     encostado no rodape branco, a diferenca aparece como mancha azulada.
+     O box-shadow no fim da regra supoe que o que vier depois desta faixa
+     tambem seja branco (hoje: o rodape); uma segunda faixa branca no meio
+     da pagina, sobre uma secao escura, mostraria uma linha branca de 1px
+     sobrando por baixo dela. */
+  .site-band--white {
+    --band-bg: #ffffff;
+    --band-solid: #ffffff;
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    --band-rule: rgba(15, 42, 81, 0.1);
+    /* A fronteira com o rodape cai em coordenada fracionaria (medido:
+       506.875px com devicePixelRatio 1.25). Nao ha vao no layout — o
+       fio cinza e a antialiasing das duas caixas brancas misturando com
+       o fundo escuro do body por baixo. Este 1px de branco logo abaixo
+       cobre a fresta sem mexer no fluxo, que e o que uma margem negativa
+       ou um wrapper branco fariam. */
+    box-shadow: 0 1px 0 0 #ffffff;
+  }
+
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
      fundo do site com os circuitos, que ja existem atras de tudo. */
   /* min-height, nunca height: uma tela e o piso. No mobile Caminhos
@@ -252,6 +278,27 @@ html.lenis body {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.92),
       0 24px 70px rgba(0, 0, 0, 0.22);
+  }
+
+  /* Superficie branca leve para blocos pequenos dentro de faixa escura —
+     os cartoes de "voce se identifica", que liam direto sobre os circuitos.
+
+     A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
+     esses tokens valem tons CLAROS, entao um fundo branco sem virar os
+     tokens deixaria texto claro sobre branco, ilegivel. Mesma mecanica da
+     .site-offer-panel, com sombra mais discreta por serem blocos pequenos
+     e repetidos. A borda esquerda azul fica por conta do utilitario. */
+  .site-quote-panel {
+    --band-fg: #07111f;
+    --band-fg-strong: #050914;
+    --band-fg-body: #3b4654;
+    --band-fg-muted: #526071;
+    --band-fg-faint: #667284;
+    background: #ffffff;
+    color: var(--band-fg);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.92),
+      0 14px 38px rgba(0, 0, 0, 0.2);
   }
 
   @media (min-width: 640px) {
