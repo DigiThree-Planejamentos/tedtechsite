@@ -32,17 +32,34 @@ function buildHeroClipPath(width: number, height: number) {
   // desta mexeram na medida errada — a profundidade total, 55.8 -> 67.4 ->
   // 81.8 — e nenhuma era o que ele queria.
   //
-  // ATENCAO: topRadius e cornerRadius tem hoje a MESMA expressao, e isso e
-  // coincidencia de valor, nao de significado. Um e a curva do recorte, o
-  // outro e o canto da moldura. Nao unifique: foi justamente por estarem
-  // amarrados que aumentar o recorte arredondava o painel junto.
-  const topRadius = clamp(height * 0.06, 20, 28);
-  const topNotchWall = clamp(height * 0.086, 14, 48);
+  // topRadius e cornerRadius JA FORAM a mesma expressao, e por um tempo isso
+  // passou por regra — nao era. Um e a curva do recorte, o outro e o canto da
+  // moldura, e foi justamente por estarem amarrados que mexer no recorte
+  // arredondava o painel junto. Hoje divergem de fato (20.5 contra 27.9 no
+  // quadro de 465), que e o que permitiu reduzir a profundidade sem que a
+  // moldura andasse um pixel. Nao reunifique.
+  // PROFUNDIDADE reduzida: 95.8 -> 70.3 no quadro de 465 (-27%). Os dois
+  // coeficientes cairam JUNTOS, na mesma proporcao, entao a silhueta e a
+  // mesma — a queda vertical continua existindo antes do recorte virar, que
+  // e o ponto do desenho. So a mordida ficou menor: de 20,6% da altura do
+  // painel para 15,1%.
+  //
+  // Encolher so o raio manteria a parede intacta nos 40, mas com raio ~15
+  // contra os 27.9 do canto da moldura o recorte ficaria visivelmente mais
+  // pincado que o resto do painel. Encolher so a parede desfaria o pedido
+  // anterior e devolveria o recorte pro S puro.
+  //
+  // Efeito colateral bem-vindo no mobile: com o piso do raio em 16 (era 20),
+  // a profundidade la cai de 27,7% para 21,6% da altura. O recorte era
+  // proporcionalmente MAIS fundo na tela pequena que na grande; agora os dois
+  // regimes ficam perto.
+  const topRadius = clamp(height * 0.044, 16, 22);
+  const topNotchWall = clamp(height * 0.063, 12, 36);
   const topNotchHeight = topRadius * 2 + topNotchWall;
   // Os cantos da moldura deixam de ser herdados do recorte. A expressao da
   // os MESMOS valores de antes em qualquer altura — `min(28, clamp(h*0.12,
   // 40, 56)/2)` reduz a `clamp(h*0.06, 20, 28)` — entao a moldura fica pixel
-  // a pixel como estava e so o recorte cresce.
+  // a pixel como estava e so o recorte muda.
   const cornerRadius = clamp(height * 0.06, 20, 28);
 
   const mobile = width < 480;
