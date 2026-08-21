@@ -347,6 +347,28 @@ html.lenis body {
     }
   }
 
+  /* Tela BAIXA: o respiro vertical encolhe pra secao nao passar de uma tela.
+     Depois das regras acima de proposito — mesma especificidade, quem vem
+     por ultimo vence.
+
+     Por que existe: a faixa mede no minimo uma tela e centraliza o conteudo,
+     entao o padding so soma altura quando conteudo + padding passa de 100svh.
+     Nas telas altas ele nunca chega la e este bloco nao muda nada visivel.
+     Em 1366x768 chegava: a oferta media 831px (703 de conteudo + 128 de
+     padding) contra 768 de tela, e vazava 63px. Com 2rem ela fecha em 767.
+
+     O limite NAO resolve todo caso, e nao ha padding que resolva: em 1024x768
+     o conteudo da oferta mede 809px sozinho, 41px a mais que a tela inteira.
+     Ali a secao passa de uma tela por conteudo, nao por espaco — encolher o
+     respiro so aperta o texto sem fazer caber. Mesma coisa no mobile, onde
+     caminhos pede 1,58 tela e oferta 1,77. Cortar isso e decisao de conteudo,
+     nao de CSS. */
+  @media (max-height: 860px) {
+    .site-section {
+      padding-block: 2rem;
+    }
+  }
+
   /* ---- Pares da oferta ------------------------------------------------
      A mesma regra pinta os dois lados: o item da oferta e a duvida
      correspondente carregam o mesmo data-ativo, entao acendem juntos sem

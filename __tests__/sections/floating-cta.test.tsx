@@ -2,9 +2,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { FloatingCta } from '@/components/sections/FloatingCta';
 import { content } from '@/lib/content';
+import { site } from '@/lib/site';
 
 let offer: HTMLElement;
 let offerTop: number;
+
+// Pelo href, nunca por `querySelector('a')`: desde que os atalhos de secao
+// entraram na barra, o PRIMEIRO link do DOM e um atalho, nao o checkout. E
+// tambem nao da pra usar getByRole aqui — metade destes testes olha a barra
+// escondida, e aria-hidden a tira da arvore de acessibilidade.
+const checkoutLink = (container: HTMLElement) =>
+  container.querySelector<HTMLAnchorElement>(`a[href="${content.checkoutUrl}"]`);
+
+const navLinks = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLAnchorElement>('nav a'));
 
 function setScrollY(value: number) {
   Object.defineProperty(window, 'scrollY', {
@@ -59,27 +70,55 @@ describe('FloatingCta', () => {
     // Inscrever", e o preco ocupa o lugar do texto de urgencia.
     expect(screen.getAllByText(content.offer.priceNow)).toHaveLength(2);
     expect(screen.getByText(content.offer.installments)).toBeInTheDocument();
-    expect(container.querySelector('a')).toHaveAttribute(
-      'href',
-      content.checkoutUrl,
+    expect(checkoutLink(container)).not.toBeNull();
+  });
+
+  // A barra e a UNICA navegacao do meio da pagina em diante: o header some
+  // quando o hero sai da tela. Se os atalhos saírem daqui, quem desceu fica
+  // sem como voltar a uma secao a nao ser rolando ate o topo.
+  it('carries the same section shortcuts as the header, in page order', () => {
+    const { container } = render(<FloatingCta />);
+    const links = navLinks(container);
+
+    expect(links.map((a) => a.textContent)).toEqual(site.nav.map((i) => i.label));
+    expect(links.map((a) => a.getAttribute('href'))).toEqual(
+      site.nav.map((i) => i.href),
     );
+
+    // O checkout fica FORA do <nav>. Dentro, um leitor de tela o anunciaria
+    // como mais uma secao da pagina — e ele e o unico link que sai dela.
+    const nav = container.querySelector('nav')!;
+    expect(nav.contains(checkoutLink(container))).toBe(false);
+
+    // Landmark com nome proprio: existe uma janela em que a barra e o header
+    // estao os dois na tela, e dois <nav> com o mesmo nome deixam quem usa
+    // leitor de tela sem saber a qual esta indo.
+    expect(nav.getAttribute('aria-label')).toBe('Atalhos para as seções');
+    expect(nav.getAttribute('aria-label')).not.toBe('Seções da página');
   });
 
   it('stays hidden before 70% of the first viewport and leaves the tab order', () => {
     setScrollY(699);
     const { container } = render(<FloatingCta />);
     const root = container.querySelector('[data-floating-cta]');
-    const link = container.querySelector('a');
+    const link = checkoutLink(container);
 
     expect(root).toHaveAttribute('data-visible', 'false');
     expect(root).toHaveAttribute('aria-hidden', 'true');
     expect(link).toHaveAttribute('tabindex', '-1');
+
+    // Os atalhos saem junto. Eles continuam no DOM com a barra invisivel, e
+    // sem isto quem navega por teclado tabularia por cinco links que nao
+    // estao na tela — o mesmo motivo do link de checkout ali em cima.
+    for (const a of navLinks(container)) {
+      expect(a).toHaveAttribute('tabindex', '-1');
+    }
   });
 
   it('follows whoever is not looking at the offer, before it and after it', () => {
     const { container } = render(<FloatingCta />);
     const root = container.querySelector('[data-floating-cta]');
-    const link = container.querySelector('a');
+    const link = checkoutLink(container);
 
     // Antes de chegar na oferta: a barra carrega o preco e o botao.
     setScrollY(700);
