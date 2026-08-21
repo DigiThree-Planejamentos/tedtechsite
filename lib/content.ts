@@ -312,10 +312,80 @@ export const content = {
   // continua. Repete a promessa nova do produto como ultimo argumento
   // antes do CTA final.
   fechamento: {
-    label: 'Comece agora',
-    title: 'Do primeiro parafuso ao primeiro cliente',
-    sub: 'Seis módulos pra aprender do zero — e, no final, o Ted junto de você pra transformar o que aprendeu em renda.',
-    cta: 'Quero aprender',
+    // Nao usar "comece"/"agora" aqui: o titulo abaixo ja abre com "Agora",
+    // e os dois a dois centimetros de distancia batiam na mesma tecla.
+    // "A virada" nomeia o que a secao faz em vez de competir com ele.
+    label: 'A virada',
+    // Fecha o arco do hero: a pagina abre com "Chega de pagar tecnico" e
+    // termina dizendo que o tecnico agora e o leitor. Evita de proposito a
+    // formula "de X ao Y" e a ponta "primeiro cliente", que ja estao no
+    // titulo da Evolucao — dois titulos iguais em estrutura e destino, a uma
+    // secao de distancia, liam como repeticao.
+    title: 'Agora o técnico é você',
+    // O titulo faz uma afirmacao de identidade; o subtitulo existe pra
+    // torna-la crivel. Nao repete "seis modulos", que a pagina ja disse tres
+    // vezes — pega a virada do dinheiro, que e o arco do hero fechando.
+    //
+    // A ajuda do Ted saiu daqui e virou bloco proprio (destaque, abaixo):
+    // como segunda frase de um paragrafo ela passava batida, e e ela que o
+    // cliente quer usar pra vender.
+    sub: 'O mesmo problema que te custava dinheiro passa a render.',
+    // PRECO DE SERVICO, NAO RENDA MENSAL — a distincao e deliberada e nao
+    // deve ser desfeita. "Uma formatacao custa R$ 100 a 200" e preco de
+    // mercado, fato verificavel. "Voce vai ganhar R$ X por mes" seria
+    // promessa sobre o resultado futuro do comprador, e publicidade vincula
+    // pelo CDC. A pesquisa (2026) nao achou media mensal confiavel para
+    // autonomo: as fontes so publicam preco por servico, e converter em
+    // "por mes" exigiria arbitrar um volume de atendimentos.
+    //
+    // Os tres servicos abaixo saem dos modulos 03 e 04, entao a pagina
+    // ensina o que precifica. Mexer aqui pede rever a nota logo abaixo.
+    // Titulo do card da esquerda. "Se cobra", impessoal, nao "voce cobra":
+    // mantem a tabela no terreno de preco de mercado em vez de virar
+    // projecao do que o leitor vai ganhar.
+    precosTitulo: 'Quanto se cobra por serviço',
+    precos: [
+      { servico: 'Formatação com instalação do Windows', valor: 'R$ 100 a R$ 200' },
+      { servico: 'Remoção de vírus e otimização', valor: 'R$ 150 a R$ 300' },
+      { servico: 'Troca de SSD com migração de dados', valor: 'R$ 200 a R$ 450' },
+    ],
+    // A nota nao e enfeite: e ela que mantem os numeros no terreno de "preco
+    // praticado" em vez de "quanto voce vai ganhar".
+    precosNota:
+      'Faixas médias praticadas no mercado brasileiro em 2026. Quanto você cobra depende da sua região, do serviço e da sua experiência.',
+    // O DIFERENCIAL DO PRODUTO, em bloco proprio logo antes do botao — e o
+    // argumento que o cliente quer usar pra vender, entao nao pode viver
+    // como segunda frase de um paragrafo.
+    //
+    // ATENCAO ao mexer: esta e a unica promessa da pagina cujo FORMATO ainda
+    // nao esta definido (nao diz se e aula, mentoria, grupo ou material). As
+    // outras se ancoram num modulo numerado. Publicidade vincula pelo CDC, e
+    // dar destaque aumenta a exposicao — por isso o texto fala do QUE o Ted
+    // ajuda a fazer, sem prometer formato, prazo ou resultado. Quando o
+    // cliente definir o formato, nomear aqui.
+    destaqueLabel: 'Você não começa sozinho',
+    destaque:
+      'No final do curso, o Ted te ajuda a dar os primeiros passos como técnico:',
+    // Os quatro itens saem do video institucional do hero: o instrutor os
+    // diz com essas palavras. Repetir as MESMAS quatro aqui faz a pagina
+    // confirmar o que o visitante acabou de ouvir, em vez de parafrasear —
+    // e enche a coluna direita, que antes terminava muito antes da tabela
+    // de precos ao lado.
+    //
+    // Cada item nomeia o que se APRENDE A FAZER, nunca um resultado
+    // prometido: "prospectar clientes" e ensino; "voce vai ter clientes"
+    // seria promessa sobre o futuro do comprador. E a mesma linha que
+    // segura os precos no terreno de mercado, pelo mesmo motivo (CDC).
+    destaqueItens: [
+      'Cobrar o valor certo pelo serviço',
+      'Atender bem o cliente',
+      'Prospectar clientes na sua região',
+      'Conseguir as primeiras ordens de serviço',
+    ],
+    // "Quero aprender" aparece em todos os outros CTAs da pagina. Aqui, logo
+    // depois de "agora o tecnico e voce", aprender soa como recuo: a essa
+    // altura o leitor ja foi convencido de que vai saber.
+    cta: 'Quero começar',
   },
 
   // A secao de FAQ separada deixou de existir: as duvidas viraram o card
