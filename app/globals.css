@@ -304,6 +304,30 @@ html.lenis body {
     pointer-events: none;
   }
 
+  /* A base da faixa fica RESERVADA pro recorte. Sem isto o conteudo entra na
+     mesma faixa e o desenho morre — e nao por sobreposicao apenas: o card de
+     modulo e escuro, o recorte tambem, e encostados eles viram um borrao so.
+     Medido antes: sobrava 6px em Modulos, -6 em Caminhos e -24 na Oferta.
+
+     A conta e diferente nos dois regimes da faixa, e por isso encolher card
+     sozinho nao resolvia:
+       secao MAIOR que a tela (oferta em laptop baixo) -> nao ha centralizacao
+         em jogo, a folga e exatamente `padding de baixo - profundidade`.
+         So padding resolve.
+       secao do tamanho da tela -> o conteudo e centralizado, entao encolher
+         card rende METADE, porque a sobra se divide entre topo e base.
+
+     1rem alem da profundidade: e o respiro que faz o recorte ler como forma
+     propria em vez de continuacao do card.
+
+     Seletor composto de proposito (0-2-0): as regras de `padding-block` do
+     .site-section vivem em media queries mais abaixo no arquivo e, com a
+     mesma especificidade, venceriam esta por ordem. */
+  .site-section.site-band--light,
+  .site-section.site-band--dark {
+    padding-bottom: calc(var(--notch-d) + 1rem);
+  }
+
   @media (max-width: 640px) {
     .site-band {
       --notch-w: 180px;
@@ -841,7 +865,13 @@ html.lenis body {
 @media (min-width: 1024px) {
   .module-card {
     flex: 1 1 0%;
-    height: clamp(460px, calc(100svh - 22rem), 545px);
+    /* Piso 415, era 460: e o que paga a faixa reservada pro recorte na base
+       da secao sem a secao passar de uma tela em laptop baixo. Em 1536x695
+       quem mandava era o PISO, nao a conta do meio — a secao fechava com 6px
+       de folga ate o recorte, e o card escuro encostava nele.
+       Cabe: o corpo do card soma 245px de conteudo, entao mesmo em 415 sobram
+       ~170px de area de foto. */
+    height: clamp(415px, calc(100svh - 22rem), 545px);
     cursor: pointer;
     transition: flex 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }

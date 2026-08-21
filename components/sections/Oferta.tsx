@@ -55,7 +55,7 @@ export function Oferta() {
               estao a vista e a barra sai de cena. */}
           <div
             data-offer-anchor
-            className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-4 text-left md:px-6 md:py-5"
+            className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4"
           >
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {o.includesTitle}
@@ -86,7 +86,11 @@ export function Oferta() {
                     onClick={() => alternarPar(i)}
                     aria-expanded={i === ativo}
                     aria-controls={`resposta-${i}`}
-                    className="flex w-full items-start gap-3 rounded-lg py-1.5 pl-3 pr-2 text-left text-sm transition-colors md:text-[15px]"
+                    /* py-1, era py-1.5: sao oito itens, entao cada 2px por
+                       item vira 32px de secao — e e altura que a base precisa
+                       ceder pro recorte. Cortar par nao era opcao: cada linha
+                       daqui e o outro lado de uma duvida do card vizinho. */
+                    className="flex w-full items-start gap-3 rounded-lg py-1 pl-3 pr-2 text-left text-sm transition-colors md:text-[15px]"
                   >
                     <span className="mt-[2px] shrink-0 text-blue" aria-hidden>
                       ✓
@@ -110,7 +114,7 @@ export function Oferta() {
           </div>
 
           {/* ---- Card da direita: as mesmas linhas, como duvida ---- */}
-          <div className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-4 text-left md:px-6 md:py-5">
+          <div className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4">
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {o.doubtsTitle}
             </h3>

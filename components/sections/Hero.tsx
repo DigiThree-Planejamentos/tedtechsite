@@ -10,7 +10,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="site-section site-section--compact site-band site-band--light site-band--full relative overflow-hidden pt-24 sm:pt-28"
+      className="site-section site-section--compact site-band site-band--light site-band--full relative overflow-hidden pt-24"
     >
       {/* O pt-24/28 era do <main>, que reservava espaco para o header
           fixo. Sem o cartao, a faixa do Hero passa a ser a unica
