@@ -166,31 +166,24 @@ export function Modulos() {
               </span>
 
               <div className="module-card__body absolute inset-x-0 bottom-0 z-10 px-5 pb-5 md:px-6 md:pb-6">
-                {/* Paleta invertida: o overlay virou branco, entao todo texto
-                    daqui pra baixo e escuro. O azul do contador saiu do
-                    #7fd0f5 (claro, feito pra fundo escuro, invisivel no
-                    branco) pro #0f6fb8, o blue-2 da marca. */}
-                <div className="font-mono text-[10px] font-bold tracking-[0.18em] text-[#0f6fb8] md:text-[11px]">
+                <div className="font-mono text-[10px] font-bold tracking-[0.18em] text-[#7fd0f5] md:text-[11px]">
                   {module.n} — {totalModules}
                 </div>
 
                 <h3
                   id={`module-${module.n}`}
-                  className="mt-2 text-lg font-bold leading-tight text-[#07111f] md:text-xl"
+                  className="mt-2 text-lg font-bold leading-tight text-white md:text-xl"
                 >
                   {module.title}
                 </h3>
 
-                <p className="mt-2 text-[11px] leading-relaxed text-[#3b4654] md:text-xs">
+                <p className="mt-2 text-[11px] leading-relaxed text-slate-200/85 md:text-xs">
                   {module.desc}
                 </p>
 
-                {/* O botao inverte junto, senao some: branco sobre branco.
-                    Escuro sobre o card claro tambem devolve o contraste que
-                    ele tinha como unica peca clara sobre o card escuro. */}
                 <a
                   href={content.checkoutUrl}
-                  className="module-card__cta mt-4 flex min-h-11 items-center justify-center gap-2 rounded-full bg-[#07111f] px-5 py-3 text-xs font-bold text-white transition-[background,color,transform] duration-200 hover:bg-[#1b2c44] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#07111f] active:scale-[0.98] md:text-sm"
+                  className="module-card__cta mt-4 flex min-h-11 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-xs font-bold text-[#07111f] transition-[background,color,transform] duration-200 hover:bg-[#dff5ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white active:scale-[0.98] md:text-sm"
                 >
                   Quero aprender
                   <span aria-hidden>→</span>

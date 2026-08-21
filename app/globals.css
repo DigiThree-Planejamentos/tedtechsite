@@ -945,17 +945,10 @@ html.lenis body {
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.92);
   }
 
-  /* A borda NAO e enfeite: e o que devolve a silhueta que a inversao de
-     cores tirou. Com a base do card branca sobre a faixa clara (#f7fbff) a
-     emenda media 1.02:1 — invisivel — e os cards derretiam na pagina da
-     metade pra baixo. Azul da marca por pedido do cliente, que reverteu
-     aqui a decisao antiga de card sem borda (ver o teste correspondente em
-     modulos.test). */
   .module-card {
-    border: 1px solid #1e9edb;
     height: 540px;
-    background: linear-gradient(165deg, #ffffff 0%, #f2f7fc 48%, #e6edf6 100%);
-    color: #07111f;
+    background: linear-gradient(165deg, #20344c 0%, #14263c 48%, #0a1525 100%);
+    color: #ffffff;
   }
 
   /* A foto entra levemente ampliada e assenta ao ativar. */
@@ -973,30 +966,18 @@ html.lenis body {
     display: none;
   }
 
-  /* Overlay BRANCO desde a inversao de cores, e ENCURTADO por pedido do
-     cliente: a rampa que ia de 26% a 68% da altura agora vai de 40% a 66%,
-     entao a foto ganhou de volta cerca de um sexto do card.
-     O 57% NAO e um numero escolhido: e onde o corpo do texto comeca (177px
-     de corpo num card de 415px = os 42.6% de baixo). O branco tem que estar
-     praticamente opaco exatamente ali, senao o contador e o titulo caem em
-     cima da foto. Esse e o piso — encurtar mais exige subir o corpo antes.
-     A rampa tambem ficou mais curta do que o degrade escuro original era, e
-     de proposito: branco por cima de foto escura le como NEBLINA muito antes
-     de escuro por cima de foto clara comecar a incomodar, e metade das fotos
-     do curso sao escuras (teclado, gabinete, cabos). Encurtar reduz
-     justamente a zona nebulosa. */
   .module-card__shade {
     background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.04) 40%,
-        rgba(255, 255, 255, 0.55) 50%,
-        rgba(255, 255, 255, 0.93) 57%,
-        rgba(255, 255, 255, 1) 66%);
+        rgba(3, 10, 24, 0.02) 0%,
+        rgba(3, 10, 24, 0.08) 26%,
+        rgba(7, 17, 31, 0.78) 44%,
+        rgba(7, 17, 31, 0.96) 68%,
+        rgba(7, 17, 31, 0.99) 100%);
   }
 
   .module-card__cta {
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
       0 10px 26px rgba(3, 10, 24, 0.22);
   }
 }
@@ -1033,24 +1014,17 @@ html.lenis body {
     flex: 2.8 1 0%;
   }
 
-  /* Veu sobre o card colapsado. Nao e enfeite: desde a inversao o titulo
-     vertical e ESCURO e cruza a metade do card, onde o shade ainda deixa a
-     foto aparecer — e tres das seis fotos sao escuras justo ali (teclado,
-     gabinete, cabos). Sem o veu o titulo some.
-     Subiu de 0.5 para 0.62 junto com a inversao, e nao por gosto: clarear
-     foto escura o bastante pra segurar texto preto custa mais opacidade do
-     que escurecer foto clara pra segurar texto branco. Medido em 1536x695
-     com 0.62 — pior dos seis: modulo 04 (cabos) a 7.33:1; melhor: modulo 01
-     (ceu) a 13.30:1. O minimo AA e 4.5:1, entao ha folga pra abaixar se o
-     veu pesar demais no visual.
-     De quebra, o card ativo "acende" ao expandir. */
+  /* Veu sobre o card colapsado. Nao e enfeite: o titulo vertical e branco
+     e fica na metade do card, onde o degrade do shade tem so 0.39 de
+     opacidade — e tres das seis fotos sao claras ali. Sem o veu o titulo
+     some. De quebra, o card ativo "acende" ao expandir. */
   .module-card::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 5;
     pointer-events: none;
-    background: rgba(255, 255, 255, 0.62);
+    background: rgba(7, 17, 31, 0.5);
     transition: opacity 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }
 
@@ -1071,7 +1045,7 @@ html.lenis body {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: #07111f;
+    color: #ffffff;
     pointer-events: none;
     transition: opacity 300ms ease;
   }
