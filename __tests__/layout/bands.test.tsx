@@ -3,9 +3,9 @@ import { render } from '@testing-library/react';
 import Home from '@/app/page';
 
 // O ritmo da pagina, na ordem do DOM. Cresce nas tarefas 2 e 3 ate
-// cobrir as sete secoes. `id` vazio = a secao nao tem id — hoje duas
-// entradas sao assim (Evolucao e Fechamento), distinguidas pela posicao
-// no array.
+// cobrir as sete secoes. `id` vazio = a secao nao tem id — hoje so o
+// Fechamento e assim. A Evolucao ganhou id quando o header passou a ter
+// um botao por secao: o botao precisa de uma ancora pra onde ir.
 // Hoje as sete sao de tela cheia. O campo `full` continua existindo para
 // que uma futura excecao seja declarada aqui, e nao passe por esquecimento.
 // Claro e escuro se alternam do inicio ao fim. As faixas escuras sao
@@ -19,7 +19,7 @@ export const RITMO = [
   // ScrollTrigger. O acordeao poe os seis cards numa tela so, o pin saiu,
   // e a secao virou uma faixa normal como as outras.
   { id: 'modulos', tom: 'light', full: true },
-  { id: '', tom: 'dark', full: true },
+  { id: 'evolucao', tom: 'dark', full: true },
   { id: 'caminhos', tom: 'light', full: true },
   // O FAQ deixou de ser secao: virou o card direito da oferta.
   { id: 'oferta', tom: 'dark', full: true },

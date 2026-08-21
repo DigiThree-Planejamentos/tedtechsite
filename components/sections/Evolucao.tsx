@@ -7,8 +7,14 @@ import { content } from '@/lib/content';
 
 export function Evolucao() {
   const e = content.evolucao;
+  // id + scroll-mt-24 como as outras secoes navegaveis: o header linka pra ca
+  // (site.nav), e sem a margem de rolagem o titulo pararia embaixo da barra
+  // fixa. O 24 e o mesmo das irmas, nao um numero novo.
   return (
-    <section className="site-section site-band site-band--dark site-band--full">
+    <section
+      id="evolucao"
+      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
+    >
       <div className="mx-auto grid w-full max-w-content items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center">
           <GaugeRing>
