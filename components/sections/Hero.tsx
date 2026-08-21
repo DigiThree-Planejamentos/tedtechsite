@@ -10,7 +10,7 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="site-section site-section--compact site-band site-band--light site-band--full relative overflow-hidden pt-24 sm:pt-28"
+      className="site-section site-section--compact site-band site-band--light site-band--full relative overflow-hidden pt-24"
     >
       {/* O pt-24/28 era do <main>, que reservava espaco para o header
           fixo. Sem o cartao, a faixa do Hero passa a ser a unica
@@ -29,7 +29,22 @@ export function Hero() {
             sendo `transform`, que funciona mesmo sem espaco livre. */}
         <div className="flex -translate-y-4 flex-col justify-between text-left md:-translate-y-6 lg:-translate-y-10">
           <div>
-          <h1 className="max-w-3xl translate-y-4 font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)] md:translate-y-5 lg:translate-y-6">
+          {/* O titulo sobe 40px; paragrafo e CTA ficam onde estavam, porque os
+              translate deles nao mudaram. Original +16/+20/+24 pra baixo ->
+              -24/-20/-16, em duas rodadas (16px e depois 24px). Os valores
+              divergem por breakpoint DE PROPOSITO, pra subida liquida ser os
+              mesmos 40px em qualquer largura em vez de variar junto com o
+              tamanho da fonte.
+
+              CUIDADO AO SUBIR MAIS: o teto e o header, e ele ja esta perto.
+              Medido em 1536x695, a barra termina em 82px e a caixa do titulo
+              comeca em 87px — restam 5px. Parece pior do que e, porque a
+              caixa comeca bem acima da tinta: o leading 1.25 desta linha poe
+              ~39px de meia-entrelinha antes do desenho do "C", entao o ar
+              VISIVEL ainda e de uns 44px. Ou seja, da pra descer o numero
+              mais um pouco, mas nao muito — e a partir daqui quem manda e o
+              print, nao a conta. */}
+          <h1 className="max-w-3xl -translate-y-6 font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)] md:-translate-y-5 lg:-translate-y-4">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
                   accessible name "Chega de pagar técnico" in one piece. */}
@@ -53,7 +68,15 @@ export function Hero() {
             </SplitReveal>
           </h1>
 
-          <p className="mt-5 max-w-xl translate-x-2 translate-y-6 text-sm leading-relaxed text-[color:var(--band-fg-strong)] sm:text-base md:translate-x-4 lg:translate-x-4">
+          {/* Sobe os MESMOS 40px do titulo (translate-y-6 -> -translate-y-4,
+              ou seja +24 -> -16). O numero nao e escolhido pelo gosto: e o
+              que devolve o vao original de 19px entre titulo e paragrafo, que
+              tinha esticado pra 59px enquanto so o titulo subia. Os dois
+              voltam a andar como um bloco so, agora 40px mais alto.
+
+              Sem variante por breakpoint porque o translate original tambem
+              nao tinha — aqui o valor ja era uniforme, diferente do titulo. */}
+          <p className="mt-5 max-w-xl -translate-y-4 translate-x-2 text-sm leading-relaxed text-[color:var(--band-fg-strong)] sm:text-base md:translate-x-4 lg:translate-x-4">
             <span className="block">Pare de gastar com técnico e comece a ganhar</span>
             <span className="block">como um. Aprenda manutenção do zero, resolva</span>
             <span className="block">seus próprios problemas e use essa habilidade</span>

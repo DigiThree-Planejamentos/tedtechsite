@@ -148,10 +148,28 @@ html.lenis body {
      Cada secao pinta o proprio fundo e define a cor do texto que seus
      filhos herdam. Antes isso vinha do .site-card, que envolvia a
      pagina inteira; sem essa fonte de verdade o site perde a cor. */
+  /* A PINTURA DA FAIXA MORA NUMA CAMADA PROPRIA, nao na secao.
+     Parece rodeio e nao e: o recorte da base precisa abrir um buraco no
+     fundo, e mascara aplicada na secao levaria o CONTEUDO junto. Nao ha
+     folga pra isso — em 1024x768 a oferta fecha com ~0px sobrando embaixo,
+     entao o texto seria cortado. Com o fundo numa camada atras, a mascara
+     morde so a tinta.
+
+     z-index -1 e nao 0: a secao tem position:relative mas nao cria contexto
+     de empilhamento, entao esta camada cai no contexto do <main> (que tem
+     `relative z-10`), atras de todo o conteudo e ainda por cima do body. */
   .site-band {
     position: relative;
-    background: var(--band-bg);
     color: var(--band-fg);
+  }
+
+  .site-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--band-bg);
+    pointer-events: none;
   }
 
   /* As faixas claras sao folhas solidas; as escuras sao janelas. */
@@ -182,14 +200,24 @@ html.lenis body {
     --band-rule: rgba(255, 255, 255, 0.1);
   }
 
-  /* Folha branca PURA para a secao de fechamento: o mesmo #ffffff do
-     rodape, de proposito — os dois emendam sem linha visivel e o rodape
-     le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
-     encostado no rodape branco, a diferenca aparece como mancha azulada.
-     O box-shadow no fim da regra supoe que o que vier depois desta faixa
-     tambem seja branco (hoje: o rodape); uma segunda faixa branca no meio
-     da pagina, sobre uma secao escura, mostraria uma linha branca de 1px
-     sobrando por baixo dela. */
+  /* Folha branca PURA para a secao de fechamento. O motivo mudou duas vezes,
+     e o valor sobreviveu as duas:
+       1. Nasceu como o #ffffff do rodape, pros dois emendarem sem linha.
+       2. O rodape virou escuro e essa emenda deixou de existir.
+       3. O fechamento subiu pra ANTES da oferta e passou a ter a faixa clara
+          de Caminhos (#f7fbff) em cima. E aqui que o branco puro volta a ter
+          funcao: com --light as duas seriam a MESMA superficie, duas telas
+          cheias do mesmo tom sem nenhuma quebra. O branco levanta a virada
+          um ponto — o lugar mais claro da pagina, logo antes do mergulho no
+          escuro da oferta.
+     A diferenca entre os dois e sutil de proposito: e um degrau, nao uma
+     emenda, e por isso Caminhos nao leva recorte (ver .site-band--no-notch).
+
+     HISTORICO: esta regra tinha um `box-shadow: 0 1px 0 0 #ffffff` no fim,
+     pra cobrir um fio cinza de antialiasing na emenda com o rodape, que era
+     branco. O rodape virou escuro; aquele 1px branco passaria a desenhar uma
+     linha clara sobre o escuro. O proprio comentario antigo avisava que o
+     truque supunha branco embaixo — saiu junto com a suposicao. */
   .site-band--white {
     --band-bg: #ffffff;
     --band-solid: #ffffff;
@@ -199,13 +227,242 @@ html.lenis body {
     --band-fg-muted: #526071;
     --band-fg-faint: #667284;
     --band-rule: rgba(15, 42, 81, 0.1);
-    /* A fronteira com o rodape cai em coordenada fracionaria (medido:
-       506.875px com devicePixelRatio 1.25). Nao ha vao no layout — o
-       fio cinza e a antialiasing das duas caixas brancas misturando com
-       o fundo escuro do body por baixo. Este 1px de branco logo abaixo
-       cobre a fresta sem mexer no fluxo, que e o que uma margem negativa
-       ou um wrapper branco fariam. */
-    box-shadow: 0 1px 0 0 #ffffff;
+  }
+
+  /* ---- Recorte na base das faixas -------------------------------------
+     Mesmo desenho do recorte inferior do video: uma aba subindo da base,
+     cantos de fora convexos e os de dentro concavos, com raio igual a
+     METADE da profundidade — e essa proporcao que faz os dois arcos se
+     encontrarem sem reta no meio e formarem o S continuo. Trocar a
+     profundidade sem trocar o raio junto desmancha o S.
+
+     Proporcao travada em 5:1 (280x56 no desktop, 180x36 no mobile) pra
+     mascara escalar sem distorcer os arcos.
+
+     O RECORTE MOSTRA A PROXIMA FAIXA, e o mecanismo muda com o tom porque
+     as duas faixas sao coisas diferentes (ver comentarios acima: clara e
+     folha solida, escura e janela):
+
+       faixa clara  -> BURACO de verdade na tinta. Atras dela esta o fundo
+                       escuro do site com os circuitos, que e exatamente o
+                       que a proxima faixa mostra.
+       faixa escura -> nao ha tinta pra furar. O recorte e uma ABA CLARA
+                       pintada, subindo da base — o mesmo que a proxima
+                       faixa mostraria.
+
+     Lado por tom, como pedido: clara puxa pra ESQUERDA, escura pra DIREITA.
+
+     QUEM FICA DE FORA: toda faixa cuja proxima superficie e a MESMA que a
+     dela. O recorte so existe pra mostrar o que vem depois; quando o que vem
+     depois e a propria superficie, nao ha o que mostrar nem emenda pra
+     marcar — ver `.site-band--no-notch` mais abaixo, que e onde essa regra
+     mora. O rodape sempre foi um caso dela (nao ha "depois" nenhum, ele e o
+     fim da pagina), so que escrito como excecao avulsa; virou regra geral
+     quando a inversao fechamento/oferta criou outros dois casos. */
+  .site-band {
+    --notch-w: 280px;
+    --notch-d: 56px;
+    --notch-inset: 12%;
+    /* A forma tem SAIA: o viewBox mede 70, sendo 56 o S do recorte (0..56) e
+       14 uma reta que continua abaixo dele (56..70). A saia nunca aparece —
+       existe pra que o buraco se estenda ALEM da folha de tinta, que e
+       metade do conserto do fio de subpixel. A outra metade e o `inset`
+       negativo da folha. Ver o bloco da faixa clara logo abaixo.
+
+       14 = 56/4, e dai os fatores 1.25 e 0.25 nos calc (70 = 56 x 1.25,
+       14 = 56 x 0.25). Proporcionais de proposito: um valor fixo em px
+       quebraria no mobile, onde a profundidade cai pra 36 e a forma
+       continuaria com 70 unidades, esmagando o S. Mexeu na saia, mexa nos
+       tres numeros juntos. */
+    --notch-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 70' preserveAspectRatio='none'%3E%3Cpath d='M 0 70 L 0 56 A 28 28 0 0 0 28 28 A 28 28 0 0 1 56 0 L 224 0 A 28 28 0 0 1 252 28 A 28 28 0 0 0 280 56 L 280 70 Z' fill='%23000'/%3E%3C/svg%3E");
+  }
+
+  /* Faixa clara E branca: buraco. Duas camadas de mascara — a folha inteira
+     menos a forma do recorte — combinadas por exclusao.
+
+     A branca (fechamento) entrou aqui quando o rodape virou escuro; antes,
+     com rodape branco embaixo, o recorte seria branco sobre branco. Hoje ela
+     e o caso mais bem servido pela regra: tem a oferta escura logo abaixo, e
+     o buraco mostra os circuitos exatamente como a oferta os mostra. */
+  .site-band--light::before,
+  .site-band--white::before {
+    /* ---- FIO DE SUBPIXEL NO RECORTE: o conserto sao DUAS coisas ----------
+       Sintoma: um fio claro atravessando o recorte, so em tela de escala
+       fracionaria (Windows a 125%/150%) ou com o scroll parado numa fracao
+       de pixel — e o Lenis produz scroll fracionario o tempo todo, entao dava
+       pra ver rolando ate em DPR 1. Em DPR 1 e scroll inteiro nao aparece, e
+       foi por isso que passou tanto tempo despercebido.
+
+       Causa: quem vaza NAO e a mascara, e a BORDA DE BAIXO DA PROPRIA FOLHA
+       de tinta. Com `inset: 0` ela termina exatamente na emenda; quando essa
+       borda cai no meio de um pixel de dispositivo, a folha pinta uma fracao
+       dele e a mascara por cima nao consegue zerar essa fracao. Medido em
+       DPR 1.5: sobrava 12,8% de #f7fbff, ou seja rgb(36,38,43) contra o
+       rgb(6,8,13) do fundo. FORA do recorte isso e invisivel — ali a linha e
+       so a transicao normal de claro pra escuro. DENTRO dele ela fica entre
+       escuro em cima (o buraco) e escuro embaixo (a proxima faixa), e le como
+       um fio cortando o desenho.
+
+       Conserto, e as duas metades sao necessarias:
+         1. a folha desce 4px ALEM da faixa (este `inset`), tirando a borda
+            fracionaria de cima da emenda;
+         2. o buraco desce ainda mais que ela (a SAIA da forma, 25% da
+            profundidade), garantindo que a borda da folha caia dentro do
+            buraco por larga margem, e nao rente a ele.
+
+       Os 4px sao imperceptiveis: fora do recorte eles so empurram a
+       transicao claro/escuro 4px pra baixo, e continua sendo UMA transicao.
+       Nada do conteudo da secao seguinte fica coberto — ela comeca depois do
+       proprio respiro, dezenas de px abaixo.
+
+       MEDIDO, nao deduzido — pior linha dentro do recorte, hero e oferta:
+         mascara original .............. rgb(35,38,42)   fio visivel
+         so saia ....................... rgb(36,38,43)   nao mudou nada
+         so folha -1px ................. limpo no hero, rgb(22,23,28) na oferta
+         so folha -2px ................. rgb(68,69,73)   pior
+         translateZ(0) na camada ....... limpo em 1.5, rgb(52,54,58) em 1.25
+         SAIA + folha -4px ............. rgb(6,8,13) nos quatro casos
+       Cada peca sozinha falha em pelo menos um DPR; so a combinacao fecha.
+       Se for mexer aqui, meça de novo nos dois DPR e nas duas emendas — o
+       artefato muda de lugar conforme o alinhamento e engana facil. */
+    inset: 0 0 -4px 0;
+    -webkit-mask-image: linear-gradient(#000 0 0), var(--notch-shape);
+    mask-image: linear-gradient(#000 0 0), var(--notch-shape);
+    /* 1.25x a profundidade porque a forma leva a saia junto (56 de S + 14 de
+       saia = 70). O S continua medindo exatamente --notch-d; o excedente e a
+       saia, pendurada abaixo da caixa pelo mask-position. */
+    -webkit-mask-size: 100% 100%, var(--notch-w) calc(var(--notch-d) * 1.25);
+    mask-size: 100% 100%, var(--notch-w) calc(var(--notch-d) * 1.25);
+    /* Porcentagem, NAO `left 12% bottom`: a forma de tres valores nao e
+       aceita em mask-position, a declaracao inteira cai, e a mascara volta
+       pro default 0% 0% — a forma some no canto de cima, atras do header, e
+       parece que o recorte nao existe. Custou uma rodada de depuracao.
+       Em mask-position, 12% significa 12% do espaco que sobra (largura da
+       secao menos a da forma), e 100% no eixo Y encosta na base.
+
+       O deslocamento de +25% da profundidade e o que PENDURA a saia abaixo
+       da caixa — a segunda metade do conserto do fio de subpixel explicado no
+       `inset` acima. Sozinho ele nao resolve nada (medido: rgb(36,38,43),
+       identico a mascara original); so funciona junto com a folha descendo
+       alem da emenda.
+
+       ATENCAO ao editar: se o calc for recusado, a declaracao inteira cai e o
+       recorte some pro canto de cima, igual ao bug de tres valores acima.
+       Conferir o computed style, e nao so a aparencia em DPR 1. */
+    -webkit-mask-position: 0 0, var(--notch-inset) calc(100% + var(--notch-d) * 0.25);
+    mask-position: 0 0, var(--notch-inset) calc(100% + var(--notch-d) * 0.25);
+    -webkit-mask-repeat: no-repeat, no-repeat;
+    mask-repeat: no-repeat, no-repeat;
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Faixa escura: aba pintada. O default #f7fbff serve pra faixa escura
+     seguida de uma CLARA, que e o caso das duas que sobraram (dores e
+     evolucao).
+
+     `--notch-fill` e a valvula pro caso em que a proxima superficie clara
+     nao e o #f7fbff. Hoje ninguem a usa: a oferta a carregava enquanto tinha
+     o fechamento BRANCO PURO embaixo, e a inversao pos o fechamento acima
+     dela. A valvula fica porque o caso volta ao primeiro reordenamento que
+     puser uma escura em cima da branca — com a aba em #f7fbff encostada no
+     #ffffff, a diferenca le como mancha azulada (mesmo motivo documentado na
+     regra da faixa branca). bands.test guarda os dois lados: exige o fill
+     quando a vizinhanca pede, e proibe quando nao pede. */
+  .site-band--dark::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: var(--notch-inset);
+    z-index: -1;
+    width: var(--notch-w);
+    height: var(--notch-d);
+    background: var(--notch-fill, #f7fbff);
+    -webkit-mask-image: var(--notch-shape);
+    mask-image: var(--notch-shape);
+    /* A aba NAO sofre do fio de subpixel que assombra a faixa clara: a cor
+       dela e a mesma da proxima superficie, entao uma borda fracionaria aqui
+       mistura claro com claro e nao aparece. Medido em DPR 1.5: limpo.
+
+       Mas ela usa a MESMA forma, que carrega a saia de 14 unidades. Dai o
+       125% com ancoragem no topo (mask-position fica no default 0 0): o S
+       ocupa exatamente os --notch-d px do elemento e a saia cai fora dele.
+       `100% 100%` esmagaria as 70 unidades nos 56px da aba — o S encolheria
+       pra ~45px e a saia viraria uma tarja reta na base. Se um dia a saia
+       sair da forma, este 1.25 volta a ser 100%. */
+    -webkit-mask-size: 100% calc(100% * 1.25);
+    mask-size: 100% calc(100% * 1.25);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  /* A base da faixa fica RESERVADA pro recorte. Sem isto o conteudo entra na
+     mesma faixa e o desenho morre — e nao por sobreposicao apenas: o card de
+     modulo e escuro, o recorte tambem, e encostados eles viram um borrao so.
+     Medido antes: sobrava 6px em Modulos, -6 em Caminhos e -24 na Oferta.
+
+     A conta e diferente nos dois regimes da faixa, e por isso encolher card
+     sozinho nao resolvia:
+       secao MAIOR que a tela (oferta em laptop baixo) -> nao ha centralizacao
+         em jogo, a folga e exatamente `padding de baixo - profundidade`.
+         So padding resolve.
+       secao do tamanho da tela -> o conteudo e centralizado, entao encolher
+         card rende METADE, porque a sobra se divide entre topo e base.
+
+     1rem alem da profundidade: e o respiro que faz o recorte ler como forma
+     propria em vez de continuacao do card.
+
+     Seletor composto de proposito (0-2-0, e 0-3-0 com o :not): as regras de
+     `padding-block` do .site-section vivem em media queries mais abaixo no
+     arquivo e, com a mesma especificidade, venceriam esta por ordem.
+
+     Sem recorte, sem reserva: quem carrega --no-notch nao tem o que abrigar
+     na base e volta ao respiro normal da .site-section. Nao e so limpeza —
+     e altura devolvida onde ela e escassa. Em tela baixa a reserva vale 72px
+     contra os 32px do padding normal, e a oferta, que ja media 1,15 tela,
+     recupera 40px deles. */
+  .site-section.site-band--light:not(.site-band--no-notch),
+  .site-section.site-band--dark:not(.site-band--no-notch),
+  .site-section.site-band--white:not(.site-band--no-notch) {
+    padding-bottom: calc(var(--notch-d) + 1rem);
+  }
+
+  /* FAIXA SEM RECORTE: a proxima superficie e a mesma que a dela.
+     O recorte mostra o que vem depois; quando o que vem depois e o mesmo
+     tom, ele nao mostra nada — no melhor caso e invisivel, no pior mente,
+     como a aba clara que a oferta pintaria apontando pro rodape escuro.
+
+     Os tres casos de hoje, todos criados ou herdados pela inversao
+     fechamento/oferta:
+       caminhos -> fechamento   claro sobre claro (#f7fbff -> #ffffff)
+       oferta   -> rodape       escuro sobre escuro (os dois transparentes)
+       rodape   -> nada         e o fim da pagina ("menos no rodape", pedido
+                                do cliente desde o comeco)
+
+     Mata os DOIS mecanismos porque a classe nao sabe de que tom e a faixa:
+     a aba pintada da escura (::after) e a mascara de buraco da clara/branca
+     (::before). Cuidado ao mexer: o ::before tambem e quem PINTA a faixa —
+     aqui so a mascara sai, o fundo continua. */
+  .site-band--no-notch::after {
+    content: none;
+  }
+
+  /* Atalho `mask`, nao `mask-image`: o atalho zera TODOS os longhands de
+     mascara de uma vez. Zerar so a imagem deixaria pra tras o
+     `mask-composite: exclude` da regra de cima, apontando pra camadas que
+     nao existem mais — funciona hoje, e e o tipo de resto que quebra na
+     proxima mudanca de mascara. */
+  .site-band--no-notch::before {
+    -webkit-mask: none;
+    mask: none;
+  }
+
+  @media (max-width: 640px) {
+    .site-band {
+      --notch-w: 180px;
+      --notch-d: 36px;
+    }
   }
 
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
@@ -290,12 +547,27 @@ html.lenis body {
       0 24px 70px rgba(15, 42, 81, 0.3);
   }
 
-  .site-offer-panel {
+  /* Cartao branco GRANDE dentro de faixa escura. Chamava-se
+     .site-offer-panel enquanto so a oferta usava; o nome neutro veio quando a
+     troca de fundos passou o tratamento pra virada — a oferta virou faixa
+     branca e perdeu a superficie, e quem herdou os cartoes foi o fechamento.
+
+     A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
+     esses tokens valem tons CLAROS, entao um fundo branco sem virar os tokens
+     deixaria texto claro sobre branco, ilegivel.
+
+     `--band-rule` entra pelo mesmo motivo, e foi lacuna real: na oferta
+     nenhum filete usava o token, entao ninguem sentiu falta. A tabela de
+     precos da virada usa (`border-[color:var(--band-rule)]`), e sem virar
+     este token as linhas herdariam o branco a 10% da faixa escura —
+     brancas sobre branco, invisiveis. */
+  .site-light-panel {
     --band-fg: #07111f;
     --band-fg-strong: #050914;
     --band-fg-body: #3b4654;
     --band-fg-muted: #526071;
     --band-fg-faint: #667284;
+    --band-rule: rgba(15, 42, 81, 0.1);
     border: 1px solid rgba(30, 158, 219, 0.25);
     background: #ffffff;
     color: var(--band-fg);
@@ -310,8 +582,8 @@ html.lenis body {
      A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
      esses tokens valem tons CLAROS, entao um fundo branco sem virar os
      tokens deixaria texto claro sobre branco, ilegivel. Mesma mecanica da
-     .site-offer-panel, com sombra mais discreta por serem blocos pequenos
-     e repetidos. A borda esquerda azul fica por conta do utilitario. */
+     .site-light-panel, com sombra mais discreta e sem borda por serem blocos
+     pequenos e repetidos. A borda esquerda azul fica por conta do utilitario. */
   .site-quote-panel {
     --band-fg: #07111f;
     --band-fg-strong: #050914;
@@ -454,7 +726,7 @@ html.lenis body {
 
   /* ---- Acordeao de modulos -------------------------------------------
      Layout e animacao portados do hero do digithree.com.br: os cards
-     dividem a largura por flex-grow e o ativo cresce de 1 para 3.6 em
+     dividem a largura por flex-grow e o ativo cresce de 1 para 2.8 em
      700ms. Abaixo de lg nao ha acordeao — vira rolagem horizontal com
      encaixe, e todo card mostra o conteudo inteiro. */
   .module-accordion {
@@ -703,20 +975,6 @@ html.lenis body {
         rgba(7, 17, 31, 0.99) 100%);
   }
 
-  .module-card__lesson {
-    opacity: 0.86;
-    transform: translate3d(0, 4px, 0);
-    transition:
-      opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: calc(var(--lesson-index) * 45ms);
-  }
-
-  .module-card[data-active='true'] .module-card__lesson {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
   .module-card__cta {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.95),
@@ -738,13 +996,22 @@ html.lenis body {
 @media (min-width: 1024px) {
   .module-card {
     flex: 1 1 0%;
-    height: clamp(460px, calc(100svh - 22rem), 545px);
+    /* Piso 415, era 460: e o que paga a faixa reservada pro recorte na base
+       da secao sem a secao passar de uma tela em laptop baixo. Em 1536x695
+       quem mandava era o PISO, nao a conta do meio — a secao fechava com 6px
+       de folga ate o recorte, e o card escuro encostava nele.
+       Cabe com folga: sem a lista de topicos o corpo do card mede 177px no
+       pior caso (medido em 1536x695, descricao de duas linhas — era 245px
+       com os topicos), entao mesmo no piso de 415 sobram 238px de foto.
+       O piso NAO desceu junto quando os topicos sairam, de proposito: quem
+       o fixa e o recorte na base da secao, nao o conteudo do card. */
+    height: clamp(415px, calc(100svh - 22rem), 545px);
     cursor: pointer;
     transition: flex 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }
 
   .module-card[data-active='true'] {
-    flex: 3.6 1 0%;
+    flex: 2.8 1 0%;
   }
 
   /* Veu sobre o card colapsado. Nao e enfeite: o titulo vertical e branco
@@ -958,8 +1225,7 @@ html.lenis body {
   .module-card,
   .module-card__image,
   .module-card__spine,
-  .module-card__body,
-  .module-card__lesson {
+  .module-card__body {
     transition: none;
   }
 

@@ -33,6 +33,7 @@ export function Reveal({
   blur = 8,
   stagger,
   variant = 'arrival',
+  start = REVEAL_START,
   className,
   children,
 }: {
@@ -41,6 +42,22 @@ export function Reveal({
   blur?: number;
   stagger?: number;
   variant?: 'arrival' | 'simple';
+  /**
+   * Ponto de partida do ScrollTrigger. O default (`top 85%`) supoe que o
+   * elemento consiga SUBIR ate 85% da tela — verdade pra qualquer coisa no
+   * meio da pagina, falso pro que fica na base dela.
+   *
+   * O rodape e o caso: sendo a ultima coisa do documento, o topo dele para
+   * de subir quando a rolagem acaba. Em tela de menos de ~773px de altura
+   * ele nunca cruza os 85%, o gatilho nunca dispara e o conteudo fica preso
+   * em opacity 0 pra sempre. Medido: viewport 861 -> topo do bloco em 745
+   * contra gatilho em 732, com a pagina ja no fim. Em 900 passa raspando
+   * (760 contra 765), que e o motivo de isso ter sobrevivido tanto tempo.
+   *
+   * Quem vive na base da pagina deve passar algo que so dependa de ENTRAR
+   * na tela, como `top bottom`.
+   */
+  start?: string;
   className?: string;
   children: ReactNode;
 }) {
@@ -76,7 +93,7 @@ export function Reveal({
         stagger: stagger ?? 0,
         scrollTrigger: {
           trigger: el,
-          start: REVEAL_START,
+          start,
           end: 'bottom top',
           // Sem isso, um scroll rapido (tecla End, arrastar a barra, fling no
           // trackpad) pode pular a janela start->end inteira num so frame.
@@ -89,7 +106,7 @@ export function Reveal({
         },
       });
     },
-    { dependencies: [reduced, variant], scope: ref },
+    { dependencies: [reduced, variant, start], scope: ref },
   );
 
   return createElement(as, { ref, className }, children);

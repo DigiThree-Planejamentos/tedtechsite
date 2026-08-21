@@ -33,6 +33,14 @@ export function FloatingCta() {
       // Vale para os dois lados: quem ainda nao chegou no preco e quem ja
       // passou dele. Antes so aparecia antes, entao quem rolava ate o fim
       // ficava sem preco e sem caminho pro checkout.
+      //
+      // Depois da inversao (a oferta virou a ultima secao) o segundo lado so
+      // acontece em tela estreita, onde a secao mede 1,7 tela e o card sai
+      // por cima antes da pagina acabar. Em desktop nao ha mais "depois":
+      // medido em 1536x695, no fim da rolagem o card ainda esta na tela
+      // (topo -112, base 475) e a barra fica escondida — o botao de verdade
+      // acompanha o leitor ate o fim, que era o problema que ela resolvia.
+      // O segundo lado fica porque o mobile ainda depende dele.
       let anchorIsOffscreen = true;
       if (anchor) {
         const box = anchor.getBoundingClientRect();

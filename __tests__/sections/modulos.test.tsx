@@ -42,15 +42,23 @@ describe('Modulos', () => {
     }
   });
 
-  it('shows all module contents without requiring disclosure', () => {
+  it('shows title and description on every card, without the lesson list', () => {
     const { container } = render(<Modulos />);
     expect(container.querySelectorAll('article')).toHaveLength(6);
     expect(container.querySelector('details')).toBeNull();
     for (const module of content.modules) {
-      for (const lesson of module.lessons) {
-        expect(screen.getByText(lesson)).toBeInTheDocument();
-      }
       expect(screen.getByText(module.desc)).toBeInTheDocument();
+    }
+
+    // Os topicos sairam do card por pedido do cliente: o card agora diz o
+    // que o modulo E, nao o que ele lista. `lessons` continua no content
+    // porque e a grade real do curso e content.test guarda ela — mas nenhum
+    // card renderiza. Sem este assert, uma volta acidental (um `map` num
+    // refactor, um merge) so apareceria no print, e cada card ganharia de
+    // volta os ~140px de texto que a foto acabou de herdar.
+    expect(container.querySelector('ul')).toBeNull();
+    for (const lesson of content.modules.flatMap((m) => m.lessons)) {
+      expect(screen.queryByText(lesson)).toBeNull();
     }
   });
 
@@ -217,5 +225,91 @@ describe('Modulos', () => {
     // Com o acordeao os seis cards cabem numa tela so.
     expect(container.querySelector('.module-pin')).toBeNull();
     expect(secao?.className).toContain('site-band--full');
+  });
+
+  // ---- Fechar tudo ao clicar fora -------------------------------------
+  // O acordeao nao tem onMouseLeave: passe o mouse por um card e ele fica
+  // aberto pra sempre. Este grupo guarda a unica saida que o visitante tem
+  // pra devolver a secao ao estado neutro.
+
+  it('closes every card when the pointer goes down outside the section', () => {
+    const { container } = render(<Modulos />);
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+
+    fireEvent.pointerDown(document.body);
+
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(0);
+    // O contador nao pode continuar anunciando um modulo que fechou.
+    expect(screen.getByText('--')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', {
+        name: 'Nenhum módulo aberto. Abrir o primeiro módulo',
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it('keeps the card open when the pointer goes down inside the rail', () => {
+    const { container } = render(<Modulos />);
+    const cards = Array.from(container.querySelectorAll('article'));
+
+    fireEvent.pointerDown(cards[0]);
+
+    expect(cards[0]).toHaveAttribute('data-active', 'true');
+  });
+
+  // O stepper mora FORA do trilho no DOM, entao sem a excecao explicita ele
+  // se fecharia no mesmo clique em que pede o proximo modulo — o controle
+  // brigando consigo mesmo, e de um jeito que so aparece clicando.
+  it('does not treat the stepper as outside, even though it sits outside the rail', () => {
+    const { container } = render(<Modulos />);
+    const next = screen.getByRole('button', { name: 'Ver próximos módulos' });
+
+    fireEvent.pointerDown(next);
+    fireEvent.click(next);
+
+    expect(screen.getByText('02')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-active="true"]')).toHaveLength(1);
+  });
+
+  // Guarda o `null + 1` do JavaScript, que daria 1 e abriria o modulo 02
+  // pulando o 01. O bug seria silencioso: um acordeao que nunca mostra o
+  // primeiro modulo depois de fechado.
+  it('opens module 01, not 02, when stepping forward from the closed state', () => {
+    const { container } = render(<Modulos />);
+    fireEvent.pointerDown(document.body);
+    expect(screen.getByText('--')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Ver próximos módulos' }));
+
+    expect(screen.getByText('01')).toBeInTheDocument();
+    expect(container.querySelectorAll('article')[0]).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+  });
+
+  it('disables the previous control while everything is closed', () => {
+    render(<Modulos />);
+    fireEvent.pointerDown(document.body);
+
+    expect(
+      screen.getByRole('button', { name: 'Ver módulos anteriores' }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Ver próximos módulos' }),
+    ).toBeEnabled();
+  });
+
+  // Fechar tudo nao pode desligar o hover: o visitante fecha, volta o mouse
+  // pra fileira e a secao tem que responder como antes.
+  it('reopens on hover after everything was closed', () => {
+    const { container } = render(<Modulos />);
+    fireEvent.pointerDown(document.body);
+    const cards = Array.from(container.querySelectorAll('article'));
+
+    fireEvent.mouseEnter(cards[4]);
+
+    expect(cards[4]).toHaveAttribute('data-active', 'true');
+    expect(screen.getByText('05')).toBeInTheDocument();
   });
 });

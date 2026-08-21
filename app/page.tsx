@@ -4,8 +4,8 @@ import { Dores } from '@/components/sections/Dores';
 import { Modulos } from '@/components/sections/Modulos';
 import { Evolucao } from '@/components/sections/Evolucao';
 import { Caminhos } from '@/components/sections/Caminhos';
-import { Oferta } from '@/components/sections/Oferta';
 import { Fechamento } from '@/components/sections/Fechamento';
+import { Oferta } from '@/components/sections/Oferta';
 import { FloatingCta } from '@/components/sections/FloatingCta';
 import { Footer } from '@/components/sections/Footer';
 
@@ -21,8 +21,23 @@ export default function Home() {
         <Modulos />
         <Evolucao />
         <Caminhos />
-        <Oferta />
+        {/* Fechamento ANTES da oferta, por pedido do cliente: a virada e o
+            ultimo argumento, e a oferta e a ultima coisa da pagina — quem
+            termina de ler ja esta no preco, sem precisar rolar de volta.
+
+            A inversao sozinha custou a alternancia claro/escuro: trocar de
+            lugar uma faixa clara e uma escura numa sequencia alternada cria
+            vizinhanca repetida, sempre. Por um tempo a pagina teve duas
+            emendas planas (caminhos->fechamento e oferta->rodape) e as duas
+            ficaram sem recorte.
+
+            A troca de FUNDOS que veio depois desfez isso de graca: a virada
+            virou escura e a oferta branca, entao a alternancia voltou e toda
+            emenda voltou a mudar de superficie. Hoje so o rodape fica sem
+            recorte, e por ser o fim da pagina — ver `.site-band--no-notch`
+            no globals.css. */}
         <Fechamento />
+        <Oferta />
       </main>
       <FloatingCta />
       <Footer />

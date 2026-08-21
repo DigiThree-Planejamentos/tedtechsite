@@ -1,8 +1,9 @@
 'use client';
 
 import {
+  useEffect,
+  useRef,
   useState,
-  type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import Image from 'next/image';
@@ -15,8 +16,8 @@ import { content } from '@/lib/content';
 /**
  * Acordeao horizontal de modulos, com layout e animacao portados do hero
  * do digithree.com.br: os seis cards dividem a largura por flex-grow, e o
- * ativo cresce de 1 para 3.6 em 700ms. O card colapsado mostra so o titulo
- * escrito na vertical; o ativo revela numero, descricao, licoes e CTA.
+ * ativo cresce de 1 para 2.8 em 700ms. O card colapsado mostra so o titulo
+ * escrito na vertical; o ativo revela numero, titulo, descricao e CTA.
  *
  * Substituiu um carrossel horizontal pinado por ScrollTrigger. O pin
  * existia para arrastar a faixa de cards conforme a pagina rolava; com o
@@ -29,13 +30,27 @@ import { content } from '@/lib/content';
  * sem dar como revelar.
  */
 export function Modulos() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  // `null` = TODOS fechados, e nao "nenhum destaque ainda". O estado nasceu
+  // do pedido de fechar tudo ao clicar fora: enquanto o indice era um numero
+  // puro, a secao nao TINHA COMO nao ter um card aberto — o hover abre um e
+  // ele fica aberto pra sempre, porque nao existe onMouseLeave aqui.
+  // Comeca em 0 de proposito: quem chega na secao ve um card aberto
+  // mostrando do que se trata, e so depois pode fechar tudo.
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const railRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
   const total = content.modules.length;
   const lastIndex = total - 1;
-  const activeModuleNumber = String(activeIndex + 1).padStart(2, '0');
   const totalModules = String(total).padStart(2, '0');
+
+  const isClosed = activeIndex === null;
+  // Com tudo fechado o contador deixa de ser um numero. Mostrar "01" ali
+  // seria mentira visivel: o card 01 esta fechado como os outros cinco.
+  const statusValue = isClosed ? '--' : String(activeIndex + 1).padStart(2, '0');
+  const statusLabel = isClosed
+    ? 'Nenhum módulo aberto. Abrir o primeiro módulo'
+    : `Módulo ${statusValue} de ${totalModules}. Voltar ao primeiro módulo`;
 
   // O stepper espera um retorno booleano: false quando nao houve movimento,
   // que e como ele sabe nao disparar a animacao de rebote.
@@ -46,11 +61,43 @@ export function Modulos() {
     return true;
   }
 
+  // De "tudo fechado", qualquer passo abre o 01: nao ha de onde contar, e o
+  // primeiro modulo e o comeco natural da leitura. Isto NAO e preciosismo —
+  // sem o teste explicito de null, `null + 1` da 1 em JavaScript e o stepper
+  // pularia o modulo 01 direto pro 02.
+  function step(delta: number) {
+    return goTo(activeIndex === null ? 0 : activeIndex + delta);
+  }
+
   function handleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
     event.preventDefault();
-    goTo(activeIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    step(event.key === 'ArrowRight' ? 1 : -1);
   }
+
+  // Clicar fora fecha todos.
+  //
+  // `pointerdown` e nao `click`: no iOS o click nao dispara em elemento sem
+  // interacao — o body, uma faixa vazia da pagina — e e exatamente ali que o
+  // visitante clica pra "sair" do acordeao. Com `click` este recurso
+  // simplesmente nao existiria no iPhone.
+  //
+  // O stepper conta como DENTRO, mesmo vivendo fora do trilho no DOM: ele
+  // comanda a lista, e fechar tudo no mesmo clique que pede o proximo modulo
+  // faria o controle brigar consigo mesmo.
+  useEffect(() => {
+    function closeOnOutsidePointer(event: Event) {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (railRef.current?.contains(target)) return;
+      if (target.closest('.module-stepper')) return;
+      setActiveIndex(null);
+    }
+
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
+    return () =>
+      document.removeEventListener('pointerdown', closeOnOutsidePointer);
+  }, []);
 
   return (
     <section
@@ -68,19 +115,22 @@ export function Modulos() {
               {content.modulos.title}
             </SplitReveal>
             <ModuleStepper
-              activeModuleNumber={activeModuleNumber}
-              totalModules={totalModules}
-              isFirst={activeIndex === 0}
-              isLast={activeIndex === lastIndex}
+              statusValue={statusValue}
+              statusLabel={statusLabel}
+              // Com tudo fechado o "anterior" fica desligado e o "proximo"
+              // ligado: nao ha nada antes do nada, e avancar abre o 01.
+              isFirst={isClosed || activeIndex === 0}
+              isLast={!isClosed && activeIndex === lastIndex}
               prefersReducedMotion={prefersReducedMotion}
-              onPrevious={() => goTo(activeIndex - 1)}
-              onNext={() => goTo(activeIndex + 1)}
+              onPrevious={() => step(-1)}
+              onNext={() => step(1)}
               onReset={() => goTo(0)}
             />
           </div>
         </div>
 
         <div
+          ref={railRef}
           data-module-carousel
           role="region"
           aria-label="Módulos do curso"
@@ -130,24 +180,6 @@ export function Modulos() {
                 <p className="mt-2 text-[11px] leading-relaxed text-slate-200/85 md:text-xs">
                   {module.desc}
                 </p>
-
-                <div className="mt-4 font-mono text-[9px] font-bold uppercase tracking-[1.2px] text-[#7fd0f5] md:text-[10px]">
-                  O que você aprende
-                </div>
-                <ul className="mt-2.5 grid gap-1.5">
-                  {module.lessons.map((lesson, lessonIndex) => (
-                    <li
-                      key={lesson}
-                      className="module-card__lesson flex items-start gap-2 py-1 text-[10px] leading-tight text-slate-100 md:text-[11px]"
-                      style={{ '--lesson-index': lessonIndex } as CSSProperties}
-                    >
-                      <span className="mt-[1px] text-[#7fd0f5]" aria-hidden>
-                        ✓
-                      </span>
-                      <span>{lesson}</span>
-                    </li>
-                  ))}
-                </ul>
 
                 <a
                   href={content.checkoutUrl}

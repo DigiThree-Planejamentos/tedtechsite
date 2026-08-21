@@ -6,16 +6,35 @@ import { Button } from '@/components/ui/Button';
 import { content } from '@/lib/content';
 
 /**
- * Fechamento da pagina: faixa branca pura (site-band--white) de tela cheia,
- * no mesmo ritmo das outras seis. O rodape, que ja e branco, emenda nela
- * sem linha e a pagina termina numa superficie so.
+ * A virada: faixa branca pura (site-band--white) de tela cheia, no mesmo
+ * ritmo das outras seis.
  *
- * Sem id de proposito: page.test exige `oferta` como ultima section[id].
+ * NAO e mais a ultima secao. Por pedido do cliente ela subiu pra ANTES da
+ * oferta — a virada e o ultimo argumento e a oferta e a ultima palavra, com
+ * o preco a um passo de quem acabou de ler. O nome do arquivo ficou.
+ *
+ * O branco saiu da FAIXA e foi pros CARTOES, na troca de fundos pedida pelo
+ * cliente: a faixa virou escura (transparente, mostrando os circuitos) e as
+ * duas colunas ganharam a superficie branca que era da oferta. Ou seja, o
+ * branco nao desapareceu — mudou de escala.
+ *
+ * Efeito de lado que vale registrar: com esta escura e a oferta branca, o
+ * ritmo claro/escuro volta a alternar do inicio ao fim da pagina. Toda emenda
+ * passa a mudar de superficie, entao todas as faixas voltam a ter recorte e o
+ * --no-notch encolhe de volta pro rodape sozinho.
+ *
+ * Sem id de proposito: page.test exige `oferta` como ultima section[id] — e
+ * a inversao a deixou ainda mais literalmente a ultima.
  */
 export function Fechamento() {
   const f = content.fechamento;
   return (
-    <section className="site-section site-band site-band--white site-band--full text-center">
+    // `[--notch-fill:#ffffff]`: esta e a faixa escura que agora tem a BRANCA
+    // embaixo (a oferta). A aba do recorte e pintada, e o default do CSS e o
+    // #f7fbff das faixas claras — encostado no branco puro ele le como mancha
+    // azulada. Era exatamente o caso pro qual a valvula tinha sido mantida no
+    // globals.css, e bands.test cobra ele pela vizinhanca.
+    <section className="site-section site-band site-band--dark site-band--full [--notch-fill:#ffffff] text-center">
       {/* A faixa e de tela cheia e centraliza o conteudo, entao com pouco
           texto tudo se empilha no meio e a sobra vai inteira para as pontas.
 
@@ -51,22 +70,27 @@ export function Fechamento() {
             outro fica pela metade — preco sem caminho e so tabela, e ajuda
             sem preco nao mostra o que esta em jogo.
 
-            Sem borda, fundo ou sombra, como os cards de Caminhos (.path-card
-            zera as tres): numa faixa branca a coluna se sustenta pelo rotulo
-            e pelo espaco, e caixa em cima de caixa so empilha moldura.
+            As duas em CARTAO BRANCO (.site-light-panel), superficie que era
+            da oferta e veio pra ca na troca de fundos. Enquanto a faixa era
+            branca elas viviam sem borda, fundo nem sombra, como os cards de
+            Caminhos — caixa branca sobre faixa branca so empilharia moldura.
+            Com a faixa escura o calculo se inverte: sem superficie propria as
+            colunas ficariam soltas direto sobre os circuitos, que e um fundo
+            movimentado e pessimo pra ler tabela de precos.
 
-            Sem a superficie tingida, quem carrega o destaque do card direito
-            passa a ser o rotulo em azul e o corpo em negrito maior. */}
+            A .site-light-panel tambem vira os --band-fg-* de volta pra tons
+            escuros. Sem isso o texto herdaria os tons CLAROS da faixa escura
+            e sairia branco sobre branco. */}
         <Reveal
           variant="simple"
           stagger={0.12}
-          // Vao largo de proposito: sem borda nem fundo, e o espaco que
-          // separa uma coluna da outra. Com o gap curto de antes as duas
-          // liam como um bloco so. No empilhado o vao vertical tambem cresce,
-          // que e onde a leitura corre risco de emendar.
+          // Vao largo de proposito: era ele que separava as colunas quando nao
+          // havia borda nem fundo. Com os cartoes a borda ja separa, mas o vao
+          // fica: encostadas, duas caixas brancas grandes leem como uma caixa
+          // so partida ao meio. No empilhado o vao vertical importa igual.
           className="mx-auto grid w-full max-w-5xl gap-x-6 gap-y-12 text-left lg:grid-cols-2 lg:gap-x-20"
         >
-          <div>
+          <div className="site-light-panel rounded-[1.5rem] px-5 py-5 md:px-6 md:py-6">
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {f.precosTitulo}
             </h3>
@@ -97,8 +121,11 @@ export function Fechamento() {
 
           {/* text-blue-2, nao text-blue: sobre fundo claro o azul de destaque
               mede ~3:1 e reprova no WCAG AA; o blue-2 passa em ~5:1. Mesma
-              troca ja feita nos subtitulos da Evolucao. */}
-          <div>
+              troca ja feita nos subtitulos da Evolucao.
+              A faixa virou escura, mas isto NAO muda: o que importa e o fundo
+              imediato, e este texto vive dentro do cartao BRANCO. Trocar por
+              text-blue "porque a secao agora e escura" reprovaria de novo. */}
+          <div className="site-light-panel rounded-[1.5rem] px-5 py-5 md:px-6 md:py-6">
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-blue-2 md:text-sm">
               {f.destaqueLabel}
             </h3>
@@ -120,7 +147,8 @@ export function Fechamento() {
                   className="flex items-start gap-3 text-sm text-[color:var(--band-fg-body)] md:text-[15px]"
                 >
                   {/* text-blue-2, nao o text-blue de Caminhos: aquele vive
-                      numa faixa levemente azulada, esta e branca pura. */}
+                      sobre o #f7fbff levemente azulado da faixa clara; este
+                      vive sobre o branco puro do cartao. */}
                   <span className="text-blue-2" aria-hidden>
                     ✓
                   </span>
