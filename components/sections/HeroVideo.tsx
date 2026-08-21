@@ -15,9 +15,35 @@ const clamp = (value: number, min: number, max: number) =>
  */
 function buildHeroClipPath(width: number, height: number) {
   const topNotchWidth = clamp(width * 0.26, 72, 180);
-  const topNotchHeight = clamp(height * 0.12, 40, 56);
-  const topRadius = Math.min(28, topNotchHeight / 2);
-  const cornerRadius = topRadius;
+  // A vertical deste recorte tem TRES partes somadas:
+  //
+  //     raio de cima  +  PAREDE RETA  +  raio de baixo
+  //
+  // Ate aqui a parede era ZERO, porque o raio era metade da profundidade —
+  // com essa proporcao os dois arcos se encontram direto e o resultado e o
+  // S continuo, o mesmo desenho do recorte esquerdo.
+  //
+  // O cliente pediu comprimento NO TRECHO RETO, nao mais profundidade. Com
+  // a parede acima de zero o recorte passa a ter uma queda vertical de
+  // verdade antes de virar, em vez de curvar desde o primeiro pixel. Isso
+  // desfaz o S NESTE canto de proposito; o esquerdo segue S puro.
+  //
+  // Registro pra ninguem "consertar" isso de volta: duas tentativas antes
+  // desta mexeram na medida errada — a profundidade total, 55.8 -> 67.4 ->
+  // 81.8 — e nenhuma era o que ele queria.
+  //
+  // ATENCAO: topRadius e cornerRadius tem hoje a MESMA expressao, e isso e
+  // coincidencia de valor, nao de significado. Um e a curva do recorte, o
+  // outro e o canto da moldura. Nao unifique: foi justamente por estarem
+  // amarrados que aumentar o recorte arredondava o painel junto.
+  const topRadius = clamp(height * 0.06, 20, 28);
+  const topNotchWall = clamp(height * 0.086, 14, 48);
+  const topNotchHeight = topRadius * 2 + topNotchWall;
+  // Os cantos da moldura deixam de ser herdados do recorte. A expressao da
+  // os MESMOS valores de antes em qualquer altura — `min(28, clamp(h*0.12,
+  // 40, 56)/2)` reduz a `clamp(h*0.06, 20, 28)` — entao a moldura fica pixel
+  // a pixel como estava e so o recorte cresce.
+  const cornerRadius = clamp(height * 0.06, 20, 28);
 
   const mobile = width < 480;
   // Teto menor no mobile: la o recorte encosta na faixa do nome do instrutor,
@@ -51,6 +77,11 @@ function buildHeroClipPath(width: number, height: number) {
   );
 
   const topNotchX = width - topNotchWidth;
+  // Onde a parede reta termina e o arco de baixo comeca. Como a
+  // profundidade e `topRadius * 2 + topNotchWall`, isto da exatamente
+  // `topRadius + topNotchWall` — ou seja, o comprimento da parede e a
+  // distancia entre este ponto e o fim do primeiro arco. Com a parede em
+  // zero os dois coincidem e o desenho volta a ser o S continuo.
   const topNotchInnerY = Math.max(topNotchHeight - topRadius, topRadius);
   const sidePlateauY = sideBottom - sideRadius;
   const sideInnerY = sideBottom - sideRadius * 2;
@@ -64,8 +95,12 @@ function buildHeroClipPath(width: number, height: number) {
     `A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(topNotchX)} ${n(topRadius)}`,
     `L ${n(topNotchX)} ${n(topNotchInnerY)}`,
     `A ${n(topRadius)} ${n(topRadius)} 0 0 0 ${n(topNotchX + topRadius)} ${n(topNotchHeight)}`,
-    `L ${n(width - topRadius)} ${n(topNotchHeight)}`,
-    `A ${n(topRadius)} ${n(topRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + topRadius)}`,
+    // cornerRadius, nao topRadius: este e o canto externo do painel, irmao
+    // dos dois de baixo, e nao uma curva do recorte. Enquanto os dois valores
+    // eram iguais dava no mesmo; agora que o recorte e mais fundo, herdar
+    // topRadius deixaria so este canto ~20% mais redondo que os outros tres.
+    `L ${n(width - cornerRadius)} ${n(topNotchHeight)}`,
+    `A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width)} ${n(topNotchHeight + cornerRadius)}`,
     `L ${n(width)} ${n(height - cornerRadius)}`,
     `A ${n(cornerRadius)} ${n(cornerRadius)} 0 0 1 ${n(width - cornerRadius)} ${n(height)}`,
     `L ${n(bottomNotchRight + bottomRadius)} ${n(height)}`,
