@@ -7,7 +7,7 @@ export function Dores() {
   const d = content.dores;
 
   return (
-    <section id="dores" className="site-section site-band site-band--dark site-band--full scroll-mt-24">
+    <section id="dores" className="site-section site-band site-band--dark site-band--full">
       {/* Coluna flex com um gap so, no lugar da pilha de mt-*: a secao ocupa
           uma tela inteira e o conteudo media 280px dela, deixando quase 500px
           de vazio dividido igualmente em cima e embaixo. O gap gasta parte

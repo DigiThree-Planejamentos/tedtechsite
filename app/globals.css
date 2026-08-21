@@ -226,6 +226,30 @@ html.lenis body {
     scroll-margin-top: 6rem;
   }
 
+  /* Faixa de tela cheia aterrissa RENTE ao topo, sem os 6rem acima.
+     A regra nao e estetica, e aritmetica: a faixa mede uma tela inteira
+     (min-height: 100svh). Empurrar a chegada 6rem pra baixo faz ela deixar
+     de caber — sobra uma tira da secao ANTERIOR no topo e perdem-se 96px
+     desta embaixo. Medido: com a margem, a secao de modulos chegava com os
+     cards cortados na base; sem ela, cabe exata (topo 0, base 900 numa
+     tela de 900).
+     Era isto o "clico no botao do header e a ida fica quebrada": a posicao
+     estava certa, o ENQUADRAMENTO e que nao.
+
+     Nada fica escondido atras da barra: o header some quando o hero sai da
+     tela, e ja sumiu quando qualquer uma destas cinco chega. Medido nas
+     cinco: headerVisivel false, titulo entre 135px e 230px do topo.
+
+     Os 6rem de .site-section continuam valendo para secao que NAO seja de
+     tela cheia — ali a margem faz sentido, porque a secao nao depende de
+     caber inteira.
+
+     Nao devolva `scroll-mt-24` as secoes: utilitario do Tailwind vence esta
+     regra por vir em @layer utilities, e o corte volta. page.test guarda. */
+  .site-section.site-band--full {
+    scroll-margin-top: 0;
+  }
+
   .site-section--compact {
     padding-block: 2.5rem;
   }

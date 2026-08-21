@@ -79,7 +79,7 @@ export function Caminhos() {
   return (
     <section
       id="caminhos"
-      className="site-section site-band site-band--light site-band--full scroll-mt-24"
+      className="site-section site-band site-band--light site-band--full"
     >
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{c.label}</SectionLabel>

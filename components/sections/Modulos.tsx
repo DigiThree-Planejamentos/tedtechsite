@@ -55,7 +55,7 @@ export function Modulos() {
   return (
     <section
       id="modulos"
-      className="site-section site-band site-band--light site-band--full scroll-mt-24"
+      className="site-section site-band site-band--light site-band--full"
     >
       <div className="mx-auto w-full max-w-content">
         <div className="relative z-20">

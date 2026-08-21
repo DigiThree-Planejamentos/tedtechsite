@@ -30,7 +30,7 @@ export function Oferta() {
   return (
     <section
       id="oferta"
-      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
+      className="site-section site-band site-band--dark site-band--full"
     >
       <div className="mx-auto w-full max-w-content">
         <div className="text-center">
