@@ -53,14 +53,30 @@ function buildHeroClipPath(width: number, height: number) {
   // a profundidade la cai de 27,7% para 21,6% da altura. O recorte era
   // proporcionalmente MAIS fundo na tela pequena que na grande; agora os dois
   // regimes ficam perto.
-  const topRadius = clamp(height * 0.044, 16, 22);
-  const topNotchWall = clamp(height * 0.063, 12, 36);
+  // RAIO UNICO do painel: os tres recortes e os quatro cantos da moldura
+  // saem todos daqui. 27.9 no quadro de 465, 20 no mobile.
+  //
+  // Antes cada arredondamento tinha sua propria formula e o path saia com
+  // TRES raios diferentes (20.5, 27.9, 40.9). Duas curvas coincidiam por
+  // acaso — o recorte de baixo e a moldura reduziam a mesma expressao — e as
+  // outras duas nao coincidiam com nada.
+  //
+  // Agora o que distingue um recorte do outro e so PROFUNDIDADE e LARGURA. A
+  // curvatura e a mesma em todo o painel, como um token.
+  //
+  // Consequencia que vale saber: com raio fixo, um recorte so e S puro se a
+  // profundidade dele for exatamente o dobro do raio. O de baixo e (55.8 =
+  // 27.9 x 2). O da esquerda deixou de ser — ver comentario la embaixo.
+  const radius = clamp(height * 0.06, 20, 28);
+
+  const topRadius = radius;
+  // A parede foi recalculada pra PROFUNDIDADE ficar onde estava (~70): com o
+  // raio subindo de 20.5 pra 27.9, os arcos passaram a consumir 55.8 dos 70,
+  // e sobram 14.4 de reta. Mexer no raio sem mexer aqui teria aprofundado o
+  // recorte de volta pra 85.
+  const topNotchWall = clamp(height * 0.031, 10, 20);
   const topNotchHeight = topRadius * 2 + topNotchWall;
-  // Os cantos da moldura deixam de ser herdados do recorte. A expressao da
-  // os MESMOS valores de antes em qualquer altura — `min(28, clamp(h*0.12,
-  // 40, 56)/2)` reduz a `clamp(h*0.06, 20, 28)` — entao a moldura fica pixel
-  // a pixel como estava e so o recorte muda.
-  const cornerRadius = clamp(height * 0.06, 20, 28);
+  const cornerRadius = radius;
 
   const mobile = width < 480;
   // Teto menor no mobile: la o recorte encosta na faixa do nome do instrutor,
@@ -69,17 +85,41 @@ function buildHeroClipPath(width: number, height: number) {
   // longo colidiria. Com 132 a folga volta pra ~20px.
   const bottomNotchWidth = clamp(width * 0.34, mobile ? 108 : 158, mobile ? 132 : 252);
   const bottomNotchHeight = clamp(height * 0.12, mobile ? 40 : 44, mobile ? 48 : 60);
-  const bottomRadius = Math.min(28, bottomNotchHeight / 2);
+  // O raio do painel, limitado pela metade da propria profundidade. O limite
+  // nao e enfeite: raio maior que metade faria os dois arcos se sobreporem e
+  // o path sairia torto. Hoje os dois lados batem exatamente (27.9 contra
+  // 55.8/2), entao este recorte e S puro — e continua sendo enquanto a
+  // profundidade for o dobro do raio.
+  //
+  // Isto tambem desarma o `Math.min(28, ...)` que vivia aqui: aquele 28 era
+  // um numero solto que passava a valer se o quadro chegasse a ~467px de
+  // altura, e ai este recorte ganhava uma reta em silencio.
+  const bottomRadius = Math.min(radius, bottomNotchHeight / 2);
   const bottomNotchLeft = (width - bottomNotchWidth) / 2 + width * 0.1;
   const bottomNotchRight = bottomNotchLeft + bottomNotchWidth;
   const bottomNotchTop = height - bottomNotchHeight;
   const sideDepth = clamp(width * 0.11, mobile ? 38 : 52, mobile ? 62 : 84);
-  // Metade da profundidade, mesma regra do topRadius (topNotchHeight / 2) do
-  // recorte da direita: raio = metade do degrau e os dois arcos se encontram
-  // sem reta no meio, formando o S continuo. Com a proporcao antiga (32/92)
-  // sobrava uma reta de ~18px entre os arcos — virava prateleira, nao S — e
-  // ainda esmagava o arredondamento do topo (sideTopInnerY caia pra 9px).
-  const sideRadius = sideDepth / 2;
+  // ATENCAO, aqui houve uma troca consciente de criterio.
+  //
+  // Este raio era `sideDepth / 2` — metade da profundidade — justamente pra
+  // este recorte ser S puro: com essa proporcao os dois arcos se encontram
+  // sem reta no meio. Uma versao ainda anterior tinha 32/92, sobrava uma reta
+  // de ~18px, virava prateleira em vez de S, e alguem corrigiu de proposito.
+  //
+  // O cliente pediu raio 27.9 em TODOS os recortes, sabendo do custo: com o
+  // raio fixo e a profundidade em 81.8, sobram 26px de reta e este recorte
+  // vira degrau, como o de cima. A escolha e coerencia de curvatura no painel
+  // inteiro em vez de S puro aqui.
+  //
+  // Se um dia for pra desfazer, o que devolve o S e voltar a `sideDepth / 2`
+  // (ou baixar sideDepth pro dobro do raio, 55.8) — nao mexer no `radius`,
+  // que agora e compartilhado com a moldura e os outros dois recortes.
+  //
+  // O Math.min guarda o mesmo invariante do recorte de baixo: raio nunca
+  // maior que metade da profundidade, senao os arcos se sobrepoem. No mobile
+  // ele entra em acao de verdade (sideDepth 38, metade 19, contra raio 20),
+  // e la o recorte segue S puro por 1px de diferenca.
+  const sideRadius = Math.min(radius, sideDepth / 2);
   const sideHeight = clamp(
     height * (mobile ? 0.46 : 0.56),
     mobile ? 104 : 144,
