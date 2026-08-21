@@ -53,7 +53,24 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     <ReactLenis
       root
       ref={lenisRef}
-      options={{ autoRaf: false, smoothWheel: true, lerp: 0.1, anchors: { offset: -80 } }}
+      // anchors.offset FICA EM ZERO. Quem afasta a secao do header e o
+      // `scroll-mt-24` (96px) declarado em cada secao navegavel — e o Lenis
+      // respeita esse scroll-margin sozinho.
+      //
+      // Com o -80 que havia aqui os dois se SOMAVAM: a secao parava a 176px
+      // do topo em vez de 96, ou seja, com quase duas dedadas da secao
+      // anterior ainda na tela. Era o "para antes da secao" que apareceu
+      // quando o header ganhou um botao por secao.
+      //
+      // O bug se escondia com facilidade: sem o rAF rodando (aba em segundo
+      // plano, por exemplo) o salto vira ancora nativa, que so obedece ao
+      // scroll-margin e para nos 96 certinhos. So aparece com o Lenis vivo.
+      //
+      // Nao troque isto por um offset novo aqui: sob prefers-reduced-motion
+      // este componente devolve a arvore SEM Lenis nenhum, e ai quem
+      // posiciona e exclusivamente o scroll-mt das secoes. Offset aqui
+      // reintroduz a divergencia entre os dois caminhos.
+      options={{ autoRaf: false, smoothWheel: true, lerp: 0.1, anchors: { offset: 0 } }}
     >
       {children}
     </ReactLenis>

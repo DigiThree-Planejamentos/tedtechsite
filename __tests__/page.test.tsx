@@ -66,4 +66,21 @@ describe('Home page', () => {
     const navegaveis = ids.filter((id) => id !== 'hero');
     expect(navegaveis.sort()).toEqual(site.nav.map((i) => i.href.slice(1)).sort());
   });
+
+  // A segunda metade do contrato, e a que ja quebrou uma vez: o afastamento
+  // entre a secao e a barra fixa mora AQUI, no scroll-mt-24 (96px) de cada
+  // secao — e em nenhum outro lugar. O Lenis vai com anchors.offset 0 de
+  // proposito, porque os dois se somavam e a pagina parava a 176px do topo,
+  // com a secao anterior ainda na tela (ver SmoothScrollProvider).
+  //
+  // Consequencia pratica pra quem mexer: tirar esta classe de uma secao NAO
+  // e compensado por ninguem. O titulo vai parar debaixo do header.
+  it('gives every header target the scroll margin that clears the fixed bar', () => {
+    const { container } = render(<Home />);
+    for (const item of site.nav) {
+      const sec = container.querySelector(item.href);
+      expect(sec, `${item.href} nao existe`).not.toBeNull();
+      expect(sec!.className, `${item.href} sem scroll-margin`).toContain('scroll-mt-24');
+    }
+  });
 });
