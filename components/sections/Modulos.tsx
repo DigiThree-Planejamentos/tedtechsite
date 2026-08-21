@@ -1,6 +1,8 @@
 'use client';
 
 import {
+  useEffect,
+  useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
@@ -28,13 +30,27 @@ import { content } from '@/lib/content';
  * sem dar como revelar.
  */
 export function Modulos() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  // `null` = TODOS fechados, e nao "nenhum destaque ainda". O estado nasceu
+  // do pedido de fechar tudo ao clicar fora: enquanto o indice era um numero
+  // puro, a secao nao TINHA COMO nao ter um card aberto — o hover abre um e
+  // ele fica aberto pra sempre, porque nao existe onMouseLeave aqui.
+  // Comeca em 0 de proposito: quem chega na secao ve um card aberto
+  // mostrando do que se trata, e so depois pode fechar tudo.
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const railRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
 
   const total = content.modules.length;
   const lastIndex = total - 1;
-  const activeModuleNumber = String(activeIndex + 1).padStart(2, '0');
   const totalModules = String(total).padStart(2, '0');
+
+  const isClosed = activeIndex === null;
+  // Com tudo fechado o contador deixa de ser um numero. Mostrar "01" ali
+  // seria mentira visivel: o card 01 esta fechado como os outros cinco.
+  const statusValue = isClosed ? '--' : String(activeIndex + 1).padStart(2, '0');
+  const statusLabel = isClosed
+    ? 'Nenhum módulo aberto. Abrir o primeiro módulo'
+    : `Módulo ${statusValue} de ${totalModules}. Voltar ao primeiro módulo`;
 
   // O stepper espera um retorno booleano: false quando nao houve movimento,
   // que e como ele sabe nao disparar a animacao de rebote.
@@ -45,11 +61,43 @@ export function Modulos() {
     return true;
   }
 
+  // De "tudo fechado", qualquer passo abre o 01: nao ha de onde contar, e o
+  // primeiro modulo e o comeco natural da leitura. Isto NAO e preciosismo —
+  // sem o teste explicito de null, `null + 1` da 1 em JavaScript e o stepper
+  // pularia o modulo 01 direto pro 02.
+  function step(delta: number) {
+    return goTo(activeIndex === null ? 0 : activeIndex + delta);
+  }
+
   function handleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
     event.preventDefault();
-    goTo(activeIndex + (event.key === 'ArrowRight' ? 1 : -1));
+    step(event.key === 'ArrowRight' ? 1 : -1);
   }
+
+  // Clicar fora fecha todos.
+  //
+  // `pointerdown` e nao `click`: no iOS o click nao dispara em elemento sem
+  // interacao — o body, uma faixa vazia da pagina — e e exatamente ali que o
+  // visitante clica pra "sair" do acordeao. Com `click` este recurso
+  // simplesmente nao existiria no iPhone.
+  //
+  // O stepper conta como DENTRO, mesmo vivendo fora do trilho no DOM: ele
+  // comanda a lista, e fechar tudo no mesmo clique que pede o proximo modulo
+  // faria o controle brigar consigo mesmo.
+  useEffect(() => {
+    function closeOnOutsidePointer(event: Event) {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (railRef.current?.contains(target)) return;
+      if (target.closest('.module-stepper')) return;
+      setActiveIndex(null);
+    }
+
+    document.addEventListener('pointerdown', closeOnOutsidePointer);
+    return () =>
+      document.removeEventListener('pointerdown', closeOnOutsidePointer);
+  }, []);
 
   return (
     <section
@@ -67,19 +115,22 @@ export function Modulos() {
               {content.modulos.title}
             </SplitReveal>
             <ModuleStepper
-              activeModuleNumber={activeModuleNumber}
-              totalModules={totalModules}
-              isFirst={activeIndex === 0}
-              isLast={activeIndex === lastIndex}
+              statusValue={statusValue}
+              statusLabel={statusLabel}
+              // Com tudo fechado o "anterior" fica desligado e o "proximo"
+              // ligado: nao ha nada antes do nada, e avancar abre o 01.
+              isFirst={isClosed || activeIndex === 0}
+              isLast={!isClosed && activeIndex === lastIndex}
               prefersReducedMotion={prefersReducedMotion}
-              onPrevious={() => goTo(activeIndex - 1)}
-              onNext={() => goTo(activeIndex + 1)}
+              onPrevious={() => step(-1)}
+              onNext={() => step(1)}
               onReset={() => goTo(0)}
             />
           </div>
         </div>
 
         <div
+          ref={railRef}
           data-module-carousel
           role="region"
           aria-label="Módulos do curso"

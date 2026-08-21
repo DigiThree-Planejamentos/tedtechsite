@@ -3,8 +3,12 @@
 type StepperAction = () => boolean;
 
 interface ModuleStepperProps {
-  activeModuleNumber: string;
-  totalModules: string;
+  // Nao e um numero: com todos os cards fechados vale '--'. O componente
+  // so pinta o que recebe — quem sabe se ha modulo aberto e o Modulos, e e
+  // la que a frase do leitor de tela e montada, senao o aria-label teria
+  // que reinventar esse estado aqui dentro.
+  statusValue: string;
+  statusLabel: string;
   isFirst: boolean;
   isLast: boolean;
   prefersReducedMotion: boolean;
@@ -86,8 +90,8 @@ function playReset(button: HTMLButtonElement) {
 }
 
 export function ModuleStepper({
-  activeModuleNumber,
-  totalModules,
+  statusValue,
+  statusLabel,
   isFirst,
   isLast,
   prefersReducedMotion,
@@ -114,7 +118,7 @@ export function ModuleStepper({
       className="module-stepper shrink-0"
       role="group"
       aria-label="Controles dos módulos"
-      data-active-module={activeModuleNumber}
+      data-active-module={statusValue}
     >
       <button
         type="button"
@@ -139,13 +143,13 @@ export function ModuleStepper({
         className="module-stepper-status grid place-items-center font-mono text-xs font-extrabold tracking-[0.14em]"
         aria-live="polite"
         aria-atomic="true"
-        aria-label={`Módulo ${activeModuleNumber} de ${totalModules}. Voltar ao primeiro módulo`}
+        aria-label={statusLabel}
       >
         <span
-          key={activeModuleNumber}
+          key={statusValue}
           className="module-stepper-status__value tabular-nums"
         >
-          {activeModuleNumber}
+          {statusValue}
         </span>
       </button>
 
