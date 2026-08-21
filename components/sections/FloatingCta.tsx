@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { MagneticButton } from '@/components/motion/MagneticButton';
 import { useReducedMotion } from '@/components/motion/useReducedMotion';
 import { Button } from '@/components/ui/Button';
+import { SectionNav } from '@/components/ui/SectionNav';
 import { content } from '@/lib/content';
 
 const SHOW_AFTER_VIEWPORTS = 0.7;
@@ -80,7 +81,7 @@ export function FloatingCta() {
       } sm:px-6`}
       style={{ bottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
     >
-      <div className='mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] px-3 py-3 text-[#07111f] shadow-[0_14px_42px_rgba(15,42,81,0.22),0_20px_60px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.92)] sm:rounded-[2rem] sm:px-5 md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-6'>
+      <div className='mx-auto flex w-full max-w-[1280px] items-center justify-between gap-3 rounded-[1.5rem] border border-blue/25 bg-[#f7fbff] px-3 py-3 text-[#07111f] shadow-[0_14px_42px_rgba(15,42,81,0.22),0_20px_60px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.92)] sm:rounded-[2rem] sm:px-5 md:grid md:grid-cols-[minmax(0,1fr)_auto_auto] md:gap-6 xl:grid-cols-[minmax(0,1fr)_auto_auto_auto]'>
         {/* No celular a barra e "R$ 297 · Inscrever": o preco ocupa o lugar
             do texto de urgencia, que so aparece de sm pra cima. */}
         <div className='flex min-w-0 items-center gap-2.5'>
@@ -95,6 +96,25 @@ export function FloatingCta() {
             {cta.urgency}
           </p>
         </div>
+
+        {/* Os mesmos atalhos do header. Nao e redundancia: o header some
+            quando o hero sai da tela, entao do meio da pagina em diante esta
+            barra e a UNICA navegacao que existe. Antes, quem descia nao tinha
+            como voltar pra uma secao sem rolar de volta ate o topo.
+
+            So a partir de xl (1280px): abaixo disso a barra divide a largura
+            com urgencia, preco e botao, e os atalhos nao entram sem espremer
+            quem paga a conta.
+
+            Escondido, nao consome celula do grid — `hidden` e display:none, e
+            item nenhum ocupa coluna. E por isso que o grid de md segue com
+            tres colunas certinhas e so o de xl tem quatro. */}
+        <SectionNav
+          label='Atalhos para as seções'
+          interactive={isVisible}
+          className='hidden gap-0.5 text-[13px] text-[#3b4654] xl:flex'
+          linkClassName='px-2.5 py-1.5'
+        />
 
         <div className='hidden items-baseline gap-2 md:flex'>
           <span className='text-lg font-extrabold text-blue'>

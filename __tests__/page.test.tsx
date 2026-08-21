@@ -22,10 +22,12 @@ describe('Home page', () => {
     expect(container.querySelector('#faq')).toBeNull();
     expect(screen.getAllByText(content.offer.priceNow).length).toBeGreaterThanOrEqual(2);
     expect(screen.getByText(content.floatingCta.urgency)).toBeInTheDocument();
-    expect(container.querySelector('[data-floating-cta] a')).toHaveAttribute(
-      'href',
-      content.checkoutUrl,
-    );
+    // Pelo href: o primeiro <a> da barra passou a ser um atalho de secao,
+    // desde que ela ganhou a mesma navegacao do header. O que importa aqui e
+    // que o caminho pro checkout continua existindo dentro dela.
+    expect(
+      container.querySelector(`[data-floating-cta] a[href="${content.checkoutUrl}"]`),
+    ).not.toBeNull();
   });
 
   it('orders the sections for conversion: hero, dores, modulos, oferta', () => {

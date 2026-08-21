@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Logo } from '@/components/ui/Logo';
 import { Button } from '@/components/ui/Button';
+import { SectionNav } from '@/components/ui/SectionNav';
 import { MagneticButton } from '@/components/motion/MagneticButton';
-import { site } from '@/lib/site';
 import { content } from '@/lib/content';
 
 export function Header() {
@@ -45,26 +45,12 @@ export function Header() {
 
             As medidas apertam no md e folgam no lg porque no md esta linha
             divide ~380px com o logo e o botao de compra. */}
-        <nav
-          aria-label="Seções da página"
-          className="hidden min-w-0 items-center gap-0.5 whitespace-nowrap text-[13px] text-[#3b4654] md:flex lg:gap-1 lg:text-sm"
-        >
-          {site.nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              tabIndex={isHidden ? -1 : undefined}
-              /* Pilula so no hover e no foco: em repouso sao texto. O botao
-                 de compra esta a centimetros dali e deve ser o unico que
-                 parece botao o tempo todo — cinco pilulas permanentes
-                 competiriam com ele. O estado de foco repete o do hover pra
-                 quem navega por teclado ver onde esta. */
-              className="rounded-full px-2.5 py-1.5 transition-colors duration-200 hover:bg-blue/10 hover:text-blue focus-visible:bg-blue/10 focus-visible:text-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue/50 lg:px-3"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
+        <SectionNav
+          label="Seções da página"
+          interactive={!isHidden}
+          className="hidden gap-0.5 text-[13px] text-[#3b4654] md:flex lg:gap-1 lg:text-sm"
+          linkClassName="px-2.5 py-1.5 lg:px-3"
+        />
         <MagneticButton>
           <Button href={content.checkoutUrl} variant="primary" tabIndex={isHidden ? -1 : undefined}>
             {content.hero.cta}
