@@ -14,7 +14,7 @@ import { content } from '@/lib/content';
 /**
  * Acordeao horizontal de modulos, com layout e animacao portados do hero
  * do digithree.com.br: os seis cards dividem a largura por flex-grow, e o
- * ativo cresce de 1 para 3.6 em 700ms. O card colapsado mostra so o titulo
+ * ativo cresce de 1 para 2.8 em 700ms. O card colapsado mostra so o titulo
  * escrito na vertical; o ativo revela numero, titulo, descricao e CTA.
  *
  * Substituiu um carrossel horizontal pinado por ScrollTrigger. O pin
