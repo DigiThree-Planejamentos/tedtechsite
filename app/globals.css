@@ -263,7 +263,18 @@ html.lenis body {
     --notch-w: 280px;
     --notch-d: 56px;
     --notch-inset: 12%;
-    --notch-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 56' preserveAspectRatio='none'%3E%3Cpath d='M 0 56 A 28 28 0 0 0 28 28 A 28 28 0 0 1 56 0 L 224 0 A 28 28 0 0 1 252 28 A 28 28 0 0 0 280 56 Z' fill='%23000'/%3E%3C/svg%3E");
+    /* A forma tem SAIA: o viewBox mede 70, sendo 56 o S do recorte (0..56) e
+       14 uma reta que continua abaixo dele (56..70). A saia nunca aparece —
+       existe pra que o buraco se estenda ALEM da folha de tinta, que e
+       metade do conserto do fio de subpixel. A outra metade e o `inset`
+       negativo da folha. Ver o bloco da faixa clara logo abaixo.
+
+       14 = 56/4, e dai os fatores 1.25 e 0.25 nos calc (70 = 56 x 1.25,
+       14 = 56 x 0.25). Proporcionais de proposito: um valor fixo em px
+       quebraria no mobile, onde a profundidade cai pra 36 e a forma
+       continuaria com 70 unidades, esmagando o S. Mexeu na saia, mexa nos
+       tres numeros juntos. */
+    --notch-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 70' preserveAspectRatio='none'%3E%3Cpath d='M 0 70 L 0 56 A 28 28 0 0 0 28 28 A 28 28 0 0 1 56 0 L 224 0 A 28 28 0 0 1 252 28 A 28 28 0 0 0 280 56 L 280 70 Z' fill='%23000'/%3E%3C/svg%3E");
   }
 
   /* Faixa clara E branca: buraco. Duas camadas de mascara — a folha inteira
@@ -275,18 +286,71 @@ html.lenis body {
      o buraco mostra os circuitos exatamente como a oferta os mostra. */
   .site-band--light::before,
   .site-band--white::before {
+    /* ---- FIO DE SUBPIXEL NO RECORTE: o conserto sao DUAS coisas ----------
+       Sintoma: um fio claro atravessando o recorte, so em tela de escala
+       fracionaria (Windows a 125%/150%) ou com o scroll parado numa fracao
+       de pixel — e o Lenis produz scroll fracionario o tempo todo, entao dava
+       pra ver rolando ate em DPR 1. Em DPR 1 e scroll inteiro nao aparece, e
+       foi por isso que passou tanto tempo despercebido.
+
+       Causa: quem vaza NAO e a mascara, e a BORDA DE BAIXO DA PROPRIA FOLHA
+       de tinta. Com `inset: 0` ela termina exatamente na emenda; quando essa
+       borda cai no meio de um pixel de dispositivo, a folha pinta uma fracao
+       dele e a mascara por cima nao consegue zerar essa fracao. Medido em
+       DPR 1.5: sobrava 12,8% de #f7fbff, ou seja rgb(36,38,43) contra o
+       rgb(6,8,13) do fundo. FORA do recorte isso e invisivel — ali a linha e
+       so a transicao normal de claro pra escuro. DENTRO dele ela fica entre
+       escuro em cima (o buraco) e escuro embaixo (a proxima faixa), e le como
+       um fio cortando o desenho.
+
+       Conserto, e as duas metades sao necessarias:
+         1. a folha desce 4px ALEM da faixa (este `inset`), tirando a borda
+            fracionaria de cima da emenda;
+         2. o buraco desce ainda mais que ela (a SAIA da forma, 25% da
+            profundidade), garantindo que a borda da folha caia dentro do
+            buraco por larga margem, e nao rente a ele.
+
+       Os 4px sao imperceptiveis: fora do recorte eles so empurram a
+       transicao claro/escuro 4px pra baixo, e continua sendo UMA transicao.
+       Nada do conteudo da secao seguinte fica coberto — ela comeca depois do
+       proprio respiro, dezenas de px abaixo.
+
+       MEDIDO, nao deduzido — pior linha dentro do recorte, hero e oferta:
+         mascara original .............. rgb(35,38,42)   fio visivel
+         so saia ....................... rgb(36,38,43)   nao mudou nada
+         so folha -1px ................. limpo no hero, rgb(22,23,28) na oferta
+         so folha -2px ................. rgb(68,69,73)   pior
+         translateZ(0) na camada ....... limpo em 1.5, rgb(52,54,58) em 1.25
+         SAIA + folha -4px ............. rgb(6,8,13) nos quatro casos
+       Cada peca sozinha falha em pelo menos um DPR; so a combinacao fecha.
+       Se for mexer aqui, meça de novo nos dois DPR e nas duas emendas — o
+       artefato muda de lugar conforme o alinhamento e engana facil. */
+    inset: 0 0 -4px 0;
     -webkit-mask-image: linear-gradient(#000 0 0), var(--notch-shape);
     mask-image: linear-gradient(#000 0 0), var(--notch-shape);
-    -webkit-mask-size: 100% 100%, var(--notch-w) var(--notch-d);
-    mask-size: 100% 100%, var(--notch-w) var(--notch-d);
+    /* 1.25x a profundidade porque a forma leva a saia junto (56 de S + 14 de
+       saia = 70). O S continua medindo exatamente --notch-d; o excedente e a
+       saia, pendurada abaixo da caixa pelo mask-position. */
+    -webkit-mask-size: 100% 100%, var(--notch-w) calc(var(--notch-d) * 1.25);
+    mask-size: 100% 100%, var(--notch-w) calc(var(--notch-d) * 1.25);
     /* Porcentagem, NAO `left 12% bottom`: a forma de tres valores nao e
        aceita em mask-position, a declaracao inteira cai, e a mascara volta
        pro default 0% 0% — a forma some no canto de cima, atras do header, e
        parece que o recorte nao existe. Custou uma rodada de depuracao.
        Em mask-position, 12% significa 12% do espaco que sobra (largura da
-       secao menos a da forma), e 100% no eixo Y encosta na base. */
-    -webkit-mask-position: 0 0, var(--notch-inset) 100%;
-    mask-position: 0 0, var(--notch-inset) 100%;
+       secao menos a da forma), e 100% no eixo Y encosta na base.
+
+       O deslocamento de +25% da profundidade e o que PENDURA a saia abaixo
+       da caixa — a segunda metade do conserto do fio de subpixel explicado no
+       `inset` acima. Sozinho ele nao resolve nada (medido: rgb(36,38,43),
+       identico a mascara original); so funciona junto com a folha descendo
+       alem da emenda.
+
+       ATENCAO ao editar: se o calc for recusado, a declaracao inteira cai e o
+       recorte some pro canto de cima, igual ao bug de tres valores acima.
+       Conferir o computed style, e nao so a aparencia em DPR 1. */
+    -webkit-mask-position: 0 0, var(--notch-inset) calc(100% + var(--notch-d) * 0.25);
+    mask-position: 0 0, var(--notch-inset) calc(100% + var(--notch-d) * 0.25);
     -webkit-mask-repeat: no-repeat, no-repeat;
     mask-repeat: no-repeat, no-repeat;
     -webkit-mask-composite: xor;
@@ -316,8 +380,18 @@ html.lenis body {
     background: var(--notch-fill, #f7fbff);
     -webkit-mask-image: var(--notch-shape);
     mask-image: var(--notch-shape);
-    -webkit-mask-size: 100% 100%;
-    mask-size: 100% 100%;
+    /* A aba NAO sofre do fio de subpixel que assombra a faixa clara: a cor
+       dela e a mesma da proxima superficie, entao uma borda fracionaria aqui
+       mistura claro com claro e nao aparece. Medido em DPR 1.5: limpo.
+
+       Mas ela usa a MESMA forma, que carrega a saia de 14 unidades. Dai o
+       125% com ancoragem no topo (mask-position fica no default 0 0): o S
+       ocupa exatamente os --notch-d px do elemento e a saia cai fora dele.
+       `100% 100%` esmagaria as 70 unidades nos 56px da aba — o S encolheria
+       pra ~45px e a saia viraria uma tarja reta na base. Se um dia a saia
+       sair da forma, este 1.25 volta a ser 100%. */
+    -webkit-mask-size: 100% calc(100% * 1.25);
+    mask-size: 100% calc(100% * 1.25);
     -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
     pointer-events: none;
