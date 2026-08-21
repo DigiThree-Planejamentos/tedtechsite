@@ -30,11 +30,15 @@ export function Oferta() {
   return (
     <section
       id="oferta"
-      // A aba do recorte da base tem que ser BRANCO PURO aqui, nao o #f7fbff
-      // das faixas claras: quem vem depois desta secao e o fechamento, que e
-      // #ffffff. Encostados, os dois tons diferem o bastante pra aba ler como
-      // mancha azulada — o mesmo motivo documentado na regra .site-band--white.
-      className="site-section site-band site-band--dark site-band--full [--notch-fill:#ffffff]"
+      // Sem recorte na base, e o `[--notch-fill:#ffffff]` que vivia aqui saiu
+      // junto: os dois existiam pra emenda com o fechamento branco, que a
+      // inversao mudou de lugar. Agora quem vem depois e o RODAPE, faixa
+      // escura como esta — as duas transparentes, mostrando o mesmo canvas de
+      // circuitos. Nao ha emenda: uma aba clara aqui seria uma mancha no meio
+      // do campo escuro, apontando pra uma superficie que nao existe. Mesma
+      // razao da excecao historica do rodape, hoje generalizada em
+      // `.site-band--no-notch`.
+      className="site-section site-band site-band--dark site-band--full site-band--no-notch"
     >
       <div className="mx-auto w-full max-w-content">
         <div className="text-center">

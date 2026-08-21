@@ -6,11 +6,19 @@ import { Button } from '@/components/ui/Button';
 import { content } from '@/lib/content';
 
 /**
- * Fechamento da pagina: faixa branca pura (site-band--white) de tela cheia,
- * no mesmo ritmo das outras seis. O rodape, que ja e branco, emenda nela
- * sem linha e a pagina termina numa superficie so.
+ * A virada: faixa branca pura (site-band--white) de tela cheia, no mesmo
+ * ritmo das outras seis.
  *
- * Sem id de proposito: page.test exige `oferta` como ultima section[id].
+ * NAO e mais a ultima secao. Por pedido do cliente ela subiu pra ANTES da
+ * oferta — a virada e o ultimo argumento e a oferta e a ultima palavra, com
+ * o preco a um passo de quem acabou de ler. O nome do arquivo ficou.
+ *
+ * O branco puro sobreviveu a mudanca com outra funcao: nasceu pra emendar
+ * com o rodape branco, e hoje serve pra NAO se confundir com o #f7fbff de
+ * Caminhos, que passou a ficar logo acima. Ver a regra .site-band--white.
+ *
+ * Sem id de proposito: page.test exige `oferta` como ultima section[id] — e
+ * a inversao a deixou ainda mais literalmente a ultima.
  */
 export function Fechamento() {
   const f = content.fechamento;

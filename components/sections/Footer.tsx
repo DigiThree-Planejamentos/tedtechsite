@@ -15,9 +15,13 @@ export function Footer() {
        Vem junto o jogo de tokens (--band-fg*), que e o que deixa o texto
        inverter sozinho em vez de espalhar hex claro por dez lugares.
 
-       Recorte na base ele NAO leva — regra `footer.site-band--dark::after`
-       no globals.css. Ele e o fim da pagina; nao ha proxima superficie. */
-    <footer className="site-band site-band--dark px-5 py-12">
+       Recorte na base ele NAO leva: e o fim da pagina, nao ha proxima
+       superficie. Isso ja foi uma regra de elemento no globals.css
+       (`footer.site-band--dark::after`); virou a classe --no-notch quando a
+       inversao fechamento/oferta criou outras faixas na mesma situacao. Ou
+       seja: a classe abaixo NAO e decoracao, e o que segura a excecao. Sem
+       ela o rodape volta a pintar a aba clara na base. */
+    <footer className="site-band site-band--dark site-band--no-notch px-5 py-12">
       <Reveal
         variant="simple"
         /* `top bottom` em vez do default `top 85%`: o rodape e a ultima

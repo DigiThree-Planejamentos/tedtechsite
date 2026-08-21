@@ -200,10 +200,19 @@ html.lenis body {
     --band-rule: rgba(255, 255, 255, 0.1);
   }
 
-  /* Folha branca PURA para a secao de fechamento: o mesmo #ffffff do
-     rodape, de proposito — os dois emendam sem linha visivel e o rodape
-     le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
-     encostado no rodape branco, a diferenca aparece como mancha azulada.
+  /* Folha branca PURA para a secao de fechamento. O motivo mudou duas vezes,
+     e o valor sobreviveu as duas:
+       1. Nasceu como o #ffffff do rodape, pros dois emendarem sem linha.
+       2. O rodape virou escuro e essa emenda deixou de existir.
+       3. O fechamento subiu pra ANTES da oferta e passou a ter a faixa clara
+          de Caminhos (#f7fbff) em cima. E aqui que o branco puro volta a ter
+          funcao: com --light as duas seriam a MESMA superficie, duas telas
+          cheias do mesmo tom sem nenhuma quebra. O branco levanta a virada
+          um ponto — o lugar mais claro da pagina, logo antes do mergulho no
+          escuro da oferta.
+     A diferenca entre os dois e sutil de proposito: e um degrau, nao uma
+     emenda, e por isso Caminhos nao leva recorte (ver .site-band--no-notch).
+
      HISTORICO: esta regra tinha um `box-shadow: 0 1px 0 0 #ffffff` no fim,
      pra cobrir um fio cinza de antialiasing na emenda com o rodape, que era
      branco. O rodape virou escuro; aquele 1px branco passaria a desenhar uma
@@ -243,11 +252,13 @@ html.lenis body {
 
      Lado por tom, como pedido: clara puxa pra ESQUERDA, escura pra DIREITA.
 
-     Quem fica de fora e so o RODAPE, porque ele e o fim da pagina e nao ha
-     proxima superficie pra mostrar (ver a regra footer.site-band--dark::after
-     mais abaixo). A faixa branca do fechamento ja esteve de fora tambem,
-     enquanto o rodape era branco — recorte branco sobre branco nao aparece.
-     Com o rodape escuro ela voltou pra regra geral. */
+     QUEM FICA DE FORA: toda faixa cuja proxima superficie e a MESMA que a
+     dela. O recorte so existe pra mostrar o que vem depois; quando o que vem
+     depois e a propria superficie, nao ha o que mostrar nem emenda pra
+     marcar — ver `.site-band--no-notch` mais abaixo, que e onde essa regra
+     mora. O rodape sempre foi um caso dela (nao ha "depois" nenhum, ele e o
+     fim da pagina), so que escrito como excecao avulsa; virou regra geral
+     quando a inversao fechamento/oferta criou outros dois casos. */
   .site-band {
     --notch-w: 280px;
     --notch-d: 56px;
@@ -258,11 +269,10 @@ html.lenis body {
   /* Faixa clara E branca: buraco. Duas camadas de mascara — a folha inteira
      menos a forma do recorte — combinadas por exclusao.
 
-     A branca (fechamento) entrou aqui quando o rodape virou escuro. Antes
-     ela ficava de fora porque o rodape era branco: o recorte seria branco
-     sobre branco, invisivel, e ainda contradiria a emenda sem linha entre os
-     dois. Com o rodape escuro, ela passa a obedecer a mesma regra das
-     outras — o buraco mostra o que vem depois. */
+     A branca (fechamento) entrou aqui quando o rodape virou escuro; antes,
+     com rodape branco embaixo, o recorte seria branco sobre branco. Hoje ela
+     e o caso mais bem servido pela regra: tem a oferta escura logo abaixo, e
+     o buraco mostra os circuitos exatamente como a oferta os mostra. */
   .site-band--light::before,
   .site-band--white::before {
     -webkit-mask-image: linear-gradient(#000 0 0), var(--notch-shape);
@@ -283,10 +293,18 @@ html.lenis body {
     mask-composite: exclude;
   }
 
-  /* Faixa escura: aba pintada. `--notch-fill` existe porque a ultima faixa
-     escura da pagina (a oferta) tem o fechamento BRANCO PURO embaixo, nao o
-     #f7fbff das claras — e a diferenca entre os dois aparece como mancha
-     azulada, pelo mesmo motivo documentado na regra da faixa branca. */
+  /* Faixa escura: aba pintada. O default #f7fbff serve pra faixa escura
+     seguida de uma CLARA, que e o caso das duas que sobraram (dores e
+     evolucao).
+
+     `--notch-fill` e a valvula pro caso em que a proxima superficie clara
+     nao e o #f7fbff. Hoje ninguem a usa: a oferta a carregava enquanto tinha
+     o fechamento BRANCO PURO embaixo, e a inversao pos o fechamento acima
+     dela. A valvula fica porque o caso volta ao primeiro reordenamento que
+     puser uma escura em cima da branca — com a aba em #f7fbff encostada no
+     #ffffff, a diferenca le como mancha azulada (mesmo motivo documentado na
+     regra da faixa branca). bands.test guarda os dois lados: exige o fill
+     quando a vizinhanca pede, e proibe quando nao pede. */
   .site-band--dark::after {
     content: '';
     position: absolute;
@@ -321,21 +339,49 @@ html.lenis body {
      1rem alem da profundidade: e o respiro que faz o recorte ler como forma
      propria em vez de continuacao do card.
 
-     Seletor composto de proposito (0-2-0): as regras de `padding-block` do
-     .site-section vivem em media queries mais abaixo no arquivo e, com a
-     mesma especificidade, venceriam esta por ordem. */
-  .site-section.site-band--light,
-  .site-section.site-band--dark,
-  .site-section.site-band--white {
+     Seletor composto de proposito (0-2-0, e 0-3-0 com o :not): as regras de
+     `padding-block` do .site-section vivem em media queries mais abaixo no
+     arquivo e, com a mesma especificidade, venceriam esta por ordem.
+
+     Sem recorte, sem reserva: quem carrega --no-notch nao tem o que abrigar
+     na base e volta ao respiro normal da .site-section. Nao e so limpeza —
+     e altura devolvida onde ela e escassa. Em tela baixa a reserva vale 72px
+     contra os 32px do padding normal, e a oferta, que ja media 1,15 tela,
+     recupera 40px deles. */
+  .site-section.site-band--light:not(.site-band--no-notch),
+  .site-section.site-band--dark:not(.site-band--no-notch),
+  .site-section.site-band--white:not(.site-band--no-notch) {
     padding-bottom: calc(var(--notch-d) + 1rem);
   }
 
-  /* O RODAPE NAO LEVA RECORTE. Ele usa as cores da faixa escura, entao
-     casaria com a regra `.site-band--dark::after` e ganharia uma aba clara na
-     base — apontando pra um "depois" que nao existe: ele e o fim da pagina.
-     Foi excecao pedida desde o comeco ("menos no rodape"). */
-  footer.site-band--dark::after {
+  /* FAIXA SEM RECORTE: a proxima superficie e a mesma que a dela.
+     O recorte mostra o que vem depois; quando o que vem depois e o mesmo
+     tom, ele nao mostra nada — no melhor caso e invisivel, no pior mente,
+     como a aba clara que a oferta pintaria apontando pro rodape escuro.
+
+     Os tres casos de hoje, todos criados ou herdados pela inversao
+     fechamento/oferta:
+       caminhos -> fechamento   claro sobre claro (#f7fbff -> #ffffff)
+       oferta   -> rodape       escuro sobre escuro (os dois transparentes)
+       rodape   -> nada         e o fim da pagina ("menos no rodape", pedido
+                                do cliente desde o comeco)
+
+     Mata os DOIS mecanismos porque a classe nao sabe de que tom e a faixa:
+     a aba pintada da escura (::after) e a mascara de buraco da clara/branca
+     (::before). Cuidado ao mexer: o ::before tambem e quem PINTA a faixa —
+     aqui so a mascara sai, o fundo continua. */
+  .site-band--no-notch::after {
     content: none;
+  }
+
+  /* Atalho `mask`, nao `mask-image`: o atalho zera TODOS os longhands de
+     mascara de uma vez. Zerar so a imagem deixaria pra tras o
+     `mask-composite: exclude` da regra de cima, apontando pra camadas que
+     nao existem mais — funciona hoje, e e o tipo de resto que quebra na
+     proxima mudanca de mascara. */
+  .site-band--no-notch::before {
+    -webkit-mask: none;
+    mask: none;
   }
 
   @media (max-width: 640px) {

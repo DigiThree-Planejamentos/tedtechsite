@@ -79,7 +79,13 @@ export function Caminhos() {
   return (
     <section
       id="caminhos"
-      className="site-section site-band site-band--light site-band--full"
+      // Sem recorte na base: depois da inversao quem vem abaixo e o
+      // fechamento, faixa BRANCA. O buraco das faixas claras mostra o fundo
+      // escuro com os circuitos, e ali embaixo nao ha circuito nenhum — ele
+      // anunciaria uma secao escura que nao vem. Pintar uma aba #ffffff
+      // sobre o #f7fbff daqui tambem nao resolve: some de tao parecida.
+      // Ver `.site-band--no-notch` no globals.css.
+      className="site-section site-band site-band--light site-band--full site-band--no-notch"
     >
       <div className="mx-auto w-full max-w-content text-center">
         <SectionLabel>{c.label}</SectionLabel>
