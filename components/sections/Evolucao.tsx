@@ -7,13 +7,13 @@ import { content } from '@/lib/content';
 
 export function Evolucao() {
   const e = content.evolucao;
-  // id + scroll-mt-24 como as outras secoes navegaveis: o header linka pra ca
-  // (site.nav), e sem a margem de rolagem o titulo pararia embaixo da barra
-  // fixa. O 24 e o mesmo das irmas, nao um numero novo.
+  // id porque o header linka pra ca (site.nav). Sem scroll-mt, como as outras
+  // faixas de tela cheia: a secao mede uma tela exata e precisa chegar rente
+  // ao topo pra caber — ver .site-section.site-band--full no globals.css.
   return (
     <section
       id="evolucao"
-      className="site-section site-band site-band--dark site-band--full scroll-mt-24"
+      className="site-section site-band site-band--dark site-band--full"
     >
       <div className="mx-auto grid w-full max-w-content items-center gap-12 md:grid-cols-2">
         <div className="flex justify-center">
