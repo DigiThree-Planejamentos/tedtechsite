@@ -947,8 +947,8 @@ html.lenis body {
 
   .module-card {
     height: 540px;
-    background: linear-gradient(165deg, #20344c 0%, #14263c 48%, #0a1525 100%);
-    color: #ffffff;
+    background: linear-gradient(165deg, #ffffff 0%, #f2f7fc 48%, #e6edf6 100%);
+    color: #07111f;
   }
 
   /* A foto entra levemente ampliada e assenta ao ativar. */
@@ -966,18 +966,24 @@ html.lenis body {
     display: none;
   }
 
+  /* Overlay BRANCO desde a inversao de cores. Nao e o degrade escuro com os
+     canais trocados: as paradas do meio subiram (0.78 -> 0.86, 0.96 -> 0.98)
+     porque branco por cima de foto escura le como NEBLINA muito antes de
+     escuro por cima de foto clara comecar a incomodar. Metade das fotos do
+     curso sao escuras — teclado, gabinete, cabos — e sao elas que cobram
+     essa diferenca. */
   .module-card__shade {
     background: linear-gradient(180deg,
-        rgba(3, 10, 24, 0.02) 0%,
-        rgba(3, 10, 24, 0.08) 26%,
-        rgba(7, 17, 31, 0.78) 44%,
-        rgba(7, 17, 31, 0.96) 68%,
-        rgba(7, 17, 31, 0.99) 100%);
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(255, 255, 255, 0.10) 26%,
+        rgba(255, 255, 255, 0.86) 44%,
+        rgba(255, 255, 255, 0.98) 68%,
+        rgba(255, 255, 255, 1) 100%);
   }
 
   .module-card__cta {
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
       0 10px 26px rgba(3, 10, 24, 0.22);
   }
 }
@@ -1014,17 +1020,24 @@ html.lenis body {
     flex: 2.8 1 0%;
   }
 
-  /* Veu sobre o card colapsado. Nao e enfeite: o titulo vertical e branco
-     e fica na metade do card, onde o degrade do shade tem so 0.39 de
-     opacidade — e tres das seis fotos sao claras ali. Sem o veu o titulo
-     some. De quebra, o card ativo "acende" ao expandir. */
+  /* Veu sobre o card colapsado. Nao e enfeite: desde a inversao o titulo
+     vertical e ESCURO e cruza a metade do card, onde o shade ainda deixa a
+     foto aparecer — e tres das seis fotos sao escuras justo ali (teclado,
+     gabinete, cabos). Sem o veu o titulo some.
+     Subiu de 0.5 para 0.62 junto com a inversao, e nao por gosto: clarear
+     foto escura o bastante pra segurar texto preto custa mais opacidade do
+     que escurecer foto clara pra segurar texto branco. Medido em 1536x695
+     com 0.62 — pior dos seis: modulo 04 (cabos) a 7.33:1; melhor: modulo 01
+     (ceu) a 13.30:1. O minimo AA e 4.5:1, entao ha folga pra abaixar se o
+     veu pesar demais no visual.
+     De quebra, o card ativo "acende" ao expandir. */
   .module-card::after {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 5;
     pointer-events: none;
-    background: rgba(7, 17, 31, 0.5);
+    background: rgba(255, 255, 255, 0.62);
     transition: opacity 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
   }
 
@@ -1045,7 +1058,7 @@ html.lenis body {
     font-size: 14px;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: #ffffff;
+    color: #07111f;
     pointer-events: none;
     transition: opacity 300ms ease;
   }
