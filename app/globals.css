@@ -204,10 +204,11 @@ html.lenis body {
      rodape, de proposito — os dois emendam sem linha visivel e o rodape
      le como continuacao da secao. O --light (#f7fbff) nao serve aqui:
      encostado no rodape branco, a diferenca aparece como mancha azulada.
-     O box-shadow no fim da regra supoe que o que vier depois desta faixa
-     tambem seja branco (hoje: o rodape); uma segunda faixa branca no meio
-     da pagina, sobre uma secao escura, mostraria uma linha branca de 1px
-     sobrando por baixo dela. */
+     HISTORICO: esta regra tinha um `box-shadow: 0 1px 0 0 #ffffff` no fim,
+     pra cobrir um fio cinza de antialiasing na emenda com o rodape, que era
+     branco. O rodape virou escuro; aquele 1px branco passaria a desenhar uma
+     linha clara sobre o escuro. O proprio comentario antigo avisava que o
+     truque supunha branco embaixo — saiu junto com a suposicao. */
   .site-band--white {
     --band-bg: #ffffff;
     --band-solid: #ffffff;
@@ -217,13 +218,6 @@ html.lenis body {
     --band-fg-muted: #526071;
     --band-fg-faint: #667284;
     --band-rule: rgba(15, 42, 81, 0.1);
-    /* A fronteira com o rodape cai em coordenada fracionaria (medido:
-       506.875px com devicePixelRatio 1.25). Nao ha vao no layout — o
-       fio cinza e a antialiasing das duas caixas brancas misturando com
-       o fundo escuro do body por baixo. Este 1px de branco logo abaixo
-       cobre a fresta sem mexer no fluxo, que e o que uma margem negativa
-       ou um wrapper branco fariam. */
-    box-shadow: 0 1px 0 0 #ffffff;
   }
 
   /* ---- Recorte na base das faixas -------------------------------------
@@ -249,11 +243,11 @@ html.lenis body {
 
      Lado por tom, como pedido: clara puxa pra ESQUERDA, escura pra DIREITA.
 
-     A faixa branca (fechamento) fica de fora, e nao e esquecimento: o que
-     vem depois dela e o rodape, tambem branco. Pela propria regra do
-     recorte — mostrar a proxima superficie — o desenho seria branco sobre
-     branco, invisivel. E um recorte escuro ali contradiria a emenda sem
-     linha entre fechamento e rodape, que e decisao registrada acima. */
+     Quem fica de fora e so o RODAPE, porque ele e o fim da pagina e nao ha
+     proxima superficie pra mostrar (ver a regra footer.site-band--dark::after
+     mais abaixo). A faixa branca do fechamento ja esteve de fora tambem,
+     enquanto o rodape era branco — recorte branco sobre branco nao aparece.
+     Com o rodape escuro ela voltou pra regra geral. */
   .site-band {
     --notch-w: 280px;
     --notch-d: 56px;
@@ -261,9 +255,16 @@ html.lenis body {
     --notch-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 56' preserveAspectRatio='none'%3E%3Cpath d='M 0 56 A 28 28 0 0 0 28 28 A 28 28 0 0 1 56 0 L 224 0 A 28 28 0 0 1 252 28 A 28 28 0 0 0 280 56 Z' fill='%23000'/%3E%3C/svg%3E");
   }
 
-  /* Faixa clara: buraco. Duas camadas de mascara — a folha inteira menos a
-     forma do recorte — combinadas por exclusao. */
-  .site-band--light::before {
+  /* Faixa clara E branca: buraco. Duas camadas de mascara — a folha inteira
+     menos a forma do recorte — combinadas por exclusao.
+
+     A branca (fechamento) entrou aqui quando o rodape virou escuro. Antes
+     ela ficava de fora porque o rodape era branco: o recorte seria branco
+     sobre branco, invisivel, e ainda contradiria a emenda sem linha entre os
+     dois. Com o rodape escuro, ela passa a obedecer a mesma regra das
+     outras — o buraco mostra o que vem depois. */
+  .site-band--light::before,
+  .site-band--white::before {
     -webkit-mask-image: linear-gradient(#000 0 0), var(--notch-shape);
     mask-image: linear-gradient(#000 0 0), var(--notch-shape);
     -webkit-mask-size: 100% 100%, var(--notch-w) var(--notch-d);
@@ -324,8 +325,17 @@ html.lenis body {
      .site-section vivem em media queries mais abaixo no arquivo e, com a
      mesma especificidade, venceriam esta por ordem. */
   .site-section.site-band--light,
-  .site-section.site-band--dark {
+  .site-section.site-band--dark,
+  .site-section.site-band--white {
     padding-bottom: calc(var(--notch-d) + 1rem);
+  }
+
+  /* O RODAPE NAO LEVA RECORTE. Ele usa as cores da faixa escura, entao
+     casaria com a regra `.site-band--dark::after` e ganharia uma aba clara na
+     base — apontando pra um "depois" que nao existe: ele e o fim da pagina.
+     Foi excecao pedida desde o comeco ("menos no rodape"). */
+  footer.site-band--dark::after {
+    content: none;
   }
 
   @media (max-width: 640px) {
