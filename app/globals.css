@@ -975,20 +975,6 @@ html.lenis body {
         rgba(7, 17, 31, 0.99) 100%);
   }
 
-  .module-card__lesson {
-    opacity: 0.86;
-    transform: translate3d(0, 4px, 0);
-    transition:
-      opacity 500ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: calc(var(--lesson-index) * 45ms);
-  }
-
-  .module-card[data-active='true'] .module-card__lesson {
-    opacity: 1;
-    transform: translate3d(0, 0, 0);
-  }
-
   .module-card__cta {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.95),
@@ -1014,8 +1000,11 @@ html.lenis body {
        da secao sem a secao passar de uma tela em laptop baixo. Em 1536x695
        quem mandava era o PISO, nao a conta do meio — a secao fechava com 6px
        de folga ate o recorte, e o card escuro encostava nele.
-       Cabe: o corpo do card soma 245px de conteudo, entao mesmo em 415 sobram
-       ~170px de area de foto. */
+       Cabe com folga: sem a lista de topicos o corpo do card mede 177px no
+       pior caso (medido em 1536x695, descricao de duas linhas — era 245px
+       com os topicos), entao mesmo no piso de 415 sobram 238px de foto.
+       O piso NAO desceu junto quando os topicos sairam, de proposito: quem
+       o fixa e o recorte na base da secao, nao o conteudo do card. */
     height: clamp(415px, calc(100svh - 22rem), 545px);
     cursor: pointer;
     transition: flex 700ms cubic-bezier(0.6, 0.04, 0.1, 1);
@@ -1236,8 +1225,7 @@ html.lenis body {
   .module-card,
   .module-card__image,
   .module-card__spine,
-  .module-card__body,
-  .module-card__lesson {
+  .module-card__body {
     transition: none;
   }
 

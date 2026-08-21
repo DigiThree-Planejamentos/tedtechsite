@@ -42,15 +42,23 @@ describe('Modulos', () => {
     }
   });
 
-  it('shows all module contents without requiring disclosure', () => {
+  it('shows title and description on every card, without the lesson list', () => {
     const { container } = render(<Modulos />);
     expect(container.querySelectorAll('article')).toHaveLength(6);
     expect(container.querySelector('details')).toBeNull();
     for (const module of content.modules) {
-      for (const lesson of module.lessons) {
-        expect(screen.getByText(lesson)).toBeInTheDocument();
-      }
       expect(screen.getByText(module.desc)).toBeInTheDocument();
+    }
+
+    // Os topicos sairam do card por pedido do cliente: o card agora diz o
+    // que o modulo E, nao o que ele lista. `lessons` continua no content
+    // porque e a grade real do curso e content.test guarda ela — mas nenhum
+    // card renderiza. Sem este assert, uma volta acidental (um `map` num
+    // refactor, um merge) so apareceria no print, e cada card ganharia de
+    // volta os ~140px de texto que a foto acabou de herdar.
+    expect(container.querySelector('ul')).toBeNull();
+    for (const lesson of content.modules.flatMap((m) => m.lessons)) {
+      expect(screen.queryByText(lesson)).toBeNull();
     }
   });
 

@@ -2,7 +2,6 @@
 
 import {
   useState,
-  type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
 } from 'react';
 import Image from 'next/image';
@@ -16,7 +15,7 @@ import { content } from '@/lib/content';
  * Acordeao horizontal de modulos, com layout e animacao portados do hero
  * do digithree.com.br: os seis cards dividem a largura por flex-grow, e o
  * ativo cresce de 1 para 3.6 em 700ms. O card colapsado mostra so o titulo
- * escrito na vertical; o ativo revela numero, descricao, licoes e CTA.
+ * escrito na vertical; o ativo revela numero, titulo, descricao e CTA.
  *
  * Substituiu um carrossel horizontal pinado por ScrollTrigger. O pin
  * existia para arrastar a faixa de cards conforme a pagina rolava; com o
@@ -130,24 +129,6 @@ export function Modulos() {
                 <p className="mt-2 text-[11px] leading-relaxed text-slate-200/85 md:text-xs">
                   {module.desc}
                 </p>
-
-                <div className="mt-4 font-mono text-[9px] font-bold uppercase tracking-[1.2px] text-[#7fd0f5] md:text-[10px]">
-                  O que você aprende
-                </div>
-                <ul className="mt-2.5 grid gap-1.5">
-                  {module.lessons.map((lesson, lessonIndex) => (
-                    <li
-                      key={lesson}
-                      className="module-card__lesson flex items-start gap-2 py-1 text-[10px] leading-tight text-slate-100 md:text-[11px]"
-                      style={{ '--lesson-index': lessonIndex } as CSSProperties}
-                    >
-                      <span className="mt-[1px] text-[#7fd0f5]" aria-hidden>
-                        ✓
-                      </span>
-                      <span>{lesson}</span>
-                    </li>
-                  ))}
-                </ul>
 
                 <a
                   href={content.checkoutUrl}
