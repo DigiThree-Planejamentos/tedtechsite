@@ -29,19 +29,22 @@ export function Hero() {
             sendo `transform`, que funciona mesmo sem espaco livre. */}
         <div className="flex -translate-y-4 flex-col justify-between text-left md:-translate-y-6 lg:-translate-y-10">
           <div>
-          {/* O titulo sobe 16px; paragrafo e CTA ficam onde estavam, porque os
-              translate deles nao mudaram. Antes era +16/+20/+24 pra baixo,
-              virou 0/+4/+8 — o mesmo passo de 16px em todo breakpoint, pra
-              subida ser igual em qualquer largura em vez de variar junto com
-              o tamanho da fonte.
+          {/* O titulo sobe 40px; paragrafo e CTA ficam onde estavam, porque os
+              translate deles nao mudaram. Original +16/+20/+24 pra baixo ->
+              -24/-20/-16, em duas rodadas (16px e depois 24px). Os valores
+              divergem por breakpoint DE PROPOSITO, pra subida liquida ser os
+              mesmos 40px em qualquer largura em vez de variar junto com o
+              tamanho da fonte.
 
-              O teto e o header: medido em 1536x695, a barra termina em 82px e
-              a caixa do titulo comecava em 127px. Os 16px cabem com sobra
-              (45 -> 29 de folga na caixa), e a folga VISIVEL e bem maior,
-              porque o leading 1.25 da linha poe uma meia-entrelinha alta
-              antes do desenho do "C". Subir bem mais que isso comeca a cobrar
-              do respiro embaixo da barra. */}
-          <h1 className="max-w-3xl translate-y-0 font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)] md:translate-y-1 lg:translate-y-2">
+              CUIDADO AO SUBIR MAIS: o teto e o header, e ele ja esta perto.
+              Medido em 1536x695, a barra termina em 82px e a caixa do titulo
+              comeca em 87px — restam 5px. Parece pior do que e, porque a
+              caixa comeca bem acima da tinta: o leading 1.25 desta linha poe
+              ~39px de meia-entrelinha antes do desenho do "C", entao o ar
+              VISIVEL ainda e de uns 44px. Ou seja, da pra descer o numero
+              mais um pouco, mas nao muito — e a partir daqui quem manda e o
+              print, nao a conta. */}
+          <h1 className="max-w-3xl -translate-y-6 font-extrabold leading-[1.08] tracking-tight text-[color:var(--band-fg-strong)] md:-translate-y-5 lg:-translate-y-4">
             <SplitReveal as="span" type="lines" trigger="ready" className="block">
               {/* The space between the spans is load-bearing: it keeps the
                   accessible name "Chega de pagar técnico" in one piece. */}
