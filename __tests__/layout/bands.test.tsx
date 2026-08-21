@@ -31,6 +31,33 @@ export const RITMO = [
 ];
 
 describe('Faixas da pagina', () => {
+  // O recorte da base pinta uma aba com a cor da PROXIMA faixa. Para quase
+  // todas isso e #f7fbff, o tom das claras — e o CSS assume esse padrao.
+  // A excecao e a faixa escura que tem a BRANCA embaixo: ali a aba precisa
+  // ser #ffffff, senao encosta no branco puro do fechamento e le como mancha
+  // azulada (mesmo motivo documentado em .site-band--white).
+  //
+  // Isto quebra em silencio: basta reordenar as secoes e outra faixa escura
+  // passa a ser a vizinha da branca, com a aba na cor errada e ninguem
+  // avisando. O teste ancora a excecao na VIZINHANCA, nao no nome da secao.
+  it('gives the dark band above the white one a pure-white notch fill', () => {
+    const { container } = render(<Home />);
+    const secoes = Array.from(container.querySelectorAll('main section'));
+    const iBranca = secoes.findIndex((s) => s.className.includes('site-band--white'));
+    expect(iBranca).toBeGreaterThan(0);
+
+    const anterior = secoes[iBranca - 1];
+    expect(anterior.className).toContain('site-band--dark');
+    expect(anterior.className).toContain('[--notch-fill:#ffffff]');
+
+    // E so ela: nas outras escuras o default (#f7fbff) e o certo, porque a
+    // proxima faixa delas e clara, nao branca.
+    for (const [i, s] of secoes.entries()) {
+      if (i === iBranca - 1) continue;
+      expect(s.className).not.toContain('--notch-fill');
+    }
+  });
+
   it('da a cada secao o tom e a altura que o ritmo manda', () => {
     const { container } = render(<Home />);
     const secoes = Array.from(container.querySelectorAll('main section'));

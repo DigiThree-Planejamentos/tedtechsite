@@ -148,10 +148,28 @@ html.lenis body {
      Cada secao pinta o proprio fundo e define a cor do texto que seus
      filhos herdam. Antes isso vinha do .site-card, que envolvia a
      pagina inteira; sem essa fonte de verdade o site perde a cor. */
+  /* A PINTURA DA FAIXA MORA NUMA CAMADA PROPRIA, nao na secao.
+     Parece rodeio e nao e: o recorte da base precisa abrir um buraco no
+     fundo, e mascara aplicada na secao levaria o CONTEUDO junto. Nao ha
+     folga pra isso — em 1024x768 a oferta fecha com ~0px sobrando embaixo,
+     entao o texto seria cortado. Com o fundo numa camada atras, a mascara
+     morde so a tinta.
+
+     z-index -1 e nao 0: a secao tem position:relative mas nao cria contexto
+     de empilhamento, entao esta camada cai no contexto do <main> (que tem
+     `relative z-10`), atras de todo o conteudo e ainda por cima do body. */
   .site-band {
     position: relative;
-    background: var(--band-bg);
     color: var(--band-fg);
+  }
+
+  .site-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--band-bg);
+    pointer-events: none;
   }
 
   /* As faixas claras sao folhas solidas; as escuras sao janelas. */
@@ -206,6 +224,91 @@ html.lenis body {
        cobre a fresta sem mexer no fluxo, que e o que uma margem negativa
        ou um wrapper branco fariam. */
     box-shadow: 0 1px 0 0 #ffffff;
+  }
+
+  /* ---- Recorte na base das faixas -------------------------------------
+     Mesmo desenho do recorte inferior do video: uma aba subindo da base,
+     cantos de fora convexos e os de dentro concavos, com raio igual a
+     METADE da profundidade — e essa proporcao que faz os dois arcos se
+     encontrarem sem reta no meio e formarem o S continuo. Trocar a
+     profundidade sem trocar o raio junto desmancha o S.
+
+     Proporcao travada em 5:1 (280x56 no desktop, 180x36 no mobile) pra
+     mascara escalar sem distorcer os arcos.
+
+     O RECORTE MOSTRA A PROXIMA FAIXA, e o mecanismo muda com o tom porque
+     as duas faixas sao coisas diferentes (ver comentarios acima: clara e
+     folha solida, escura e janela):
+
+       faixa clara  -> BURACO de verdade na tinta. Atras dela esta o fundo
+                       escuro do site com os circuitos, que e exatamente o
+                       que a proxima faixa mostra.
+       faixa escura -> nao ha tinta pra furar. O recorte e uma ABA CLARA
+                       pintada, subindo da base — o mesmo que a proxima
+                       faixa mostraria.
+
+     Lado por tom, como pedido: clara puxa pra ESQUERDA, escura pra DIREITA.
+
+     A faixa branca (fechamento) fica de fora, e nao e esquecimento: o que
+     vem depois dela e o rodape, tambem branco. Pela propria regra do
+     recorte — mostrar a proxima superficie — o desenho seria branco sobre
+     branco, invisivel. E um recorte escuro ali contradiria a emenda sem
+     linha entre fechamento e rodape, que e decisao registrada acima. */
+  .site-band {
+    --notch-w: 280px;
+    --notch-d: 56px;
+    --notch-inset: 12%;
+    --notch-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 56' preserveAspectRatio='none'%3E%3Cpath d='M 0 56 A 28 28 0 0 0 28 28 A 28 28 0 0 1 56 0 L 224 0 A 28 28 0 0 1 252 28 A 28 28 0 0 0 280 56 Z' fill='%23000'/%3E%3C/svg%3E");
+  }
+
+  /* Faixa clara: buraco. Duas camadas de mascara — a folha inteira menos a
+     forma do recorte — combinadas por exclusao. */
+  .site-band--light::before {
+    -webkit-mask-image: linear-gradient(#000 0 0), var(--notch-shape);
+    mask-image: linear-gradient(#000 0 0), var(--notch-shape);
+    -webkit-mask-size: 100% 100%, var(--notch-w) var(--notch-d);
+    mask-size: 100% 100%, var(--notch-w) var(--notch-d);
+    /* Porcentagem, NAO `left 12% bottom`: a forma de tres valores nao e
+       aceita em mask-position, a declaracao inteira cai, e a mascara volta
+       pro default 0% 0% — a forma some no canto de cima, atras do header, e
+       parece que o recorte nao existe. Custou uma rodada de depuracao.
+       Em mask-position, 12% significa 12% do espaco que sobra (largura da
+       secao menos a da forma), e 100% no eixo Y encosta na base. */
+    -webkit-mask-position: 0 0, var(--notch-inset) 100%;
+    mask-position: 0 0, var(--notch-inset) 100%;
+    -webkit-mask-repeat: no-repeat, no-repeat;
+    mask-repeat: no-repeat, no-repeat;
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* Faixa escura: aba pintada. `--notch-fill` existe porque a ultima faixa
+     escura da pagina (a oferta) tem o fechamento BRANCO PURO embaixo, nao o
+     #f7fbff das claras — e a diferenca entre os dois aparece como mancha
+     azulada, pelo mesmo motivo documentado na regra da faixa branca. */
+  .site-band--dark::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: var(--notch-inset);
+    z-index: -1;
+    width: var(--notch-w);
+    height: var(--notch-d);
+    background: var(--notch-fill, #f7fbff);
+    -webkit-mask-image: var(--notch-shape);
+    mask-image: var(--notch-shape);
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .site-band {
+      --notch-w: 180px;
+      --notch-d: 36px;
+    }
   }
 
   /* As faixas escuras nao tem textura propria: quem preenche o vao e o
