@@ -68,7 +68,15 @@ export function Hero() {
             </SplitReveal>
           </h1>
 
-          <p className="mt-5 max-w-xl translate-x-2 translate-y-6 text-sm leading-relaxed text-[color:var(--band-fg-strong)] sm:text-base md:translate-x-4 lg:translate-x-4">
+          {/* Sobe os MESMOS 40px do titulo (translate-y-6 -> -translate-y-4,
+              ou seja +24 -> -16). O numero nao e escolhido pelo gosto: e o
+              que devolve o vao original de 19px entre titulo e paragrafo, que
+              tinha esticado pra 59px enquanto so o titulo subia. Os dois
+              voltam a andar como um bloco so, agora 40px mais alto.
+
+              Sem variante por breakpoint porque o translate original tambem
+              nao tinha — aqui o valor ja era uniforme, diferente do titulo. */}
+          <p className="mt-5 max-w-xl -translate-y-4 translate-x-2 text-sm leading-relaxed text-[color:var(--band-fg-strong)] sm:text-base md:translate-x-4 lg:translate-x-4">
             <span className="block">Pare de gastar com técnico e comece a ganhar</span>
             <span className="block">como um. Aprenda manutenção do zero, resolva</span>
             <span className="block">seus próprios problemas e use essa habilidade</span>
