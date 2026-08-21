@@ -12,12 +12,17 @@ import Home from '@/app/page';
 // com o canvas de circuitos. A propria troca de tom e a separacao entre uma
 // secao e a seguinte — sem fio, sem aba, sem nenhum enfeite na emenda.
 //
-// Claro e escuro se alternavam do inicio ao fim ate a inversao pedida pelo
-// cliente (fechamento pra antes da oferta). Trocar de lugar uma faixa clara e
-// uma escura numa sequencia alternada SEMPRE cria uma vizinhanca repetida —
-// nao ha arranjo de cores que salve, e por isso a alternancia deixou de ser
-// invariante. O que ficou no lugar dela esta em `FAMILIA` e nos testes de
-// emenda abaixo.
+// Claro e escuro alternam do inicio ao fim, o RODAPE INCLUIDO.
+//
+// A invariante chegou a cair. A inversao pedida pelo cliente (fechamento pra
+// antes da oferta) trocou de lugar uma faixa clara e uma escura, e isso numa
+// sequencia alternada SEMPRE cria vizinhanca repetida — a pagina passou um
+// tempo com duas emendas planas e duas faixas sem recorte. A troca de FUNDOS
+// que veio depois (virada escura, oferta branca) devolveu a alternancia sem
+// custo nenhum: as duas mudancas se cancelam exatamente.
+//
+// Por isso o teste voltou. Se ele cair de novo, e sinal de que mexeram na
+// ordem ou no tom sem refazer a conta das duas pontas.
 export const RITMO = [
   { id: 'hero', tom: 'light', full: true },
   { id: 'dores', tom: 'dark', full: true },
@@ -27,14 +32,15 @@ export const RITMO = [
   { id: 'modulos', tom: 'light', full: true },
   { id: 'evolucao', tom: 'dark', full: true },
   { id: 'caminhos', tom: 'light', full: true },
-  // Fechamento (a virada): faixa branca PURA, #ffffff contra o #f7fbff das
-  // claras. Sem id porque page.test exige oferta como ultima section[id].
-  // Subiu pra ca na inversao: a virada e o ultimo argumento, a oferta e a
-  // ultima palavra.
-  { id: '', tom: 'white', full: true },
+  // Fechamento (a virada): ESCURA desde a troca de fundos — o branco que era
+  // da faixa foi pros dois cartoes (.site-light-panel). Sem id porque
+  // page.test exige oferta como ultima section[id]. Subiu pra ca na inversao:
+  // a virada e o ultimo argumento, a oferta e a ultima palavra.
+  { id: '', tom: 'dark', full: true },
   // O FAQ deixou de ser secao: virou o card direito da oferta. E a oferta
-  // fecha a pagina, com o rodape escuro emendando nela sem nenhuma linha.
-  { id: 'oferta', tom: 'dark', full: true },
+  // fecha a pagina, hoje em BRANCO PURO (#ffffff, nao o #f7fbff das claras):
+  // e a superficie que era dos cartoes, agora ocupando a faixa toda.
+  { id: 'oferta', tom: 'white', full: true },
 ];
 
 // A familia da superficie, que e o que o recorte consegue mostrar. Clara e
@@ -136,21 +142,12 @@ describe('Faixas da pagina', () => {
     });
   });
 
-  // A alternancia claro/escuro era invariante ate a inversao, e a inversao
-  // nao podia mante-la: trocar uma faixa clara por uma escura numa sequencia
-  // que alterna cria vizinhanca repetida, sempre.
-  //
-  // O que sobrou de guardavel e o TAMANHO do estrago. Duas emendas planas sao
-  // o preco da inversao; uma terceira seria descuido de alguem, e e o que
-  // este teste pega. Listadas por nome pra que qualquer reordenamento futuro
-  // caia aqui e obrigue a decidir de novo, em vez de ir somando trecho chapado
-  // sem ninguem notar.
-  const PLANAS = [
-    ['caminhos', 'fechamento'], // #f7fbff -> #ffffff, o degrau da virada
-    ['oferta', 'rodape'], // as duas transparentes, o mesmo campo de circuitos
-  ];
-
-  it('nao deixa a inversao espalhar trecho chapado alem das duas emendas que ela custou', () => {
+  // O ritmo so e ritmo se nenhuma vizinha repetir o tom. Este teste ja caiu
+  // uma vez (a inversao custou duas emendas planas) e a troca de fundos o
+  // trouxe de volta — ver o comentario do RITMO. A lista de emendas planas
+  // esperadas e VAZIA de proposito: se voltar a existir uma, ela aparece aqui
+  // nomeada, com quem esta dos dois lados, em vez de so falhar.
+  it('alterna os tons, sem duas faixas iguais coladas', () => {
     const { container } = render(<Home />);
     const todas = faixas(container);
     // Fechamento nao tem id (page.test exige oferta como ultima section[id])
@@ -161,9 +158,9 @@ describe('Faixas da pagina', () => {
     const planas = todas
       .map((faixa, i) => ({ faixa, i }))
       .filter(({ faixa, i }) => todas[i + 1] && FAMILIA(todas[i + 1]) === FAMILIA(faixa))
-      .map(({ faixa, i }) => [nome(faixa, i), nome(todas[i + 1], i + 1)]);
+      .map(({ faixa, i }) => `${nome(faixa, i)} -> ${nome(todas[i + 1], i + 1)}`);
 
-    expect(planas).toEqual(PLANAS);
+    expect(planas).toEqual([]);
   });
 
   it('deixa a emenda entre as secoes limpa, so a troca de tom', () => {

@@ -4,11 +4,17 @@ import { Fechamento } from '@/components/sections/Fechamento';
 import { content } from '@/lib/content';
 
 describe('Fechamento', () => {
-  it('renders the closing copy on the full-height pure white band, without an id', () => {
+  // Faixa ESCURA com os dois cartoes brancos, desde a troca de fundos: o
+  // branco saiu da faixa e foi pras colunas. O par de asserts anda junto —
+  // faixa escura sem os cartoes deixaria a tabela de precos solta sobre os
+  // circuitos, e os --band-fg-* claros da faixa escura sairiam branco sobre
+  // branco assim que alguem devolvesse o fundo aos cartoes.
+  it('renders the closing copy on the full-height dark band, in white panels, without an id', () => {
     const { container } = render(<Fechamento />);
     const section = container.querySelector('section')!;
-    expect(section.className).toContain('site-band--white');
+    expect(section.className).toContain('site-band--dark');
     expect(section.className).toContain('site-band--full');
+    expect(container.querySelectorAll('.site-light-panel')).toHaveLength(2);
     expect(section.id).toBe('');
     expect(
       screen.getByRole('heading', { level: 2, name: content.fechamento.title }),

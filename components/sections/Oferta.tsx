@@ -30,15 +30,16 @@ export function Oferta() {
   return (
     <section
       id="oferta"
-      // Sem recorte na base, e o `[--notch-fill:#ffffff]` que vivia aqui saiu
-      // junto: os dois existiam pra emenda com o fechamento branco, que a
-      // inversao mudou de lugar. Agora quem vem depois e o RODAPE, faixa
-      // escura como esta — as duas transparentes, mostrando o mesmo canvas de
-      // circuitos. Nao ha emenda: uma aba clara aqui seria uma mancha no meio
-      // do campo escuro, apontando pra uma superficie que nao existe. Mesma
-      // razao da excecao historica do rodape, hoje generalizada em
-      // `.site-band--no-notch`.
-      className="site-section site-band site-band--dark site-band--full site-band--no-notch"
+      // Faixa BRANCA, nao escura: na troca de fundos a oferta e a virada
+      // trocaram de pele. O branco puro (nao o #f7fbff das claras) e herdado
+      // dos cartoes que viviam aqui — e a mesma superficie de antes, so que
+      // agora ocupando a faixa inteira em vez de duas caixas.
+      //
+      // O recorte VOLTOU: quem vem depois e o rodape escuro, entao a
+      // superficie muda de novo e ha emenda pra marcar. Por isso o
+      // `site-band--no-notch` saiu daqui. Buraco de verdade na tinta,
+      // mostrando os circuitos, como toda faixa clara.
+      className="site-section site-band site-band--white site-band--full"
     >
       <div className="mx-auto w-full max-w-content">
         <div className="text-center">
@@ -57,9 +58,19 @@ export function Oferta() {
               data-offer-anchor: e este card que a barra fixa do rodape
               observa. Enquanto ele estiver na tela, o preco e o botao ja
               estao a vista e a barra sai de cena. */}
+          {/* Sem superficie propria: a faixa ja e branca, entao pintar um
+              cartao branco em cima de branco so acrescentaria borda e sombra
+              sem separar nada. Quem separa as duas colunas e o vao (gap), o
+              mesmo recurso dos cards de Caminhos (.path-card zera borda,
+              fundo e sombra pelo mesmo motivo).
+
+              Some junto a virada de tokens que a .site-light-panel fazia: ela
+              existia pra devolver tons ESCUROS de texto dentro da faixa
+              escura. Numa faixa branca os tokens da propria faixa ja sao
+              esses, entao o texto continua identico ao de antes. */}
           <div
             data-offer-anchor
-            className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4"
+            className="flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4"
           >
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {o.includesTitle}
@@ -118,7 +129,7 @@ export function Oferta() {
           </div>
 
           {/* ---- Card da direita: as mesmas linhas, como duvida ---- */}
-          <div className="site-offer-panel flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4">
+          <div className="flex flex-col rounded-[1.5rem] px-5 py-3 text-left md:px-6 md:py-4">
             <h3 className="font-mono text-xs font-bold uppercase tracking-wide text-[color:var(--band-fg-faint)] md:text-sm">
               {o.doubtsTitle}
             </h3>

@@ -25,13 +25,17 @@ export default function Home() {
             ultimo argumento, e a oferta e a ultima coisa da pagina — quem
             termina de ler ja esta no preco, sem precisar rolar de volta.
 
-            Isso troca uma faixa clara com uma escura numa sequencia que
-            alternava do inicio ao fim, e alternancia nao sobrevive a essa
-            troca: duas emendas passam a ligar superficies da mesma familia
-            (caminhos->fechamento, os dois claros; oferta->rodape, os dois
-            escuros). Onde a superficie nao muda nao ha emenda pra marcar, e
-            as duas ficam sem recorte — ver `.site-band--no-notch` no
-            globals.css, que generaliza a antiga excecao do rodape. */}
+            A inversao sozinha custou a alternancia claro/escuro: trocar de
+            lugar uma faixa clara e uma escura numa sequencia alternada cria
+            vizinhanca repetida, sempre. Por um tempo a pagina teve duas
+            emendas planas (caminhos->fechamento e oferta->rodape) e as duas
+            ficaram sem recorte.
+
+            A troca de FUNDOS que veio depois desfez isso de graca: a virada
+            virou escura e a oferta branca, entao a alternancia voltou e toda
+            emenda voltou a mudar de superficie. Hoje so o rodape fica sem
+            recorte, e por ser o fim da pagina — ver `.site-band--no-notch`
+            no globals.css. */}
         <Fechamento />
         <Oferta />
       </main>

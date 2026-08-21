@@ -473,12 +473,27 @@ html.lenis body {
       0 24px 70px rgba(15, 42, 81, 0.3);
   }
 
-  .site-offer-panel {
+  /* Cartao branco GRANDE dentro de faixa escura. Chamava-se
+     .site-offer-panel enquanto so a oferta usava; o nome neutro veio quando a
+     troca de fundos passou o tratamento pra virada — a oferta virou faixa
+     branca e perdeu a superficie, e quem herdou os cartoes foi o fechamento.
+
+     A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
+     esses tokens valem tons CLAROS, entao um fundo branco sem virar os tokens
+     deixaria texto claro sobre branco, ilegivel.
+
+     `--band-rule` entra pelo mesmo motivo, e foi lacuna real: na oferta
+     nenhum filete usava o token, entao ninguem sentiu falta. A tabela de
+     precos da virada usa (`border-[color:var(--band-rule)]`), e sem virar
+     este token as linhas herdariam o branco a 10% da faixa escura —
+     brancas sobre branco, invisiveis. */
+  .site-light-panel {
     --band-fg: #07111f;
     --band-fg-strong: #050914;
     --band-fg-body: #3b4654;
     --band-fg-muted: #526071;
     --band-fg-faint: #667284;
+    --band-rule: rgba(15, 42, 81, 0.1);
     border: 1px solid rgba(30, 158, 219, 0.25);
     background: #ffffff;
     color: var(--band-fg);
@@ -493,8 +508,8 @@ html.lenis body {
      A redefinicao dos --band-fg-* nao e decorativa: dentro da faixa escura
      esses tokens valem tons CLAROS, entao um fundo branco sem virar os
      tokens deixaria texto claro sobre branco, ilegivel. Mesma mecanica da
-     .site-offer-panel, com sombra mais discreta por serem blocos pequenos
-     e repetidos. A borda esquerda azul fica por conta do utilitario. */
+     .site-light-panel, com sombra mais discreta e sem borda por serem blocos
+     pequenos e repetidos. A borda esquerda azul fica por conta do utilitario. */
   .site-quote-panel {
     --band-fg: #07111f;
     --band-fg-strong: #050914;
